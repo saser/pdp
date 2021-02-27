@@ -3,4 +3,7 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 proto_library(
     name = "tasks_proto",
     srcs = ["tasks.proto"],
+    deps = [
+        "@com_google_protobuf//:field_mask_proto",
+    ],
 )
