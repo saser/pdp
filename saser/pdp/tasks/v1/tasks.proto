@@ -4,6 +4,8 @@ package saser.pdp.tasks.v1;
 
 import "google/protobuf/field_mask.proto";
 
+option go_package = "github.com/Saser/pdp/genproto/tasks/v1;taskspb";
+
 service Tasks {
   // Gets a single task.
   rpc GetTask(GetTaskRequest) returns (Task);
