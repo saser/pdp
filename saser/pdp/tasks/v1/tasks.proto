@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package saser.pdp.tasks.v1;
+
+// Represents something that requires some action to be completed.
+message Task {
+  // The resource name of the task.
+  // Format: tasks/{task}
+  string name = 1;
+
+  // The title of the task, as it would be displayed in a list of tasks. Should be short.
+  // Required.
+  string title = 2;
+
+  // Whether this task is completed.
+  bool completed = 3;
+}
