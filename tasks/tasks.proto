@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package saser.pdp.tasks.v1;
+package tasks;
 
 import "google/protobuf/field_mask.proto";
 
-option go_package = "github.com/Saser/pdp/genproto/tasks/v1;taskspb";
+option go_package = "github.com/Saser/pdp/tasks/tasks_go_proto;taskspb";
 
 service Tasks {
   // Gets a single task.

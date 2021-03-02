@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	taskspb "github.com/Saser/pdp/genproto/tasks/v1"
+	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
 func main() {

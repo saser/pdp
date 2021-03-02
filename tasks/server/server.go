@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 
-	taskspb "github.com/Saser/pdp/genproto/tasks/v1"
+	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
 type Server struct {

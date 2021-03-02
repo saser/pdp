@@ -6,7 +6,7 @@ go_library(
     importpath = "github.com/Saser/pdp/tasks/cmd/server",
     visibility = ["//visibility:private"],
     deps = [
-        "//saser/pdp/tasks/v1:tasks",
+        "//tasks:tasks_go_proto",
         "//tasks/server",
         "@org_golang_google_grpc//:go_default_library",
         "@org_golang_google_grpc//reflection",
