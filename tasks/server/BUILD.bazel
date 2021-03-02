@@ -20,6 +20,7 @@ go_test(
     deps = [
         "//tasks:tasks_go_proto",
         "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
         "@org_golang_google_grpc//:go_default_library",
         "@org_golang_google_grpc//test/bufconn",
         "@org_golang_google_protobuf//testing/protocmp",

@@ -44,3 +44,15 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	s.tasks[name] = task
 	return task, nil
 }
+
+func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (*taskspb.ListTasksResponse, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	var tasks []*taskspb.Task
+	for _, t := range s.tasks {
+		tasks = append(tasks, t)
+	}
+	return &taskspb.ListTasksResponse{
+		Tasks: tasks,
+	}, nil
+}
