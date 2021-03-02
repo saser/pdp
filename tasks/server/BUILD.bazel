@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "server",
@@ -10,5 +10,18 @@ go_library(
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//status",
         "@org_golang_google_protobuf//proto",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = ["server_test.go"],
+    embed = [":server"],
+    deps = [
+        "//tasks:tasks_go_proto",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_google_grpc//test/bufconn",
+        "@org_golang_google_protobuf//testing/protocmp",
     ],
 )

@@ -70,8 +70,8 @@ def go_repositories():
     go_repository(
         name = "com_github_google_go_cmp",
         importpath = "github.com/google/go-cmp",
-        sum = "h1:/QaMHBdZ26BB3SSst0Iwl10Epc+xhTquomWX0oZEB6w=",
-        version = "v0.5.0",
+        sum = "h1:L8R9j+yAqZuZjsqh/z+F1NCffTKKLShY6zXTItVIZ8M=",
+        version = "v0.5.4",
     )
     go_repository(
         name = "com_github_google_uuid",
@@ -178,8 +178,8 @@ def go_repositories():
     go_repository(
         name = "org_golang_x_sync",
         importpath = "golang.org/x/sync",
-        sum = "h1:8gQV6CLnAEikrhgkHFbMAEhagSSnXWGV915qUMm9mrU=",
-        version = "v0.0.0-20190423024810-112230192c58",
+        sum = "h1:5KslGYwFpkhGh+Q16bwMP3cOontH8FOep7tGV86Y7SQ=",
+        version = "v0.0.0-20210220032951-036812b2e83c",
     )
     go_repository(
         name = "org_golang_x_sys",

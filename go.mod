@@ -4,7 +4,8 @@ go 1.16
 
 require (
 	github.com/golang/protobuf v1.4.3
-	golang.org/x/sync v0.0.0-20190423024810-112230192c58
+	github.com/google/go-cmp v0.5.4
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/grpc v1.36.0
 	google.golang.org/protobuf v1.25.0
 )
