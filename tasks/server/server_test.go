@@ -17,12 +17,14 @@ import (
 const bufSize = 1024 * 1024
 
 func setup(t *testing.T) taskspb.TasksClient {
+	t.Helper()
 	register := func(s *grpc.Server) { taskspb.RegisterTasksServer(s, New()) }
 	cc := grpctest.NewClientConnT(t, register)
 	return taskspb.NewTasksClient(cc)
 }
 
 func createTasks(ctx context.Context, t *testing.T, c taskspb.TasksClient, tasks []*taskspb.Task) []*taskspb.Task {
+	t.Helper()
 	created := make([]*taskspb.Task, len(tasks))
 	for i, task := range tasks {
 		req := &taskspb.CreateTaskRequest{
@@ -30,7 +32,7 @@ func createTasks(ctx context.Context, t *testing.T, c taskspb.TasksClient, tasks
 		}
 		task2, err := c.CreateTask(ctx, req)
 		if err != nil {
-			t.Errorf("CreateTask(%v) err = %v", req, err)
+			t.Errorf("CreateTask(%v) err = %v; want nil", req, err)
 		}
 		created[i] = task2
 	}
