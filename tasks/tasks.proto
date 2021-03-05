@@ -77,6 +77,9 @@ message ListTasksRequest {
   // A token supplied by a previous call to `ListTasks`. If empty, the first page of results will be
   // returned.
   string page_token = 2;
+
+  // Whether to include soft-deleted resources.
+  bool show_deleted = 3;
 }
 
 message ListTasksResponse {
