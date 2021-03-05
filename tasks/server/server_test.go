@@ -36,6 +36,20 @@ func createTasks(ctx context.Context, t *testing.T, c taskspb.TasksClient, tasks
 		}
 		created[i] = task2
 	}
+	t.Cleanup(func() {
+		for _, task := range created {
+			req := &taskspb.DeleteTaskRequest{
+				Name: task.GetName(),
+			}
+			deleted, err := c.DeleteTask(ctx, req)
+			if err != nil {
+				t.Errorf("DeleteTask(%v) err = %v; want nil", req, err)
+			}
+			if deleted.GetDeleted() == false {
+				t.Error("deleted.GetDeleted() = false; want true")
+			}
+		}
+	})
 	return created
 }
 
