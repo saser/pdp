@@ -98,3 +98,25 @@ func TestServer_ListTasks(t *testing.T) {
 		t.Errorf("diff between created tasks and ListTasks() (-want +got)\n%s", diff)
 	}
 }
+
+func TestServer_DeleteTask(t *testing.T) {
+	c := setup(t)
+	ctx := context.Background()
+	tasks := createTasks(ctx, t, c, []*taskspb.Task{
+		{Title: "Some task"},
+	})
+	task := tasks[0]
+	req := &taskspb.DeleteTaskRequest{
+		Name: task.GetName(),
+	}
+	deleted, err := c.DeleteTask(ctx, req)
+	if err != nil {
+		t.Errorf("DeleteTask(%v) err = %v; want nil", req, err)
+	}
+	if deleted.GetDeleted() == false {
+		t.Error("deleted.GetDeleted() = true; want false")
+	}
+	if diff := cmp.Diff(task, deleted, protocmp.Transform(), protocmp.IgnoreFields(task, "deleted")); diff != "" {
+		t.Errorf("diff between before and after deleted (-before +after)\n%s", diff)
+	}
+}
