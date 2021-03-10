@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"testing"
 
 	"github.com/Saser/pdp/testing/grpctest"
@@ -9,16 +10,26 @@ import (
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
-func setup(t *testing.T) taskspb.TasksClient {
+type testTasksClient struct {
+	taskspb.TasksClient
+}
+
+func setup(t *testing.T) testTasksClient {
 	t.Helper()
 	register := func(s *grpc.Server) { taskspb.RegisterTasksServer(s, New()) }
 	cc := grpctest.NewClientConnT(t, register)
-	t.Cleanup(func() {
-		if err := cc.Close(); err != nil {
-			t.Errorf("cc.Close() = %v; want nil", err)
-		}
-	})
-	return taskspb.NewTasksClient(cc)
+	return testTasksClient{
+		TasksClient: taskspb.NewTasksClient(cc),
+	}
+}
+
+func (c testTasksClient) CreateTaskT(ctx context.Context, t *testing.T, req *taskspb.CreateTaskRequest) *taskspb.Task {
+	t.Helper()
+	task, err := c.CreateTask(ctx, req)
+	if err != nil {
+		t.Errorf("CreateTask(%v) err = %v; want nil", req, err)
+	}
+	return task
 }
 
 func Test_setup(t *testing.T) {
