@@ -12,6 +12,7 @@ import (
 const bufSize = 1024 * 1024
 
 func NewClientConnT(t testing.TB, register func(*grpc.Server)) *grpc.ClientConn {
+	t.Helper()
 	lis := bufconn.Listen(bufSize)
 	t.Cleanup(func() {
 		if err := lis.Close(); err != nil && err != net.ErrClosed {
