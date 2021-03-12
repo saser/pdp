@@ -15,6 +15,7 @@
 * [ ] Deleted tasks (`show_deleted = true`)
 * [ ] Each task can also be queried with `GetTask`
 * [ ] Negative page size: fail with `InvalidArgument`.
+* [ ] Correct pagination (2 tasks, set `page_size = 1`, and do two calls)
 * [ ] Some rubbish `page_token`: should fail with `InvalidArgument`.
 * [ ] A correct page token but other parameters changed (apart from `page_size`): should fail with `InvalidArgument`.
     * [ ] The only other parameter is `show_deleted` at the moment, but for example `filter` can be added in the future.
