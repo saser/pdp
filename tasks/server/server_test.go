@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/Saser/pdp/testing/errtest"
 	"github.com/Saser/pdp/testing/grpctest"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/testing/protocmp"
 
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
@@ -71,38 +71,44 @@ func TestGetTask_Errors(t *testing.T) {
 	for _, tt := range []struct {
 		name string
 		req  *taskspb.GetTaskRequest
-		want codes.Code
+		tf   errtest.TestFunc
 	}{
 		{
-			name: "Empty name",
+			name: "EmptyName",
 			req: &taskspb.GetTaskRequest{
 				Name: "",
 			},
-			want: codes.InvalidArgument,
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("empty name"),
+			),
 		},
 		{
-			name: "Invalid name",
+			name: "InvalidName",
 			req: &taskspb.GetTaskRequest{
 				Name: "issues/1",
 			},
-			want: codes.InvalidArgument,
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("issues/1"),
+				errtest.ErrorContains("invalid task name"),
+				errtest.ErrorContains("tasks/{task}"),
+			),
 		},
 		{
-			name: "Valid but non-existent name",
+			name: "NonExistentTask",
 			req: &taskspb.GetTaskRequest{
 				Name: "tasks/2",
 			},
-			want: codes.NotFound,
+			tf: errtest.All(
+				grpctest.WantCode(codes.NotFound),
+				errtest.ErrorContains("tasks/2"),
+			),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := c.GetTask(ctx, tt.req)
-			if err == nil {
-				t.Errorf("GetTask(%v) err = nil; want non-nil", tt.req)
-			}
-			if got := status.Code(err); got != tt.want {
-				t.Errorf("status.Code(%v) = %v; want %v", err, got, tt.want)
-			}
+			tt.tf(t, err)
 		})
 	}
 }

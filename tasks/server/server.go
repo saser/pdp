@@ -29,8 +29,11 @@ func (s *Server) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*tas
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	name := req.GetName()
+	if name == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "empty name")
+	}
 	if !strings.HasPrefix(name, "tasks/") {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid task name: %q", name)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid task name %q, expected name of format %q", name, "tasks/{task}")
 	}
 	task, ok := s.tasks[name]
 	if !ok {
