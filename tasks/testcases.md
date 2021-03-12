@@ -2,10 +2,10 @@
 
 ## `GetTask`
 
-* [ ] Empty `name`: fail with `InvalidArgument`
-* [ ] Invalid `name` (i.e., wrong format): fail with `InvalidArgument`
-* [ ] Non-existent task: fail with `NotFound`
-* [ ] Deleted task: succeed!
+* [x] Empty `name`: fail with `InvalidArgument`
+* [x] Invalid `name` (i.e., wrong format): fail with `InvalidArgument`
+* [x] Non-existent task: fail with `NotFound`
+* [x] Deleted task: succeed!
 
 ## `ListTasks`
 
