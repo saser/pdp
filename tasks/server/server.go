@@ -52,3 +52,15 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	s.tasks[task.Name] = task
 	return task, nil
 }
+
+func (s *Server) DeleteTask(ctx context.Context, req *taskspb.DeleteTaskRequest) (*taskspb.Task, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	name := req.GetName()
+	task, ok := s.tasks[name]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task not found: %q", name)
+	}
+	task.Deleted = true
+	return task, nil
+}

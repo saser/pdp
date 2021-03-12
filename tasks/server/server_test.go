@@ -36,6 +36,15 @@ func (c testTasksClient) CreateTaskT(ctx context.Context, t *testing.T, req *tas
 	return task
 }
 
+func (c testTasksClient) DeleteTaskT(ctx context.Context, t *testing.T, req *taskspb.DeleteTaskRequest) *taskspb.Task {
+	t.Helper()
+	task, err := c.DeleteTask(ctx, req)
+	if err != nil {
+		t.Errorf("DeleteTask(%v) err = %v; want nil", req, err)
+	}
+	return task
+}
+
 func Test_setup(t *testing.T) {
 	_ = setup(t)
 }
@@ -110,5 +119,28 @@ func TestGetTask_Errors(t *testing.T) {
 			_, err := c.GetTask(ctx, tt.req)
 			tt.tf(t, err)
 		})
+	}
+}
+
+func TestGetTask_AfterDeletion(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Some task",
+		},
+	})
+	deleted := c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: task.GetName(),
+	})
+	req := &taskspb.GetTaskRequest{
+		Name: task.GetName(),
+	}
+	got, err := c.GetTask(ctx, req)
+	if err != nil {
+		t.Errorf("GetTask(%v) err = %v; want nil", req, err)
+	}
+	if diff := cmp.Diff(deleted, got, protocmp.Transform()); diff != "" {
+		t.Errorf("diff between DeleteTask() and GetTask() (-want +got)\n%s", diff)
 	}
 }
