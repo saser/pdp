@@ -7,6 +7,7 @@ import (
 	"github.com/Saser/pdp/testing/errtest"
 	"github.com/Saser/pdp/testing/grpctest"
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/testing/protocmp"
@@ -142,5 +143,75 @@ func TestGetTask_AfterDeletion(t *testing.T) {
 	}
 	if diff := cmp.Diff(deleted, got, protocmp.Transform()); diff != "" {
 		t.Errorf("diff between DeleteTask() and GetTask() (-want +got)\n%s", diff)
+	}
+}
+
+func TestListTasks_OK(t *testing.T) {
+	ctx := context.Background()
+	for _, tt := range []struct {
+		name  string
+		tasks []*taskspb.Task
+	}{
+		{
+			name:  "NoTasks",
+			tasks: nil,
+		},
+		{
+			name: "SomeTasks",
+			tasks: []*taskspb.Task{
+				{Title: "First task"},
+				{Title: "Second task"},
+				{Title: "Third task"},
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := setup(t)
+			want := make([]*taskspb.Task, len(tt.tasks))
+			for i, task := range tt.tasks {
+				want[i] = c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+					Task: task,
+				})
+			}
+			req := &taskspb.ListTasksRequest{}
+			res, err := c.ListTasks(ctx, req)
+			if err != nil {
+				t.Errorf("ListTasks(%v) err = %v; want nil", req, err)
+			}
+			if res.GetNextPageToken() != "" {
+				t.Errorf("res.GetNextPageToken() = %q; want empty", res.GetNextPageToken())
+			}
+			got := res.GetTasks()
+			less := func(t1, t2 *taskspb.Task) bool {
+				return t1.GetName() < t2.GetName()
+			}
+			if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.EquateEmpty(), cmpopts.SortSlices(less)); diff != "" {
+				t.Errorf("diff between created tasks and listed tasks (-want +got)\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestListTasks_Errors(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	for _, tt := range []struct {
+		name string
+		req  *taskspb.ListTasksRequest
+		tf   errtest.TestFunc
+	}{
+		{
+			name: "NegativePageSize",
+			req:  &taskspb.ListTasksRequest{PageSize: -1},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("negative page size"),
+			),
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := c.ListTasks(ctx, tt.req)
+			tt.tf(t, err)
+		})
 	}
 }

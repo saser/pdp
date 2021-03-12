@@ -42,6 +42,25 @@ func (s *Server) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*tas
 	return task, nil
 }
 
+func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (*taskspb.ListTasksResponse, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if req.GetPageSize() < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "negative page size: %d", req.GetPageSize())
+	}
+	if req.GetPageToken() != "" {
+		return nil, status.Errorf(codes.Unimplemented, "got non-empty page token %q, but pagination is not implemented", req.GetPageToken())
+	}
+	tasks := make([]*taskspb.Task, 0, len(s.tasks))
+	for _, task := range s.tasks {
+		tasks = append(tasks, task)
+	}
+	return &taskspb.ListTasksResponse{
+		Tasks:         tasks,
+		NextPageToken: "",
+	}, nil
+}
+
 func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest) (*taskspb.Task, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()

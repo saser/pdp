@@ -9,12 +9,12 @@
 
 ## `ListTasks`
 
-* [ ] No created tasks
-* [ ] Some created tasks
+* [x] No created tasks
+* [x] Some created tasks
 * [ ] Deleted tasks (`show_deleted = false`)
 * [ ] Deleted tasks (`show_deleted = true`)
 * [ ] Each task can also be queried with `GetTask`
-* [ ] Negative page size: fail with `InvalidArgument`.
+* [x] Negative page size: fail with `InvalidArgument`.
 * [ ] Correct pagination (2 tasks, set `page_size = 1`, and do two calls)
 * [ ] Some rubbish `page_token`: should fail with `InvalidArgument`.
 * [ ] A correct page token but other parameters changed (apart from `page_size`): should fail with `InvalidArgument`.
