@@ -215,3 +215,58 @@ func TestListTasks_Errors(t *testing.T) {
 		})
 	}
 }
+
+func TestListTasks_DeletedTasks(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	existing := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Existing task",
+		},
+	})
+	deleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Deleted task",
+		},
+	})
+	deleted = c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: deleted.GetName(),
+	})
+
+	for _, tt := range []struct {
+		name string
+		req  *taskspb.ListTasksRequest
+		want []*taskspb.Task
+	}{
+		{
+			name: "NoShowDeleted",
+			req:  &taskspb.ListTasksRequest{ShowDeleted: false},
+			want: []*taskspb.Task{
+				existing,
+			},
+		},
+		{
+			name: "ShowDeleted",
+			req:  &taskspb.ListTasksRequest{ShowDeleted: true},
+			want: []*taskspb.Task{
+				existing,
+				deleted,
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			res, err := c.ListTasks(ctx, tt.req)
+			if err != nil {
+				t.Errorf("ListTasks(%v) err = %v; want nil", tt.req, err)
+			}
+			got := res.GetTasks()
+			less := func(t1, t2 *taskspb.Task) bool {
+				return t1.GetName() < t2.GetName()
+			}
+			if diff := cmp.Diff(tt.want, got, cmpopts.SortSlices(less), protocmp.Transform()); diff != "" {
+				t.Errorf("diff in ListTasks() (-want +got)\n%s", diff)
+			}
+		})
+	}
+}

@@ -53,6 +53,9 @@ func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (
 	}
 	tasks := make([]*taskspb.Task, 0, len(s.tasks))
 	for _, task := range s.tasks {
+		if task.GetDeleted() && !req.GetShowDeleted() {
+			continue
+		}
 		tasks = append(tasks, task)
 	}
 	return &taskspb.ListTasksResponse{
