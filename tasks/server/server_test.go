@@ -15,6 +15,10 @@ import (
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
+func less(t1, t2 *taskspb.Task) bool {
+	return t1.GetName() < t2.GetName()
+}
+
 type testTasksClient struct {
 	taskspb.TasksClient
 }
@@ -182,9 +186,6 @@ func TestListTasks_OK(t *testing.T) {
 				t.Errorf("res.GetNextPageToken() = %q; want empty", res.GetNextPageToken())
 			}
 			got := res.GetTasks()
-			less := func(t1, t2 *taskspb.Task) bool {
-				return t1.GetName() < t2.GetName()
-			}
 			if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.EquateEmpty(), cmpopts.SortSlices(less)); diff != "" {
 				t.Errorf("diff between created tasks and listed tasks (-want +got)\n%s", diff)
 			}
@@ -261,9 +262,6 @@ func TestListTasks_DeletedTasks(t *testing.T) {
 				t.Errorf("ListTasks(%v) err = %v; want nil", tt.req, err)
 			}
 			got := res.GetTasks()
-			less := func(t1, t2 *taskspb.Task) bool {
-				return t1.GetName() < t2.GetName()
-			}
 			if diff := cmp.Diff(tt.want, got, cmpopts.SortSlices(less), protocmp.Transform()); diff != "" {
 				t.Errorf("diff in ListTasks() (-want +got)\n%s", diff)
 			}
