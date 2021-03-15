@@ -269,7 +269,7 @@ func TestListTasks_DeletedTasks(t *testing.T) {
 	}
 }
 
-func TestListTasks_Pagination_OK(t *testing.T) {
+func TestListTasks_Pagination_NoShowDeleted_NoDeletedTasks(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
 	want := []*taskspb.Task{
@@ -307,6 +307,111 @@ func TestListTasks_Pagination_OK(t *testing.T) {
 	res2, err := c.ListTasks(ctx, req2)
 	if err != nil {
 		t.Errorf("ListTasks(%v) err = %v; want nil", req2, err)
+	}
+	if tok := res2.GetNextPageToken(); tok != "" {
+		t.Errorf("second page of tasks: next_page_token = %q; want empty string", tok)
+	}
+	got = append(got, res2.GetTasks()...)
+
+	if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.SortSlices(less)); diff != "" {
+		t.Errorf("diff between created and listed tasks (-want +got)\n%s", diff)
+	}
+}
+
+func TestListTasks_Pagination_NoShowDeleted_SomeDeletedTasks(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	existing := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Existing task",
+		},
+	})
+	deleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Deleted task",
+		},
+	})
+	deleted = c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: deleted.GetName(),
+	})
+	want := []*taskspb.Task{
+		existing,
+	}
+
+	var got []*taskspb.Task
+
+	// Get first page of results that should contain exactly one task and a non-empty NextPageToken.
+	req := &taskspb.ListTasksRequest{
+		PageSize: 1,
+	}
+	res, err := c.ListTasks(ctx, req)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", req, err)
+	}
+	if tasks := res.GetTasks(); len(tasks) != 1 {
+		t.Errorf("first page of tasks: got %v (len = %v); want len = 1", tasks, len(tasks))
+	}
+	if tok := res.GetNextPageToken(); tok != "" {
+		t.Errorf("first page of tasks: next_page_token = %q; want empty string", tok)
+	}
+	got = append(got, res.GetTasks()...)
+
+	if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.SortSlices(less)); diff != "" {
+		t.Errorf("diff between created and listed tasks (-want +got)\n%s", diff)
+	}
+}
+
+func TestListTasks_Pagination_ShowDeleted(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	existing := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Existing task",
+		},
+	})
+	deleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Deleted task",
+		},
+	})
+	deleted = c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: deleted.GetName(),
+	})
+	want := []*taskspb.Task{
+		existing,
+		deleted,
+	}
+
+	var got []*taskspb.Task
+
+	// Get first page of results that should contain exactly one task and a non-empty NextPageToken.
+	req1 := &taskspb.ListTasksRequest{
+		PageSize:    1,
+		ShowDeleted: true,
+	}
+	res1, err := c.ListTasks(ctx, req1)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", req1, err)
+	}
+	if tasks := res1.GetTasks(); len(tasks) != 1 {
+		t.Errorf("first page of tasks: got %v (len = %v); want len = 1", tasks, len(tasks))
+	}
+	if tok := res1.GetNextPageToken(); tok == "" {
+		t.Error("first page of tasks: next_page_token is empty")
+	}
+	got = append(got, res1.GetTasks()...)
+
+	// Get second page of results, which should contain the rest of the tasks.
+	req2 := &taskspb.ListTasksRequest{
+		PageToken:   res1.GetNextPageToken(),
+		ShowDeleted: true,
+	}
+	res2, err := c.ListTasks(ctx, req2)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", req2, err)
+	}
+	if tok := res2.GetNextPageToken(); tok != "" {
+		t.Errorf("second page of tasks: next_page_token = %q; want empty string", tok)
 	}
 	got = append(got, res2.GetTasks()...)
 

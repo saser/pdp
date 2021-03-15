@@ -67,18 +67,23 @@ func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (
 		}
 	}
 
-	var tasks []*taskspb.Task
-	for i := offset; i < len(s.tasks) && i-offset < pageSize; i++ {
-		task := s.tasks[i]
-		if task.GetDeleted() && !req.GetShowDeleted() {
+	var indices []int
+	for i := offset; i < len(s.tasks); i++ {
+		if s.tasks[i].GetDeleted() && !req.GetShowDeleted() {
 			continue
+		}
+		indices = append(indices, i)
+	}
+	var tasks []*taskspb.Task
+	for _, i := range indices {
+		if len(tasks) >= pageSize {
+			break
 		}
 		tasks = append(tasks, s.tasks[i])
 	}
-
 	nextPageToken := ""
-	if nextOffset := offset + len(tasks); nextOffset < len(s.tasks) {
-		nextPageToken = strconv.Itoa(nextOffset)
+	if len(tasks) < len(indices) {
+		nextPageToken = strconv.Itoa(indices[len(tasks)])
 	}
 
 	return &taskspb.ListTasksResponse{
