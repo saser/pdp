@@ -13,7 +13,9 @@
 * [x] Some created tasks
 * [x] Deleted tasks (`show_deleted = false`)
 * [x] Deleted tasks (`show_deleted = true`)
-* [ ] Each task can also be queried with `GetTask`
+* [x] Each task can also be queried with `GetTask`
+    * [x] ... for existent tasks returned from request with `show_deleted = false`
+    * [x] ... for deleted tasks returned from request with `show_deleted = true`
 * [x] Negative page size: fail with `InvalidArgument`.
 * [x] Correct pagination with `show_deleted = false`
     * [x] 2 tasks, set `page_size = 1`, and do two calls

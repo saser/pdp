@@ -419,3 +419,74 @@ func TestListTasks_Pagination_ShowDeleted(t *testing.T) {
 		t.Errorf("diff between created and listed tasks (-want +got)\n%s", diff)
 	}
 }
+
+func TestListTasks_GetTasks_NoDeletedTasks(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	for _, task := range []*taskspb.Task{
+		{Title: "First task"},
+		{Title: "Second task"},
+		{Title: "Third task"},
+	} {
+		c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+			Task: task,
+		})
+	}
+
+	listReq := &taskspb.ListTasksRequest{}
+	res, err := c.ListTasks(ctx, listReq)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", listReq, err)
+	}
+	for _, want := range res.GetTasks() {
+		getReq := &taskspb.GetTaskRequest{
+			Name: want.GetName(),
+		}
+		got, err := c.GetTask(ctx, getReq)
+		if err != nil {
+			t.Errorf("GetTask(%v) err = %v; want nil", getReq, err)
+		}
+		if diff := cmp.Diff(want, got, protocmp.Transform()); diff != "" {
+			t.Errorf("difference between ListTasks() and GetTask() (-want +got)\n%s", diff)
+		}
+	}
+}
+
+func TestListTasks_GetTasks_SomeDeletedTasks(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Existing task",
+		},
+	})
+	deleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Deleted task",
+		},
+	})
+	c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: deleted.GetName(),
+	})
+
+	listReq := &taskspb.ListTasksRequest{
+		ShowDeleted: true,
+	}
+	res, err := c.ListTasks(ctx, listReq)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", listReq, err)
+	}
+	for _, want := range res.GetTasks() {
+		getReq := &taskspb.GetTaskRequest{
+			Name: want.GetName(),
+		}
+		got, err := c.GetTask(ctx, getReq)
+		if err != nil {
+			t.Errorf("GetTask(%v) err = %v; want nil", getReq, err)
+		}
+		if diff := cmp.Diff(want, got, protocmp.Transform()); diff != "" {
+			t.Errorf("difference between ListTasks() and GetTask() (-want +got)\n%s", diff)
+		}
+	}
+}
