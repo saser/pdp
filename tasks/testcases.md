@@ -16,7 +16,7 @@
 * [ ] Each task can also be queried with `GetTask`
 * [x] Negative page size: fail with `InvalidArgument`.
 * [ ] Correct pagination with `show_deleted = false`
-    * [ ] 2 tasks, set `page_size = 1`, and do two calls
+    * [x] 2 tasks, set `page_size = 1`, and do two calls
 	* [ ] 3 tasks, 2 deleted, `page_size = 1` should succeed and return empty `next_page_token`
 	* [ ] 3 tasks, 1 deleted, `page_size = 1` should succeed and return non-empty `next_page_token`
 * [ ] Correct pagination with `show_deleted = true`

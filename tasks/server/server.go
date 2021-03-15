@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -12,16 +13,19 @@ import (
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
+const maxPageSize = 50
+
 type Server struct {
 	taskspb.UnimplementedTasksServer
 
-	mu    sync.Mutex
-	tasks map[string]*taskspb.Task
+	mu          sync.Mutex
+	tasks       []*taskspb.Task
+	taskIndices map[string]int
 }
 
 func New() *Server {
 	return &Server{
-		tasks: make(map[string]*taskspb.Task),
+		taskIndices: make(map[string]int),
 	}
 }
 
@@ -35,32 +39,51 @@ func (s *Server) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*tas
 	if !strings.HasPrefix(name, "tasks/") {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid task name %q, expected name of format %q", name, "tasks/{task}")
 	}
-	task, ok := s.tasks[name]
+	idx, ok := s.taskIndices[name]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "task not found: %q", name)
 	}
-	return task, nil
+	return s.tasks[idx], nil
 }
 
 func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (*taskspb.ListTasksResponse, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if req.GetPageSize() < 0 {
-		return nil, status.Errorf(codes.InvalidArgument, "negative page size: %d", req.GetPageSize())
+
+	pageSize := int(req.GetPageSize())
+	if pageSize < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "negative page size: %d", pageSize)
 	}
-	if req.GetPageToken() != "" {
-		return nil, status.Errorf(codes.Unimplemented, "got non-empty page token %q, but pagination is not implemented", req.GetPageToken())
+	if pageSize == 0 || pageSize > maxPageSize {
+		pageSize = maxPageSize
 	}
-	tasks := make([]*taskspb.Task, 0, len(s.tasks))
-	for _, task := range s.tasks {
+
+	offset := 0
+	if tok := req.GetPageToken(); tok != "" {
+		var err error
+		offset, err = strconv.Atoi(tok)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid page token: %q", tok)
+		}
+	}
+
+	var tasks []*taskspb.Task
+	for i := offset; i < len(s.tasks) && i-offset < pageSize; i++ {
+		task := s.tasks[i]
 		if task.GetDeleted() && !req.GetShowDeleted() {
 			continue
 		}
-		tasks = append(tasks, task)
+		tasks = append(tasks, s.tasks[i])
 	}
+
+	nextPageToken := ""
+	if nextOffset := offset + len(tasks); nextOffset < len(s.tasks) {
+		nextPageToken = strconv.Itoa(nextOffset)
+	}
+
 	return &taskspb.ListTasksResponse{
 		Tasks:         tasks,
-		NextPageToken: "",
+		NextPageToken: nextPageToken,
 	}, nil
 }
 
@@ -71,7 +94,8 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	task.Name = fmt.Sprintf("tasks/%d", len(s.tasks)+1)
 	task.Deleted = false
 	task.Completed = false
-	s.tasks[task.Name] = task
+	s.taskIndices[task.Name] = len(s.tasks)
+	s.tasks = append(s.tasks, task)
 	return task, nil
 }
 
@@ -79,10 +103,11 @@ func (s *Server) DeleteTask(ctx context.Context, req *taskspb.DeleteTaskRequest)
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	name := req.GetName()
-	task, ok := s.tasks[name]
+	idx, ok := s.taskIndices[name]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "task not found: %q", name)
 	}
+	task := s.tasks[idx]
 	task.Deleted = true
 	return task, nil
 }
