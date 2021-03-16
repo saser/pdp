@@ -4,7 +4,7 @@ package tasks;
 
 import "google/protobuf/field_mask.proto";
 
-option go_package = "github.com/Saser/pdp/tasks/tasks_go_proto;taskspb";
+option go_package = "github.com/Saser/pdp/tasks/tasks_go_proto";
 
 service Tasks {
   // Gets a single task.
