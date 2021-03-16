@@ -209,6 +209,15 @@ func TestListTasks_Errors(t *testing.T) {
 				errtest.ErrorContains("negative page size"),
 			),
 		},
+		{
+			name: "InvalidPageToken",
+			req:  &taskspb.ListTasksRequest{PageToken: "This is rubbish"},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("invalid page token"),
+				errtest.ErrorContains("This is rubbish"),
+			),
+		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := c.ListTasks(ctx, tt.req)
