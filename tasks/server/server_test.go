@@ -10,6 +10,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/testing/protocmp"
 
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
@@ -426,6 +427,41 @@ func TestListTasks_Pagination_ShowDeleted(t *testing.T) {
 
 	if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.SortSlices(less)); diff != "" {
 		t.Errorf("diff between created and listed tasks (-want +got)\n%s", diff)
+	}
+}
+
+func TestListTasks_Pagination_DifferentQueryParameters(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	for _, task := range []*taskspb.Task{
+		{Title: "First task"},
+		{Title: "Second task"},
+	} {
+		c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+			Task: task,
+		})
+	}
+
+	req1 := &taskspb.ListTasksRequest{
+		PageSize:    1,
+		ShowDeleted: false,
+	}
+	res1, err := c.ListTasks(ctx, req1)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", req1, err)
+	}
+
+	req2 := &taskspb.ListTasksRequest{
+		PageSize:    5,    // was 1 in previous request, but is allowed to change
+		ShowDeleted: true, // was false in previous request, and is not allowed to change
+		PageToken:   res1.GetNextPageToken(),
+	}
+	_, err = c.ListTasks(ctx, req2)
+	if err == nil {
+		t.Fatalf("ListTasks(%v) err = nil; want non-nil", req2)
+	}
+	if got, want := status.Code(err), codes.InvalidArgument; got != want {
+		t.Errorf("status.Code(%v) = %v; want %v", err, got, want)
 	}
 }
 

@@ -23,8 +23,8 @@
 * [x] Correct pagination with `show_deleted = true`
 	* [x] 2 tasks, 1 deleted, `page_size = 1` should succeed and return non-empty `next_page_token`.
 * [x] Some rubbish `page_token`: should fail with `InvalidArgument`.
-* [ ] A correct page token but other parameters changed (apart from `page_size`): should fail with `InvalidArgument`.
-    * [ ] The only other parameter is `show_deleted` at the moment, but for example `filter` can be added in the future.
+* [x] A correct page token but other parameters changed (apart from `page_size`): should fail with `InvalidArgument`.
+    * [x] The only other parameter is `show_deleted` at the moment, but for example `filter` can be added in the future.
 
 ## `CreateTask`
 
