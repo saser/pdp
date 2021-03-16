@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package aip.pagetoken;
+
+option go_package = "github.com/Saser/pdp/aip/pagetoken/page_token_go_proto";
+
+message ExampleListRequest {
+  // Required pagination parameters.
+  int32 page_size = 1;
+  string page_token = 2;
+
+  // Extra query parameters.
+  string foo = 3;
+}
