@@ -3,10 +3,10 @@ package server
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"strings"
 	"sync"
 
+	"github.com/Saser/pdp/aip/pagetoken"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -50,7 +50,7 @@ func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	pageSize := int(req.GetPageSize())
+	pageSize := req.GetPageSize()
 	if pageSize < 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "negative page size: %d", pageSize)
 	}
@@ -58,36 +58,37 @@ func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (
 		pageSize = maxPageSize
 	}
 
-	offset := 0
-	if tok := req.GetPageToken(); tok != "" {
-		var err error
-		offset, err = strconv.Atoi(tok)
-		if err != nil {
-			return nil, status.Errorf(codes.InvalidArgument, "invalid page token: %q", tok)
-		}
+	pt, err := pagetoken.Parse(req)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid page token: %q", req.GetPageToken())
 	}
 
-	var indices []int
-	for i := offset; i < len(s.tasks); i++ {
-		if s.tasks[i].GetDeleted() && !req.GetShowDeleted() {
+	// allTasks is the list of tasks we are paginating over. The offset represented by the page
+	// token applies to this list.
+	var allTasks []*taskspb.Task
+	for _, task := range s.tasks {
+		if task.GetDeleted() && !req.GetShowDeleted() {
 			continue
 		}
-		indices = append(indices, i)
+		allTasks = append(allTasks, task)
 	}
-	var tasks []*taskspb.Task
-	for _, i := range indices {
-		if len(tasks) >= pageSize {
+
+	// page is the list of tasks that will be returned by this request.
+	var page []*taskspb.Task
+	for i := int(pt.Offset()); i < len(allTasks); i++ {
+		if len(page) >= int(pageSize) {
 			break
 		}
-		tasks = append(tasks, s.tasks[i])
+		page = append(page, allTasks[i])
 	}
+
 	nextPageToken := ""
-	if len(tasks) < len(indices) {
-		nextPageToken = strconv.Itoa(indices[len(tasks)])
+	if next := pt.Next(pageSize); next.Offset() < int32(len(allTasks)) {
+		nextPageToken = next.String()
 	}
 
 	return &taskspb.ListTasksResponse{
-		Tasks:         tasks,
+		Tasks:         page,
 		NextPageToken: nextPageToken,
 	}, nil
 }
