@@ -43,6 +43,9 @@
 * [ ] Setting output only fields: shoud fail with `InvalidArgument`:
     * [ ] Both for empty `update_mask` (i.e., update all fields), or for `update_mask` specifically containing the output-only fields
 * [ ] Updating the `title` to be empty
+* [ ] Invalid `update_mask`
+    * [ ] Containing only bad fields
+    * [ ] Containing at least one good field
 
 ## `DeleteTask`
 
