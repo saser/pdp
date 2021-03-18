@@ -28,12 +28,12 @@
 
 ## `CreateTask`
 
-* [ ] With missing title (should fail with `InvalidArgument`)
-* [ ] With a `name` set (should fail with `InvalidArgument`)
-    * [ ] Why? Because a client could think the `name` can be set when creating, and if the name is silently ignored and replaced the client could continue using their own name (if they were to ignore the returned task, which they shouldn't, but yeah).
-* [ ] With `deleted = true` (should fail with `InvalidArgument`)
-* [ ] With `completed = true` (should fail with `InvalidArgument`(?))
-    * [ ] It could be reasonable to create a completed task, instead of first creating a non-completed task and then completing it with `SetCompleted`. That is a later use case though.
+* [x] With missing title (should fail with `InvalidArgument`)
+* [x] With a `name` set (should fail with `InvalidArgument`)
+    * [x] Why? Because a client could think the `name` can be set when creating, and if the name is silently ignored and replaced the client could continue using their own name (if they were to ignore the returned task, which they shouldn't, but yeah).
+* [x] With `deleted = true` (should fail with `InvalidArgument`)
+* [x] With `completed = true` (should fail with `InvalidArgument`(?))
+    * [x] It could be reasonable to create a completed task, instead of first creating a non-completed task and then completing it with `SetCompleted`. That is a later use case though.
 
 ## `UpdateTask`
 

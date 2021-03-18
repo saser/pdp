@@ -535,3 +535,92 @@ func TestListTasks_GetTasks_SomeDeletedTasks(t *testing.T) {
 		}
 	}
 }
+
+func TestCreateTask_OK(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	req := &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "My task",
+		},
+	}
+	if _, err := c.CreateTask(ctx, req); err != nil {
+		t.Errorf("CreateTask(%v) err = %v; want nil", req, err)
+	}
+}
+
+func TestCreateTask_Errors(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	for _, tt := range []struct {
+		name string
+		req  *taskspb.CreateTaskRequest
+		tf   errtest.TestFunc
+	}{
+		{
+			name: "EmptyTitle",
+			req: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "",
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("empty title"),
+			),
+		},
+		{
+			name: "NonEmptyName",
+			req: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Name:  "tasks/1",
+					Title: "My task",
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains(`"name" must be empty`),
+				errtest.ErrorContains(`"tasks/1"`),
+			),
+		},
+		{
+			name: "DeletedTrue",
+			req: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Deleted: true,
+					Title:   "My task",
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains(`"deleted" must be false`),
+			),
+		},
+		{
+			name: "CompletedTrue",
+			req: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Title:     "My task",
+					Completed: true,
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains(`"completed" must be false`),
+				errtest.ErrorContains("SetCompleted"),
+			),
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := c.CreateTask(ctx, tt.req)
+			if err == nil {
+				t.Fatalf("CreateTask(%v) err = nil; want non-nil", tt.req)
+			}
+			tt.tf(t, err)
+			if t.Failed() {
+				t.Logf("request: %v", tt.req)
+			}
+		})
+	}
+}

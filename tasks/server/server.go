@@ -96,10 +96,24 @@ func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (
 func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest) (*taskspb.Task, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
+	// Validate the task that was passed in.
 	task := req.GetTask()
+	if name := task.GetName(); name != "" {
+		return nil, status.Errorf(codes.InvalidArgument, `"name" must be empty, was %q`, name)
+	}
+	if task.GetTitle() == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty title")
+	}
+	if task.GetDeleted() {
+		return nil, status.Error(codes.InvalidArgument, `"deleted" must be false`)
+	}
+	if task.GetCompleted() {
+		return nil, status.Error(codes.InvalidArgument, `"completed" must be false (use the SetCompleted method to set the "completed" field)`)
+	}
+
+	// Task is valid, so go ahead and store it.
 	task.Name = fmt.Sprintf("tasks/%d", len(s.tasks)+1)
-	task.Deleted = false
-	task.Completed = false
 	s.taskIndices[task.Name] = len(s.tasks)
 	s.tasks = append(s.tasks, task)
 	return task, nil
