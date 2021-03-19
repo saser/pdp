@@ -1,0 +1,27 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "fieldmask",
+    srcs = ["fieldmask.go"],
+    importpath = "github.com/Saser/pdp/aip/fieldmask",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//types/known/fieldmaskpb",
+    ],
+)
+
+go_test(
+    name = "fieldmask_test",
+    srcs = ["fieldmask_test.go"],
+    embed = [":fieldmask"],
+    deps = [
+        "//aip/fieldmask/example:example_go_proto",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//testing/protocmp",
+        "@org_golang_google_protobuf//types/known/fieldmaskpb",
+    ],
+)
