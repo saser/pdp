@@ -9,10 +9,6 @@ package implicitdeps
 
 import (
 	// Imports required by generated protobuf code.
-	_ "context"
-	_ "reflect"
-	_ "sync"
-
 	_ "google.golang.org/grpc"
 	_ "google.golang.org/grpc/codes"
 	_ "google.golang.org/grpc/status"
