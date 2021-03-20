@@ -9,10 +9,6 @@ http_archive(
     urls = ["https://github.com/protocolbuffers/protobuf/archive/v%s.zip" % PROTOBUF_VERSION],
 )
 
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-
-protobuf_deps()
-
 RULES_PROTO_COMMIT = "97d8af4dc474595af3900dd85cb3a29ad28cc313"
 
 http_archive(
@@ -25,12 +21,6 @@ http_archive(
     ],
 )
 
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-
-rules_proto_dependencies()
-
-rules_proto_toolchains()
-
 RULES_GO_VERSION = "v0.27.0"
 
 http_archive(
@@ -41,12 +31,6 @@ http_archive(
         "https://github.com/bazelbuild/rules_go/releases/download/{v}/rules_go-{v}.tar.gz".format(v = RULES_GO_VERSION),
     ],
 )
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-
-go_rules_dependencies()
-
-go_register_toolchains(version = "1.16.2")
 
 GAZELLE_VERSION = "v0.23.0"
 
@@ -59,11 +43,27 @@ http_archive(
     ],
 )
 
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 load("//:go_repositories.bzl", "go_repositories")
 
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+
+protobuf_deps()
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
+
 # gazelle:repository_macro go_repositories.bzl%go_repositories
 go_repositories()
+
+go_rules_dependencies()
+
+go_register_toolchains(version = "1.16.2")
 
 gazelle_dependencies()
