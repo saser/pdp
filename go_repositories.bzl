@@ -65,8 +65,8 @@ def go_repositories():
         name = "com_github_golang_protobuf",
         build_file_proto_mode = "disable_global",
         importpath = "github.com/golang/protobuf",
-        sum = "h1:JjCZWpVbqXDqFVmTfYWEVTMIYrL/NPdPSCHPJ0T/raM=",
-        version = "v1.4.3",
+        sum = "h1:LUVKkCeviFUMKqHa4tXIIij/lbhnMbP7Fn5wKdKkRh4=",
+        version = "v1.5.0",
     )
     go_repository(
         name = "com_github_google_go_cmp",
@@ -152,8 +152,8 @@ def go_repositories():
         name = "org_golang_google_protobuf",
         build_file_proto_mode = "disable_global",
         importpath = "google.golang.org/protobuf",
-        sum = "h1:Ejskq+SyPohKW+1uil0JJMtmHCgJPJ/qWTxr8qp+R4c=",
-        version = "v1.25.0",
+        sum = "h1:bxAC2xTBsZGibn2RTntX0oH50xLsqy1OxA9tTL3p/lk=",
+        version = "v1.26.0",
     )
     go_repository(
         name = "org_golang_x_crypto",

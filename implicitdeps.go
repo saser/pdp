@@ -13,7 +13,6 @@ import (
 	_ "reflect"
 	_ "sync"
 
-	_ "github.com/golang/protobuf/proto"
 	_ "google.golang.org/grpc"
 	_ "google.golang.org/grpc/codes"
 	_ "google.golang.org/grpc/status"
