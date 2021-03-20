@@ -18,6 +18,7 @@ import (
 	_ "google.golang.org/grpc/status"
 	_ "google.golang.org/protobuf/reflect/protoreflect"
 	_ "google.golang.org/protobuf/runtime/protoimpl"
+	_ "google.golang.org/protobuf/types/known/anypb"
 	_ "google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	// Packages required by `rules_go`.
