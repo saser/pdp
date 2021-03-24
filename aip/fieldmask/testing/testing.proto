@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package aip.fieldmask.testing;
+
+option go_package = "github.com/Saser/pdp/aip/fieldmask/testing/testing_go_proto";
+
+// A message containing various types of fields that should be tested against.
+message Test {
+  string s = 1;
+  repeated string rep_s = 2;
+
+  Nested nested = 3;
+  repeated Nested rep_nested = 4;
+
+  oneof oo {
+    string oo_s = 5;
+    Nested oo_nested = 6;
+  }
+}
+
+// A message that is intended to be used in a field in the Test message.
+message Nested {
+  string foo = 1;
+  string bar = 2;
+}
