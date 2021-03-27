@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "fieldmask",
-    srcs = ["update.go"],
+    srcs = [
+        "doc.go",
+        "update.go",
+    ],
     importpath = "github.com/Saser/pdp/aip/fieldmask",
     visibility = ["//visibility:public"],
     deps = [
