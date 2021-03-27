@@ -11,7 +11,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
@@ -620,6 +622,239 @@ func TestCreateTask_Errors(t *testing.T) {
 			tt.tf(t, err)
 			if t.Failed() {
 				t.Logf("request: %v", tt.req)
+			}
+		})
+	}
+}
+
+func TestUpdateTask_OK(t *testing.T) {
+	ctx := context.Background()
+	for _, tt := range []struct {
+		name      string
+		createReq *taskspb.CreateTaskRequest
+		updateReq *taskspb.UpdateTaskRequest
+		want      *taskspb.Task
+	}{
+		{
+			name: "UpdateTitle_NilMask",
+			createReq: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title before",
+				},
+			},
+			updateReq: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title after",
+				},
+			},
+			want: &taskspb.Task{
+				Title: "Title after",
+			},
+		},
+		{
+			name: "UpdateTitle_StarMask",
+			createReq: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title before",
+				},
+			},
+			updateReq: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title after",
+				},
+				UpdateMask: &fieldmaskpb.FieldMask{
+					Paths: []string{"*"},
+				},
+			},
+			want: &taskspb.Task{
+				Title: "Title after",
+			},
+		},
+		{
+			name: "UpdateTitle_NonEmptyMask",
+			createReq: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title before",
+				},
+			},
+			updateReq: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title after",
+				},
+				UpdateMask: &fieldmaskpb.FieldMask{
+					Paths: []string{"title"},
+				},
+			},
+			want: &taskspb.Task{
+				Title: "Title after",
+			},
+		},
+		{
+			name: "IgnoreOutputOnly_StarMask",
+			createReq: &taskspb.CreateTaskRequest{
+				Task: &taskspb.Task{
+					Title: "Title before",
+				},
+			},
+			updateReq: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Title:     "Title after",
+					Deleted:   true,
+					Completed: true,
+				},
+				UpdateMask: &fieldmaskpb.FieldMask{
+					Paths: []string{"*"},
+				},
+			},
+			want: &taskspb.Task{
+				Title:     "Title after",
+				Deleted:   false, // specified just for clarity
+				Completed: false, // specified just for clarity
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := setup(t)
+			task := c.CreateTaskT(ctx, t, tt.createReq)
+			tt.updateReq.GetTask().Name = task.GetName()
+			got, err := c.UpdateTask(ctx, tt.updateReq)
+			if err != nil {
+				t.Fatalf("UpdateTask(%v) err = %v; want nil", tt.updateReq, err)
+			}
+			if diff := cmp.Diff(tt.want, got, protocmp.Transform(), protocmp.IgnoreFields(&taskspb.Task{}, "name")); diff != "" {
+				t.Errorf("unexpected result of Update (-want +got)\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestUpdateTask_Errors(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Some task",
+		},
+	})
+	clone := func(modify func(task *taskspb.Task)) *taskspb.Task {
+		task2 := proto.Clone(task).(*taskspb.Task)
+		modify(task2)
+		return task2
+	}
+	for _, tt := range []struct {
+		name string
+		req  *taskspb.UpdateTaskRequest
+		tf   errtest.TestFunc
+	}{
+		{
+			name: "EmptyName",
+			req: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Name: "", // explicitly set to zero value for clarity
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("empty name"),
+			),
+		},
+		{
+			name: "InvalidName",
+			req: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Name: "invalidname/1",
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("invalid name"),
+			),
+		},
+		{
+			name: "NonExistentTask",
+			req: &taskspb.UpdateTaskRequest{
+				Task: &taskspb.Task{
+					Name: "tasks/999",
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.NotFound),
+				errtest.ErrorContains(`"tasks/999"`),
+			),
+		},
+		{
+			name: "EmptyTitle_DirectFieldMask",
+			req: &taskspb.UpdateTaskRequest{
+				Task:       clone(func(task *taskspb.Task) { task.Title = "" }),
+				UpdateMask: &fieldmaskpb.FieldMask{Paths: []string{"title"}},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("empty title"),
+			),
+		},
+		{
+			name: "EmptyTitle_StarMask",
+			req: &taskspb.UpdateTaskRequest{
+				Task:       clone(func(task *taskspb.Task) { task.Title = "" }),
+				UpdateMask: &fieldmaskpb.FieldMask{Paths: []string{"*"}},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("empty title"),
+			),
+		},
+		{
+			name: "OutputOnlyFieldsInMask",
+			req: &taskspb.UpdateTaskRequest{
+				Task: clone(func(task *taskspb.Task) {
+					task.Deleted = true
+					task.Completed = true
+				}),
+				UpdateMask: &fieldmaskpb.FieldMask{
+					Paths: []string{
+						"deleted",
+						"completed",
+					},
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("output only"),
+				errtest.ErrorContains(`"deleted"`),
+				errtest.ErrorContains(`"completed"`),
+			),
+		},
+		{
+			name: "InvalidPathsInFieldMask",
+			req: &taskspb.UpdateTaskRequest{
+				Task: clone(func(task *taskspb.Task) { task.Title = "Some other title" }),
+				UpdateMask: &fieldmaskpb.FieldMask{
+					Paths: []string{
+						"foobar",
+						"baz.quux",
+					},
+				},
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("invalid path"),
+				errtest.ErrorContains(`"foobar"`),
+				errtest.ErrorContains(`"baz.quux"`),
+			),
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := c.UpdateTask(ctx, tt.req)
+			tt.tf(t, err)
+
+			// Since we expect the update to fail, we verify that the task was not
+			// actually modified.
+			after, err := c.GetTask(ctx, &taskspb.GetTaskRequest{
+				Name: task.GetName(),
+			})
+			if diff := cmp.Diff(task, after, protocmp.Transform()); diff != "" {
+				t.Errorf("resource updated even with errors (-before +after)\n%s", diff)
 			}
 		})
 	}

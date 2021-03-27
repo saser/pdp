@@ -3,12 +3,17 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 	"sync"
 
+	"github.com/Saser/pdp/aip/fieldbehavior"
+	"github.com/Saser/pdp/aip/fieldmask"
 	"github.com/Saser/pdp/aip/pagetoken"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
@@ -117,6 +122,70 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	s.taskIndices[task.Name] = len(s.tasks)
 	s.tasks = append(s.tasks, task)
 	return task, nil
+}
+
+func (s *Server) UpdateTask(ctx context.Context, req *taskspb.UpdateTaskRequest) (*taskspb.Task, error) {
+	// First, let's do some basic validation, starting with the name.
+	src := req.GetTask()
+	name := src.GetName()
+	if name == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty name")
+	}
+	if prefix := "tasks/"; !strings.HasPrefix(name, prefix) {
+		return nil, status.Errorf(codes.InvalidArgument, `invalid name %q: must be of format "tasks/{task}"`, name)
+	}
+
+	// Now validate the field mask. First of all, check that it only references valid fields.
+	mask := req.GetUpdateMask()
+	if err := fieldmask.Validate(&taskspb.Task{}, mask); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "update mask contains invalid paths: %v", err)
+	}
+
+	// Then, check if the field mask directly references any output only fields. If so, that's
+	// invalid and an error should be returned.
+	outputOnlyMask, err := fieldmaskpb.New(&taskspb.Task{}, fieldbehavior.OutputOnlyPaths(&taskspb.Task{})...)
+	if err != nil {
+		log.Printf("error building output-only mask: %v", err)
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+	if intersect := fieldmaskpb.Intersect(outputOnlyMask, mask); len(intersect.GetPaths()) > 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "mask contains paths to output only fields: %q", intersect.GetPaths())
+	}
+
+	// We have done all stateless validation, so grab the mutex.
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	// The name is valid. Now we check if it corresponds to any task.
+	idx, ok := s.taskIndices[name]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", name)
+	}
+
+	// Grab a copy of the stored task. Until we have updated the resource and actually validated
+	// it, we do not want to affect the stored resource.
+	dst := proto.Clone(s.tasks[idx]).(*taskspb.Task)
+
+	// Find all output-only fields, and copy them over from dst to src. This way we know that
+	// they will be unchanged in dst after it is updated.
+	if err := fieldmask.Update(src, dst, outputOnlyMask); err != nil {
+		log.Printf("error copying output-only fields to src: %v", err)
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	// Now we can finally update dst based on src.
+	if err := fieldmask.Update(dst, src, req.GetUpdateMask()); err != nil {
+		return nil, status.Errorf(codes.Internal, "invalid mask: %v", err)
+	}
+
+	// After the update, validate the new version of the resource.
+	if dst.GetTitle() == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty title")
+	}
+
+	// After updating the resource is still valid, so store and return it.
+	s.tasks[idx] = dst
+	return dst, nil
 }
 
 func (s *Server) DeleteTask(ctx context.Context, req *taskspb.DeleteTaskRequest) (*taskspb.Task, error) {
