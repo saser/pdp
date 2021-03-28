@@ -1,6 +1,8 @@
 # tools.mk: rules for installing tools used by this project.
 
-tools := tools
+# The underscore is to prevent the `go` command from considering any Go files that may exist in
+# downloaded third-party dependencies.
+tools := _tools
 $(tools):
 	mkdir -p '$@'
 
