@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package aip.fieldbehavior.testing;
+
+import "google/api/field_behavior.proto";
+
+option go_package = "github.com/Saser/pdp/aip/fieldbehavior/testing/testing_go_proto";
+
+message Test {
+  string unspecified = 1;
+  string output_only = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  Nested nested = 3;
+}
+
+message Nested {
+  string unspecified = 1;
+  string output_only = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}

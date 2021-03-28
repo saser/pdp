@@ -5,6 +5,7 @@ go_module := $(shell go list -m)
 
 .PHONY: generate
 generate: \
+	$(googleapis_dir) \
 	$(proto_files) \
 	$(protoc) \
 	$(protoc-gen-go) \
@@ -13,6 +14,7 @@ generate: \
 generate:
 	$(protoc) \
 		--proto_path='.' \
+		--proto_path='$(googleapis_dir)' \
 		--proto_path='$(protoc_dir)/include' \
 		--plugin='$(protoc-gen-go)' \
 		--go_out=. \
