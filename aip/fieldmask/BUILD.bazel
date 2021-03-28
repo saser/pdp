@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "doc.go",
         "update.go",
+        "validate.go",
     ],
     importpath = "github.com/Saser/pdp/aip/fieldmask",
     visibility = ["//visibility:public"],
@@ -17,10 +18,14 @@ go_library(
 
 go_test(
     name = "fieldmask_test",
-    srcs = ["update_test.go"],
+    srcs = [
+        "update_test.go",
+        "validate_test.go",
+    ],
     embed = [":fieldmask"],
     deps = [
         "//aip/fieldmask/testing:testing_go_proto",
+        "//testing/errtest",
         "@com_github_google_go_cmp//cmp",
         "@org_golang_google_protobuf//proto",
         "@org_golang_google_protobuf//testing/protocmp",

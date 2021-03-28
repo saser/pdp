@@ -16,6 +16,24 @@ func All(fs ...TestFunc) TestFunc {
 	}
 }
 
+func IsNil() TestFunc {
+	return func(tb testing.TB, err error) {
+		tb.Helper()
+		if err != nil {
+			tb.Errorf("err = %v; want nil", err)
+		}
+	}
+}
+
+func IsNonNil() TestFunc {
+	return func(tb testing.TB, err error) {
+		tb.Helper()
+		if err == nil {
+			tb.Errorf("err = %v; want non-nil", err)
+		}
+	}
+}
+
 func ErrorContains(s string) TestFunc {
 	return func(tb testing.TB, err error) {
 		tb.Helper()
