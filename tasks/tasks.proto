@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package tasks;
 
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
 import "google/protobuf/field_mask.proto";
 
 option go_package = "github.com/Saser/pdp/tasks/tasks_go_proto";
@@ -43,21 +45,22 @@ service Tasks {
 
 // Represents something that requires some action to be completed.
 message Task {
+  option (google.api.resource) = {
+    type: "tasks.api.saser.se/Task"
+    pattern: "tasks/{task}"
+  };
+
   // The resource name of the task.
-  // Format: tasks/{task}
   string name = 1;
 
-  // Whether this task has been deleted.
-  // Output only. Call `DeleteTask` to mark a task as deleted.
-  bool deleted = 2;
+  // Whether this task has been deleted. Call `DeleteTask` to mark a task as deleted.
+  bool deleted = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The title of the task, as it would be displayed in a list of tasks. Should be short.
-  // Required.
-  string title = 3;
+  string title = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Whether this task is completed.
-  // Output only. This field can only be updated by calling `SetCompleted`.
-  bool completed = 4;
+  // Whether this task is completed. This field can only be updated by calling `SetCompleted`.
+  bool completed = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 /////////////////////////////////
