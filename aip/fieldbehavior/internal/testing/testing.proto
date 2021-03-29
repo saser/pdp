@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package aip.fieldbehavior.testing;
+package aip.fieldbehavior.internal.testing;
 
 import "google/api/field_behavior.proto";
 
-option go_package = "github.com/Saser/pdp/aip/fieldbehavior/testing/testing_go_proto";
+option go_package = "github.com/Saser/pdp/aip/fieldbehavior/internal/testing/testing_go_proto";
 
 message Test {
   string unspecified = 1;

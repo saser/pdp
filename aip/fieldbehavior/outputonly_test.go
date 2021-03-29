@@ -7,7 +7,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/protobuf/proto"
 
-	testingpb "github.com/Saser/pdp/aip/fieldbehavior/testing/testing_go_proto"
+	testingpb "github.com/Saser/pdp/aip/fieldbehavior/internal/testing/testing_go_proto"
 )
 
 func TestOutputOnlyPaths(t *testing.T) {
