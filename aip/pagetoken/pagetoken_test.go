@@ -3,7 +3,7 @@ package pagetoken
 import (
 	"testing"
 
-	pagetokenpb "github.com/Saser/pdp/aip/pagetoken/page_token_go_proto"
+	testingpb "github.com/Saser/pdp/aip/pagetoken/internal/testing/testing_go_proto"
 )
 
 func TestParse_EmptyPageToken(t *testing.T) {
@@ -13,17 +13,17 @@ func TestParse_EmptyPageToken(t *testing.T) {
 	}{
 		{
 			name: "DefaultFields",
-			req:  &pagetokenpb.ExampleListRequest{},
+			req:  &testingpb.ExampleListRequest{},
 		},
 		{
 			name: "NonDefaultPageSize",
-			req: &pagetokenpb.ExampleListRequest{
+			req: &testingpb.ExampleListRequest{
 				PageSize: 25,
 			},
 		},
 		{
 			name: "CustomParameter",
-			req: &pagetokenpb.ExampleListRequest{
+			req: &testingpb.ExampleListRequest{
 				Foo: "bar",
 			},
 		},
@@ -37,7 +37,7 @@ func TestParse_EmptyPageToken(t *testing.T) {
 }
 
 func TestParse_NonEmptyPageToken_OK(t *testing.T) {
-	req1 := &pagetokenpb.ExampleListRequest{
+	req1 := &testingpb.ExampleListRequest{
 		PageSize: 10,
 		Foo:      "bar",
 	}
@@ -46,7 +46,7 @@ func TestParse_NonEmptyPageToken_OK(t *testing.T) {
 		t.Fatalf("Parse(%v) err = %v; want nil", req1, err)
 	}
 
-	req2 := &pagetokenpb.ExampleListRequest{
+	req2 := &testingpb.ExampleListRequest{
 		PageSize:  50,
 		PageToken: pt1.Next(req1.GetPageSize()).String(),
 		Foo:       "bar",
@@ -57,7 +57,7 @@ func TestParse_NonEmptyPageToken_OK(t *testing.T) {
 }
 
 func TestParse_NonEmptyPageToken_Errors(t *testing.T) {
-	req1 := &pagetokenpb.ExampleListRequest{
+	req1 := &testingpb.ExampleListRequest{
 		PageSize: 10,
 		Foo:      "bar",
 	}
@@ -66,7 +66,7 @@ func TestParse_NonEmptyPageToken_Errors(t *testing.T) {
 		t.Fatalf("Parse(%v) err = %v; want nil", req1, err)
 	}
 
-	req2 := &pagetokenpb.ExampleListRequest{
+	req2 := &testingpb.ExampleListRequest{
 		PageSize:  50,
 		PageToken: pt1.Next(req1.GetPageSize()).String(),
 		Foo:       "barbarbar",
@@ -77,7 +77,7 @@ func TestParse_NonEmptyPageToken_Errors(t *testing.T) {
 }
 
 func TestPageToken_Next_Offset(t *testing.T) {
-	req := &pagetokenpb.ExampleListRequest{
+	req := &testingpb.ExampleListRequest{
 		Foo: "bar",
 	}
 	pt1, err := Parse(req)
@@ -94,7 +94,7 @@ func TestPageToken_Next_Offset(t *testing.T) {
 }
 
 func TestPageToken_Next_String(t *testing.T) {
-	req := &pagetokenpb.ExampleListRequest{
+	req := &testingpb.ExampleListRequest{
 		Foo: "bar",
 	}
 	pt1, err := Parse(req)

@@ -12,7 +12,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	pagetokenpb "github.com/Saser/pdp/aip/pagetoken/page_token_go_proto"
+	pagetokenpb "github.com/Saser/pdp/aip/pagetoken/internal/page_token_go_proto"
 )
 
 // ListRequest defines the common interface of proto messages for List requests.

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package aip.pagetoken;
+package aip.pagetoken.internal.testing;
 
-option go_package = "github.com/Saser/pdp/aip/pagetoken/page_token_go_proto";
+option go_package = "github.com/Saser/pdp/aip/pagetoken/internal/testing/testing_go_proto";
 
 message ExampleListRequest {
   // Required pagination parameters.
