@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package aip.fieldmask.testing;
+package aip.fieldmask.internal.testing;
 
-option go_package = "github.com/Saser/pdp/aip/fieldmask/testing/testing_go_proto";
+option go_package = "github.com/Saser/pdp/aip/fieldmask/internal/testing/testing_go_proto";
 
 // A message containing various types of fields that should be tested against.
 message Test {

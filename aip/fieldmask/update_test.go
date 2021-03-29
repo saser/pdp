@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
-	testingpb "github.com/Saser/pdp/aip/fieldmask/testing/testing_go_proto"
+	testingpb "github.com/Saser/pdp/aip/fieldmask/internal/testing/testing_go_proto"
 )
 
 func TestUpdate(t *testing.T) {
