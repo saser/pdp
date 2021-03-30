@@ -69,7 +69,12 @@ message Task {
 
 message GetTaskRequest {
   // The name of the task to get.
-  string name = 1;
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "tasks.api.saser.se/Task"
+    }
+  ];
 }
 
 message ListTasksRequest {
@@ -97,13 +102,13 @@ message ListTasksResponse {
 message CreateTaskRequest {
   // The task to create. The `name` field will be ignored -- it will be set by the server on the
   // returned task.
-  Task task = 1;
+  Task task = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateTaskRequest {
   // The task as it should be defined after the update, subject to `update_mask`. The `name` field
   // will be used to identify which task to update.
-  Task task = 1;
+  Task task = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Which fields of the task to update. If unspecified then the entire task will be updated.
   google.protobuf.FieldMask update_mask = 2;
@@ -111,7 +116,12 @@ message UpdateTaskRequest {
 
 message DeleteTaskRequest {
   // The name of the task to be deleted.
-  string name = 1;
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "tasks.api.saser.se/Task"
+    }
+  ];
 }
 
 message SetCompletedRequest {
