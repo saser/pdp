@@ -32,4 +32,5 @@ buildifier:
 		-lint=fix \
 		-warnings=all \
 		-r \
+		-v \
 		.
