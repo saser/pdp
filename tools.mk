@@ -64,3 +64,11 @@ $(googleapis_dir): | $(googleapis_archive)
 	unzip \
 		'$(googleapis_archive)' \
 		-d '$(@D)'
+
+# buildifier: a formatter and linter for BUILD.bazel files.
+buildifier := $(tools)/buildifier
+$(buildifier): go.mod go.sum
+	go \
+		build \
+		-o='$@' \
+		github.com/bazelbuild/buildtools/buildifier

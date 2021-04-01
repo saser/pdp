@@ -23,3 +23,13 @@ generate:
 		--go-grpc_out=. \
 		--go-grpc_opt=module='$(go_module)' \
 		$(proto_files)
+
+.PHONY: lint
+buildifier: \
+	$(buildifier)
+buildifier:
+	$(buildifier) \
+		-lint=fix \
+		-warnings=all \
+		-r \
+		.
