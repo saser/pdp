@@ -1,0 +1,6 @@
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:exclude _tools
+# gazelle:prefix github.com/Saser/pdp
+# gazelle:proto disable_global
+gazelle(name = "gazelle")

@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "page_token_go_proto",
+    srcs = ["page_token.pb.go"],
+    importpath = "github.com/Saser/pdp/aip/pagetoken/internal/page_token_go_proto",
+    visibility = ["//aip/pagetoken:__subpackages__"],
+    deps = [
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//runtime/protoimpl",
+        "@org_golang_google_protobuf//types/known/anypb",
+    ],
+)

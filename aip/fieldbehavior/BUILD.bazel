@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "fieldbehavior",
+    srcs = ["outputonly.go"],
+    importpath = "github.com/Saser/pdp/aip/fieldbehavior",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@org_golang_google_genproto//googleapis/api/annotations",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//types/descriptorpb",
+    ],
+)
+
+go_test(
+    name = "fieldbehavior_test",
+    srcs = ["outputonly_test.go"],
+    embed = [":fieldbehavior"],
+    deps = [
+        "//aip/fieldbehavior/internal/testing/testing_go_proto",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
+        "@org_golang_google_protobuf//proto",
+    ],
+)

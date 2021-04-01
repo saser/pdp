@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "grpctest",
+    srcs = [
+        "errtest.go",
+        "grpctest.go",
+    ],
+    importpath = "github.com/Saser/pdp/testing/grpctest",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//testing/errtest",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_grpc//test/bufconn",
+        "@org_golang_x_sync//errgroup",
+    ],
+)
