@@ -110,7 +110,7 @@ message UpdateTaskRequest {
   // will be used to identify which task to update.
   Task task = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Which fields of the task to update. If unspecified then the entire task will be updated.
+  // Which fields of the task to update. If unspecified then all fields set on the wire are updated.
   google.protobuf.FieldMask update_mask = 2;
 }
 

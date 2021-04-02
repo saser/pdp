@@ -329,7 +329,7 @@ type UpdateTaskRequest struct {
 	// The task as it should be defined after the update, subject to `update_mask`. The `name` field
 	// will be used to identify which task to update.
 	Task *Task `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Which fields of the task to update. If unspecified then the entire task will be updated.
+	// Which fields of the task to update. If unspecified then all fields set on the wire are updated.
 	UpdateMask *fieldmaskpb.FieldMask `protobuf:"bytes,2,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`
 }
 
