@@ -189,14 +189,24 @@ func (s *Server) UpdateTask(ctx context.Context, req *taskspb.UpdateTaskRequest)
 }
 
 func (s *Server) DeleteTask(ctx context.Context, req *taskspb.DeleteTaskRequest) (*taskspb.Task, error) {
+	name := req.GetName()
+	if name == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty name")
+	}
+	if prefix := "tasks/"; !strings.HasPrefix(name, prefix) {
+		return nil, status.Errorf(codes.InvalidArgument, `invalid name %q: must be of format "tasks/{task}"`, name)
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	name := req.GetName()
 	idx, ok := s.taskIndices[name]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "task not found: %q", name)
 	}
 	task := s.tasks[idx]
+	if task.Deleted {
+		return nil, status.Errorf(codes.InvalidArgument, "task %q is already deleted", name)
+	}
 	task.Deleted = true
 	return task, nil
 }

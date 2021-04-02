@@ -47,10 +47,10 @@
 
 ## `DeleteTask`
 
-* [ ] Empty `name` field: fail with `InvalidArgument`
-* [ ] Malformed `name` field: fail with `InvalidArgument`
-* [ ] Non-existent task: fail with `NotFound`
-* [ ] Deleting already deleted task: fail with `FailedPrecondition`
+* [x] Empty `name` field: fail with `InvalidArgument`
+* [x] Malformed `name` field: fail with `InvalidArgument`
+* [x] Non-existent task: fail with `NotFound`
+* [x] Deleting already deleted task: fail with `FailedPrecondition`
 
 ## `SetCompleted`
 

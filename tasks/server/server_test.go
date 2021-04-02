@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/Saser/pdp/testing/errtest"
@@ -33,6 +34,24 @@ func setup(t *testing.T) testTasksClient {
 	return testTasksClient{
 		TasksClient: taskspb.NewTasksClient(cc),
 	}
+}
+
+func (c testTasksClient) GetTaskT(ctx context.Context, t *testing.T, req *taskspb.GetTaskRequest) *taskspb.Task {
+	t.Helper()
+	task, err := c.GetTask(ctx, req)
+	if err != nil {
+		t.Errorf("GetTask(%v) err = %v; want nil", req, err)
+	}
+	return task
+}
+
+func (c testTasksClient) ListTasksT(ctx context.Context, t *testing.T, req *taskspb.ListTasksRequest) *taskspb.ListTasksResponse {
+	t.Helper()
+	res, err := c.ListTasks(ctx, req)
+	if err != nil {
+		t.Errorf("ListTasks(%v) err = %v; want nil", req, err)
+	}
+	return res
 }
 
 func (c testTasksClient) CreateTaskT(ctx context.Context, t *testing.T, req *taskspb.CreateTaskRequest) *taskspb.Task {
@@ -856,6 +875,179 @@ func TestUpdateTask_Errors(t *testing.T) {
 			if diff := cmp.Diff(task, after, protocmp.Transform()); diff != "" {
 				t.Errorf("resource updated even with errors (-before +after)\n%s", diff)
 			}
+		})
+	}
+}
+
+func TestDeleteTask(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	// Create a task that should later be deleted.
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "to be deleted",
+		},
+	})
+
+	// Verify that the task can be deleted.
+	req := &taskspb.DeleteTaskRequest{
+		Name: task.GetName(),
+	}
+	deleted, err := c.DeleteTask(ctx, req)
+	if err != nil {
+		t.Fatalf("DeleteTask(%v) err = %v; want nil", req, err)
+	}
+	if deleted.GetDeleted() == false {
+		t.Error("deleted.GetDeleted() = false; want true")
+	}
+}
+
+func TestDeleteTask_ThenGetTask(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	// Create a task then delete it.
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "to be deleted",
+		},
+	})
+	task = c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: task.GetName(),
+	})
+
+	// Verify that the task can still be queried using GetTask.
+	got := c.GetTaskT(ctx, t, &taskspb.GetTaskRequest{
+		Name: task.GetName(),
+	})
+	if diff := cmp.Diff(task, got, protocmp.Transform()); diff != "" {
+		t.Errorf("GetTask() after deleting has diff (-want +got)\n%s", diff)
+	}
+}
+
+func TestDeleteTask_ThenListTasks(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	// Create a task then delete it.
+	deleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "to be deleted",
+		},
+	})
+	deleted = c.DeleteTaskT(ctx, t, &taskspb.DeleteTaskRequest{
+		Name: deleted.GetName(),
+	})
+
+	// Create another task that should not be deleted.
+	notDeleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "should not be deleted",
+		},
+	})
+
+	for _, tt := range []struct {
+		name string
+		req  *taskspb.ListTasksRequest
+		want []*taskspb.Task
+	}{
+		{
+			name: "ShowDeleted",
+			req: &taskspb.ListTasksRequest{
+				ShowDeleted: true,
+			},
+			want: []*taskspb.Task{
+				deleted,
+				notDeleted,
+			},
+		},
+		{
+			name: "NoShowDeleted",
+			req: &taskspb.ListTasksRequest{
+				ShowDeleted: false,
+			},
+			want: []*taskspb.Task{
+				notDeleted,
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			res := c.ListTasksT(ctx, t, tt.req)
+			if diff := cmp.Diff(tt.want, res.GetTasks(), protocmp.Transform(), cmpopts.SortSlices(less)); diff != "" {
+				t.Errorf("unexpected result from listing tasks (-want +got)\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestDeleteTask_ThenDeleteAgain(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+
+	// Create a task then delete it.
+	deleted := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "to be deleted",
+		},
+	})
+	req := &taskspb.DeleteTaskRequest{
+		Name: deleted.GetName(),
+	}
+	deleted = c.DeleteTaskT(ctx, t, req)
+
+	// Repeating the request should fail.
+	_, err := c.DeleteTask(ctx, req)
+	errtest.All(
+		grpctest.WantCode(codes.InvalidArgument),
+		errtest.ErrorContains("already deleted"),
+		errtest.ErrorContains(fmt.Sprintf("%q", deleted.GetName())),
+	)(t, err)
+}
+
+func TestDeleteTask_Errors(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	for _, tt := range []struct {
+		name string
+		req  *taskspb.DeleteTaskRequest
+		tf   errtest.TestFunc
+	}{
+		{
+			name: "EmptyName",
+			req: &taskspb.DeleteTaskRequest{
+				Name: "", // explicitly set for clarity
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("empty name"),
+			),
+		},
+		{
+			name: "InvalidName",
+			req: &taskspb.DeleteTaskRequest{
+				Name: "invalidname",
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.InvalidArgument),
+				errtest.ErrorContains("invalid name"),
+				errtest.ErrorContains(`"invalidname"`),
+			),
+		},
+		{
+			name: "NonExistentTask",
+			req: &taskspb.DeleteTaskRequest{
+				Name: "tasks/999",
+			},
+			tf: errtest.All(
+				grpctest.WantCode(codes.NotFound),
+				errtest.ErrorContains(`"tasks/999"`),
+			),
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := c.DeleteTask(ctx, tt.req)
+			tt.tf(t, err)
 		})
 	}
 }
