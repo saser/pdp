@@ -1,0 +1,293 @@
+syntax = "proto3";
+
+package tasks2;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Saser/pdp/tasks2/tasks_go_proto";
+
+service Tasks {
+  rpc GetTask(GetTaskRequest) returns (Task);
+
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+
+  rpc CreateTask(CreateTaskRequest) returns (Task);
+
+  rpc UpdateTask(UpdateTaskRequest) returns (Task);
+
+  rpc AddDependency(AddDependencyRequest) returns (Task);
+
+  rpc RemoveDependency(RemoveDependencyRequest) returns (Task);
+
+  rpc AddLabel(AddLabelRequest) returns (Task);
+
+  rpc RemoveLabel(RemoveLabelRequest) returns (Task);
+
+  rpc CompleteTask(CompleteTaskRequest) returns (Task);
+
+  rpc UncompleteTask(UncompleteTaskRequest) returns (Task);
+
+  rpc DeferTask(DeferTaskRequest) returns (Task);
+
+  rpc UndeferTask(UndeferTaskRequest) returns (Task);
+
+  rpc GetEvent(GetEventRequest) returns (Event);
+
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Resource definitions.
+////////////////////////////////////////////////////////////////////////////////
+
+message Task {
+  option (google.api.resource) = {
+    type: "tasks.api.saser.se/Task"
+    pattern: "tasks/{task}"
+  };
+
+  string name = 1;
+
+  string title = 2 [(google.api.field_behavior) = REQUIRED];
+
+  bool completed = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  repeated string dependencies = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  repeated string labels = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  Deferral deferral = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message Event {
+  option (google.api.resource) = {
+    type: "tasks.api.saser.se/Event"
+    pattern: "tasks/{task}/events/{event}"
+  };
+
+  string name = 1;
+
+  string parent = 2 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  string comment = 4;
+
+  message AddDependency {
+    string task = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+    string dependency = 2 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+  }
+
+  message RemoveDependency {
+    string task = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+    string dependency = 2 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+  }
+
+  message AddLabel {
+    string label = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Label"];
+  }
+
+  message RemoveLabel {
+    string label = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Label"];
+  }
+
+  message Complete {}
+
+  message Uncomplete {}
+
+  message Defer {
+    Deferral deferral = 1;
+  }
+
+  message Undefer {
+    bool manual = 1;
+  }
+
+  oneof kind {
+    AddDependency add_dependency = 5;
+    RemoveDependency remove_dependency = 6;
+    AddLabel add_label = 7;
+    RemoveLabel remove_label = 8;
+    Complete complete = 9;
+    Uncomplete uncomplete = 10;
+    Defer defer = 11;
+    Undefer undefer = 12;
+  }
+}
+
+message Label {
+  option (google.api.resource) = {
+    type: "tasks.api.saser.se/Label"
+    pattern: "labels/{label}"
+  };
+
+  string name = 1;
+
+  string display_name = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Request and response messages.
+////////////////////////////////////////////////////////////////////////////////
+
+message GetTaskRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+}
+
+message ListTasksRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListTasksResponse {
+  repeated Task tasks = 1;
+
+  string next_page_token = 2;
+}
+
+message CreateTaskRequest {
+  Task task = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateTaskRequest {
+  Task task = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AddDependencyRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string dependency = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string comment = 3;
+}
+
+message RemoveDependencyRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string dependency = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string comment = 3;
+}
+
+message AddLabelRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string label = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Label"
+  ];
+
+  string comment = 3;
+}
+
+message RemoveLabelRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string label = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Label"
+  ];
+
+  string comment = 3;
+}
+
+message CompleteTaskRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string comment = 2;
+}
+
+message UncompleteTaskRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string comment = 2;
+}
+
+message DeferTaskRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  Deferral deferral = 2 [(google.api.field_behavior) = REQUIRED];
+
+  string comment = 3;
+}
+
+message UndeferTaskRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  string comment = 2;
+}
+
+message GetEventRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Event"
+  ];
+}
+
+message ListEventsRequest {
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+  ];
+
+  int32 page_size = 2;
+
+  string page_token = 3;
+}
+
+message ListEventsResponse {
+  repeated Event events = 1;
+
+  string next_page_token = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Other messages.
+////////////////////////////////////////////////////////////////////////////////
+
+message Deferral {
+  message Constraint {
+    oneof kind {
+      string dependency = 1;
+      google.protobuf.Timestamp after_time = 2;
+    }
+  }
+
+  repeated Constraint constraints = 1;
+}
