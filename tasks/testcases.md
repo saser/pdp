@@ -37,15 +37,13 @@
 
 ## `UpdateTask`
 
-* [ ] With empty `name`: fail with `InvalidArgument`
-* [ ] With `name` field with invalid format: fail with `InvalidArgument`
-* [ ] With non-existent task: fail with `NotFound`
-* [ ] Setting output only fields: shoud fail with `InvalidArgument`:
-    * [ ] Both for empty `update_mask` (i.e., update all fields), or for `update_mask` specifically containing the output-only fields
-* [ ] Updating the `title` to be empty
-* [ ] Invalid `update_mask`
-    * [ ] Containing only bad fields
-    * [ ] Containing at least one good field
+* [x] With empty `name`: fail with `InvalidArgument`
+* [x] With `name` field with invalid format: fail with `InvalidArgument`
+* [x] With non-existent task: fail with `NotFound`
+* [x] Setting output only fields and specifying them in field mask: shoud fail with `InvalidArgument`:
+* [x] Updating the `title` to be empty
+* [x] Invalid `update_mask`
+    * [x] Containing only bad fields
 
 ## `DeleteTask`
 
