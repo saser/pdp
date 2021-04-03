@@ -1,0 +1,34 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "server",
+    srcs = ["server.go"],
+    importpath = "github.com/Saser/pdp/tasks2/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//aip/pagetoken",
+        "//tasks2/tasks_go_proto",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = [
+        "server_createtask_test.go",
+        "server_gettask_test.go",
+        "server_listtasks_test.go",
+        "server_utils_for_test.go",
+    ],
+    embed = [":server"],
+    deps = [
+        "//tasks2/tasks_go_proto",
+        "//testing/errtest",
+        "//testing/grpctest",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_protobuf//testing/protocmp",
+    ],
+)
