@@ -9,7 +9,6 @@ import (
 	"github.com/Saser/pdp/testing/grpctest"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -29,8 +28,7 @@ type testTasksClient struct {
 
 func setup(t *testing.T) testTasksClient {
 	t.Helper()
-	register := func(s *grpc.Server) { taskspb.RegisterTasksServer(s, New()) }
-	cc := grpctest.NewClientConnT(t, register)
+	cc := grpctest.NewClientConnT(t, &taskspb.Tasks_ServiceDesc, New())
 	return testTasksClient{
 		TasksClient: taskspb.NewTasksClient(cc),
 	}

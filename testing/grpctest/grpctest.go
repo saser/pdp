@@ -12,7 +12,7 @@ import (
 
 const bufSize = 1024 * 1024
 
-func NewClientConnT(tb testing.TB, register func(*grpc.Server)) *grpc.ClientConn {
+func NewClientConnT(tb testing.TB, sd *grpc.ServiceDesc, ss interface{}) *grpc.ClientConn {
 	tb.Helper()
 
 	lis := bufconn.Listen(bufSize)
@@ -31,7 +31,7 @@ func NewClientConnT(tb testing.TB, register func(*grpc.Server)) *grpc.ClientConn
 	})
 
 	s := grpc.NewServer()
-	register(s)
+	s.RegisterService(sd, ss)
 	g.Go(func() error {
 		return s.Serve(lis)
 	})
