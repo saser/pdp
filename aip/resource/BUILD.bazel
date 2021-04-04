@@ -1,0 +1,34 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "resource",
+    srcs = [
+        "descriptor.go",
+        "lookup.go",
+    ],
+    importpath = "github.com/Saser/pdp/aip/resource",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@org_golang_google_genproto//googleapis/api/annotations",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//reflect/protoregistry",
+    ],
+)
+
+go_test(
+    name = "resource_test",
+    srcs = [
+        "descriptor_test.go",
+        "lookup_test.go",
+    ],
+    embed = [":resource"],
+    deps = [
+        "//aip/resource/internal/testing/testing_go_proto",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_genproto//googleapis/api/annotations",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//testing/protocmp",
+    ],
+)

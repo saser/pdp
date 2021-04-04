@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "testing_go_proto",
+    srcs = ["testing.pb.go"],
+    importpath = "github.com/Saser/pdp/aip/resource/internal/testing/testing_go_proto",
+    visibility = ["//aip/resource:__subpackages__"],
+    deps = [
+        "@org_golang_google_genproto//googleapis/api/annotations",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//runtime/protoimpl",
+    ],
+)
