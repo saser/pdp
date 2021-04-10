@@ -15,11 +15,13 @@ var (
 	valueRE    = regexp.MustCompile(`^[a-zA-Z0-9\-]+$`)
 )
 
+// segment represents a segment in a pattern (not in a name).
 type segment struct {
-	Pattern  string
-	Variable bool
+	Pattern  string // The string this segment was parsed from.
+	Variable bool   // Whether this segment represents a variable.
 }
 
+// parseSegment parses the given string as a single segment.
 func parseSegment(s string) (segment, error) {
 	if s == "" {
 		return segment{}, errors.New("empty segment")
@@ -40,7 +42,9 @@ func parseSegment(s string) (segment, error) {
 	}
 }
 
-func (s segment) Name() string {
+// VarName returns the name of the variable, i.e., the "blurb" in "{blurb}". If this segment does
+// not represent a variable (s.Variable is false), VarName returns an empty string.
+func (s segment) VarName() string {
 	if !s.Variable {
 		return ""
 	}
@@ -114,7 +118,7 @@ func (p *Pattern) Match(name string) (Values, error) {
 	for i, segstr := range segstrs {
 		seg := p.segments[i]
 		if seg.Variable {
-			varName := seg.Name()
+			varName := seg.VarName()
 			if !valueRE.MatchString(segstr) {
 				return Values{}, fmt.Errorf("match: invalid value %q for variable %q", segstr, varName)
 			}
@@ -138,7 +142,7 @@ func (p *Pattern) Render(v Values) (string, error) {
 		if !seg.Variable {
 			continue
 		}
-		needed[seg.Name()] = true
+		needed[seg.VarName()] = true
 	}
 	var missing []string
 	for varName := range needed {
@@ -157,7 +161,7 @@ func (p *Pattern) Render(v Values) (string, error) {
 			rendered = append(rendered, seg.Pattern)
 			continue
 		}
-		varName := seg.Name()
+		varName := seg.VarName()
 		val := v[varName]
 		if val == "" {
 			return "", fmt.Errorf("render: empty value for variable %q", varName)
