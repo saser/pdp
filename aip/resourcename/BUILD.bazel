@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "resourcename",
+    srcs = ["resourcename.go"],
+    importpath = "github.com/Saser/pdp/aip/resourcename",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "resourcename_test",
+    srcs = [
+        "example_test.go",
+        "resourcename_test.go",
+    ],
+    embed = [":resourcename"],
+    deps = [
+        "//testing/errtest",
+        "@com_github_google_go_cmp//cmp",
+    ],
+)
