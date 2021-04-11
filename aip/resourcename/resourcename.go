@@ -101,16 +101,17 @@ func MustCompile(pattern string) *Pattern {
 	return p
 }
 
-// Match matches the given name against this pattern. The variables in the pattern are given values
-// based on the corresponding segment in the name. The name can contains the same segments or a
-// prefix sequence of segments. However, a name with more segments than the pattern is invalid.
+// Match matches the given non-empty name against this pattern. The variables in the pattern are
+// given values based on the corresponding segment in the name. The name can contains the same
+// segments or a prefix sequence of segments. However, a name with more segments than the pattern is
+// invalid.
 //
 // Variable values must be non-empty and can consist only of a-z, A-Z, 0-9, and hyphens.
 func (p *Pattern) Match(name string) (Values, error) {
-	v := Values{}
 	if name == "" {
-		return v, nil
+		return Values{}, errors.New("match: empty name")
 	}
+	v := Values{}
 	segstrs := strings.Split(name, "/")
 	if got, max := len(segstrs), len(p.segments); got > max {
 		return Values{}, fmt.Errorf("match: name %q has %d segments, which is more than pattern %q which has %d segments", name, got, p, max)

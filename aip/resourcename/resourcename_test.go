@@ -85,7 +85,6 @@ func TestPattern_Match(t *testing.T) {
 			testName: "NestedResources",
 			p:        MustCompile("blurbs/{blurb}/gobs/{gob}/{othergob}"),
 			values: map[string]Values{
-				"":       {},
 				"blurbs": {},
 				"blurbs/123": {
 					"blurb": "123",
@@ -118,7 +117,6 @@ func TestPattern_Match(t *testing.T) {
 			testName: "OnlySingletons",
 			p:        MustCompile("some/nested/singletons"),
 			values: map[string]Values{
-				"":                       {},
 				"some":                   {},
 				"some/nested":            {},
 				"some/nested/singletons": {},
@@ -152,6 +150,7 @@ func TestPattern_Match_Errors(t *testing.T) {
 			testName: "NestedResources",
 			p:        MustCompile("blurbs/{blurb}/gobs/{gob}/{othergob}"),
 			names: []string{
+				"",
 				"/",
 				"blurbs/",
 				"/gobs",
@@ -169,6 +168,7 @@ func TestPattern_Match_Errors(t *testing.T) {
 			testName: "OnlySingletons",
 			p:        MustCompile("some/nested/singletons"),
 			names: []string{
+				"",
 				"/",
 				"some/",
 				"some/nested/",
@@ -201,6 +201,7 @@ func TestPattern_Matches(t *testing.T) {
 			testName: "NestedResources",
 			p:        MustCompile("blurbs/{blurb}/gobs/{gob}/{othergob}"),
 			cases: map[string]bool{
+				"":                               false,
 				"blurbs":                         true,
 				"blurbs/":                        false,
 				"blurbs/123":                     true,
