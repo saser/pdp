@@ -191,6 +191,41 @@ func TestPattern_Match_Errors(t *testing.T) {
 	}
 }
 
+func TestPattern_Matches(t *testing.T) {
+	for _, tt := range []struct {
+		testName string
+		p        *Pattern
+		cases    map[string]bool
+	}{
+		{
+			testName: "NestedResources",
+			p:        MustCompile("blurbs/{blurb}/gobs/{gob}/{othergob}"),
+			cases: map[string]bool{
+				"blurbs":                         true,
+				"blurbs/":                        false,
+				"blurbs/123":                     true,
+				"blurbs/{blurb}":                 false,
+				"blurbs/123/gobs/456/789":        true,
+				"blurbs/{blurb}/gobs/456/789":    false,
+				"blurbs/123/gobs/{gob}/789":      false,
+				"blurbs/123/gobs/456/{othergob}": false,
+			},
+		},
+	} {
+		t.Run(tt.testName, func(t *testing.T) {
+			for name, want := range tt.cases {
+				got := tt.p.Matches(name)
+				if got != want {
+					t.Errorf("p.Matches(%q) = %v; want %v", name, got, want)
+				}
+			}
+			if t.Failed() {
+				t.Logf("p = %q", tt.p)
+			}
+		})
+	}
+}
+
 func TestPattern_Render(t *testing.T) {
 	for _, tt := range []struct {
 		name string

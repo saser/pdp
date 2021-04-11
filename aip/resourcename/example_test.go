@@ -70,6 +70,25 @@ func ExamplePattern_Match_prefix() {
 	// gob exists = false
 }
 
+func ExamplePattern_Matches() {
+	p := MustCompile("blurbs/{blurb}/gobs/{gob}")
+	for _, name := range []string{
+		"blurbs",
+		"blurbs/123",
+		"blurbs/{blurb}",
+		"blurbs/123/gobs/456",
+		"blurbs/123/gobs/{gob}",
+	} {
+		fmt.Printf("p.Matches(%q) = %v\n", name, p.Matches(name))
+	}
+	// Output:
+	// p.Matches("blurbs") = true
+	// p.Matches("blurbs/123") = true
+	// p.Matches("blurbs/{blurb}") = false
+	// p.Matches("blurbs/123/gobs/456") = true
+	// p.Matches("blurbs/123/gobs/{gob}") = false
+}
+
 func ExamplePattern_Render() {
 	p := MustCompile("blurbs/{blurb}/gobs/{gob}")
 

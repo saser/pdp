@@ -132,6 +132,12 @@ func (p *Pattern) Match(name string) (Values, error) {
 	return v, nil
 }
 
+// Matches returns whether Match would return a nil error.
+func (p *Pattern) Matches(name string) bool {
+	_, err := p.Match(name)
+	return err == nil
+}
+
 // Render uses the given values to construct a resource name. The given values must contain
 // non-empty, valid values for all variables in the pattern.
 //
