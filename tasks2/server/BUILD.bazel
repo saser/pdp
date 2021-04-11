@@ -2,11 +2,16 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "server",
-    srcs = ["server.go"],
+    srcs = [
+        "resources.go",
+        "server.go",
+    ],
     importpath = "github.com/Saser/pdp/tasks2/server",
     visibility = ["//visibility:public"],
     deps = [
         "//aip/pagetoken",
+        "//aip/resource",
+        "//aip/resourcename",
         "//tasks2/tasks_go_proto",
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//status",

@@ -3,13 +3,14 @@ package server
 import (
 	"context"
 	"fmt"
-	"strings"
+	"log"
 	"sync"
 
+	"github.com/Saser/pdp/aip/pagetoken"
+	"github.com/Saser/pdp/aip/resourcename"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/Saser/pdp/aip/pagetoken"
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
 )
 
@@ -34,8 +35,8 @@ func (s *Server) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*tas
 	if name == "" {
 		return nil, status.Error(codes.InvalidArgument, "empty name")
 	}
-	if prefix := "tasks/"; !strings.HasPrefix(name, prefix) {
-		return nil, status.Errorf(codes.InvalidArgument, `invalid name %q does not have format "tasks/{task}"`, name)
+	if !taskPattern.Matches(name) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid name %q does not have format %q", name, taskPattern)
 	}
 
 	s.mu.Lock()
@@ -98,7 +99,14 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	idx := len(s.tasks)
-	task.Name = fmt.Sprintf("tasks/%d", idx+1)
+	v := resourcename.Values{
+		"task": fmt.Sprint(idx + 1),
+	}
+	name, err := taskPattern.Render(v)
+	if err != nil {
+		log.Printf("CreateTask failed to render task name: %v", err)
+	}
+	task.Name = name
 	s.tasks = append(s.tasks, task)
 	s.taskIndices[task.Name] = idx
 	return task, nil
