@@ -15,7 +15,7 @@ var lookup = map[string]entry{}
 
 func init() {
 	protoregistry.GlobalTypes.RangeMessages(func(mt protoreflect.MessageType) bool {
-		rd := Descriptor(mt.Zero().Interface())
+		rd := DescriptorOf(mt.Zero().Interface())
 		if rd == nil {
 			return true
 		}

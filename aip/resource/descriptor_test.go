@@ -40,7 +40,7 @@ func TestDescriptor(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Descriptor(tt.m)
+			got := DescriptorOf(tt.m)
 			if diff := cmp.Diff(tt.want, got, protocmp.Transform()); diff != "" {
 				t.Errorf("diff between resource descriptors (-want +got)\n%s", diff)
 			}

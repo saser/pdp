@@ -5,6 +5,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func Descriptor(m proto.Message) *annotations.ResourceDescriptor {
+func DescriptorOf(m proto.Message) *annotations.ResourceDescriptor {
 	return proto.GetExtension(m.ProtoReflect().Descriptor().Options(), annotations.E_Resource).(*annotations.ResourceDescriptor)
 }
