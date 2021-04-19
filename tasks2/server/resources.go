@@ -8,10 +8,14 @@ import (
 )
 
 var (
-	taskPattern *resourcename.Pattern
+	taskPattern  *resourcename.Pattern
+	eventPattern *resourcename.Pattern
 )
 
 func init() {
 	taskRD := resource.DescriptorOf(&taskspb.Task{})
 	taskPattern = resourcename.MustCompile(taskRD.GetPattern()[0])
+
+	eventRD := resource.DescriptorOf(&taskspb.Event{})
+	eventPattern = resourcename.MustCompile(eventRD.GetPattern()[0])
 }

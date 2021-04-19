@@ -4,12 +4,14 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
 	"sync"
 
 	"github.com/Saser/pdp/aip/pagetoken"
 	"github.com/Saser/pdp/aip/resourcename"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
 )
@@ -19,14 +21,19 @@ const maxPageSize = 100
 type Server struct {
 	taskspb.UnimplementedTasksServer
 
-	mu          sync.Mutex
-	tasks       []*taskspb.Task
-	taskIndices map[string]int
+	mu           sync.Mutex
+	tasks        []*taskspb.Task
+	taskIndices  map[string]int // task name -> index into `tasks`
+	events       []*taskspb.Event
+	eventIndices map[string]int      // event name -> index into `events`
+	taskEvents   map[string][]string // task name -> event names
 }
 
 func New() *Server {
 	return &Server{
-		taskIndices: make(map[string]int),
+		taskIndices:  make(map[string]int),
+		eventIndices: make(map[string]int),
+		taskEvents:   make(map[string][]string),
 	}
 }
 
@@ -105,6 +112,7 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	name, err := taskPattern.Render(v)
 	if err != nil {
 		log.Printf("CreateTask failed to render task name: %v", err)
+		return nil, status.Error(codes.Internal, "internal error")
 	}
 	task.Name = name
 	s.tasks = append(s.tasks, task)
@@ -148,5 +156,124 @@ func (s *Server) AddDependency(ctx context.Context, req *taskspb.AddDependencyRe
 	}
 
 	task.Dependencies = append(task.GetDependencies(), dependencyName)
+
+	for _, parent := range []string{
+		taskName,
+		dependencyName,
+	} {
+		event := &taskspb.Event{
+			CreateTime: timestamppb.Now(),
+			Comment:    req.GetComment(),
+			Kind: &taskspb.Event_AddDependency_{AddDependency: &taskspb.Event_AddDependency{
+				Task:       taskName,
+				Dependency: dependencyName,
+			}},
+		}
+		if _, err := s.createEvent(ctx, parent, event); err != nil {
+			return nil, err
+		}
+	}
+
 	return task, nil
+}
+
+func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest) (*taskspb.ListEventsResponse, error) {
+	parent := req.GetParent()
+	if parent == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty parent")
+	}
+	if !taskPattern.Matches(parent) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid parent %q; want format %q", parent, taskPattern)
+	}
+
+	pageSize := req.GetPageSize()
+	if pageSize < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "negative page size %d", pageSize)
+	}
+	if pageSize == 0 || pageSize > maxPageSize {
+		pageSize = maxPageSize
+	}
+
+	pt, err := pagetoken.Parse(req)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid page token %q: %v", req.GetPageToken(), err)
+	}
+	start := int(pt.Offset())
+	next := pt.Next(pageSize)
+	end := int(next.Offset())
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	eventNames, ok := s.taskEvents[parent]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "no events found for parent %q", parent)
+	}
+
+	// eventNames is the collection we are paginating over.
+	var lastPage bool
+	if end > len(eventNames) {
+		eventNames = eventNames[start:]
+		lastPage = true
+	} else {
+		eventNames = eventNames[start:end]
+		lastPage = false
+	}
+
+	var indices []int
+	for _, event := range eventNames {
+		index, ok := s.eventIndices[event]
+		if !ok {
+			log.Printf("no index for event %q (parent %q)", event, parent)
+			return nil, status.Error(codes.Internal, "internal error")
+		}
+		indices = append(indices, index)
+	}
+
+	var events []*taskspb.Event
+	for _, index := range indices {
+		events = append(events, s.events[index])
+	}
+
+	res := &taskspb.ListEventsResponse{
+		Events: events,
+	}
+	if !lastPage {
+		res.NextPageToken = next.String()
+	}
+	return res, nil
+}
+
+// createEvent creates the given event under the given parent. The event's name and parent fields
+// will be overwritten, and the updated event is returned. This method takes care of the internal
+// bookkeeping. Any error returned is created by the status package, and can be returned directly
+// from an RPC method.
+//
+// This method is not thread-safe. A caller must hold the server's mutex before calling this method.
+func (s *Server) createEvent(ctx context.Context, parent string, event *taskspb.Event) (*taskspb.Event, error) {
+	v, err := eventPattern.Match(parent)
+	if err != nil {
+		log.Printf("parent task %q didn't match event pattern %q", parent, eventPattern)
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+	taskEvents := s.taskEvents[parent]
+	defer func() {
+		s.taskEvents[parent] = taskEvents
+	}()
+	id := strconv.Itoa(len(taskEvents) + 1)
+	v["event"] = id
+	name, err := eventPattern.Render(v)
+	if err != nil {
+		log.Printf("failed to render name for new event: %v", err)
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+	taskEvents = append(taskEvents, name)
+
+	event.Name = name
+	event.Parent = parent
+
+	index := len(s.events)
+	s.eventIndices[name] = index
+	s.events = append(s.events, event)
+	return event, nil
 }

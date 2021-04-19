@@ -15,6 +15,7 @@ go_library(
         "//tasks2/tasks_go_proto",
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//types/known/timestamppb",
     ],
 )
 
@@ -24,6 +25,7 @@ go_test(
         "server_adddependency_test.go",
         "server_createtask_test.go",
         "server_gettask_test.go",
+        "server_listevents_test.go",
         "server_listtasks_test.go",
         "server_utils_for_test.go",
     ],
