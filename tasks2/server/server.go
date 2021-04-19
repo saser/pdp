@@ -111,3 +111,42 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	s.taskIndices[task.Name] = idx
 	return task, nil
 }
+
+func (s *Server) AddDependency(ctx context.Context, req *taskspb.AddDependencyRequest) (*taskspb.Task, error) {
+	taskName := req.GetTask()
+	if taskName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty task")
+	}
+	if !taskPattern.Matches(taskName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid task name %q; want format %q", taskName, taskPattern)
+	}
+	dependencyName := req.GetDependency()
+	if dependencyName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty dependency")
+	}
+	if !taskPattern.Matches(dependencyName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid dependency name %q; want format %q", dependencyName, taskPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	taskIdx, ok := s.taskIndices[taskName]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", taskName)
+	}
+	task := s.tasks[taskIdx]
+
+	if _, ok := s.taskIndices[dependencyName]; !ok {
+		return nil, status.Errorf(codes.NotFound, "dependency %q not found", dependencyName)
+	}
+
+	for _, existing := range task.GetDependencies() {
+		if existing == dependencyName {
+			return nil, status.Errorf(codes.AlreadyExists, "%q already depends on %q", taskName, dependencyName)
+		}
+	}
+
+	task.Dependencies = append(task.GetDependencies(), dependencyName)
+	return task, nil
+}
