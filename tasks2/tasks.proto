@@ -36,6 +36,14 @@ service Tasks {
   rpc GetEvent(GetEventRequest) returns (Event);
 
   rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
+
+  rpc GetLabel(GetLabelRequest) returns (Label);
+
+  rpc ListLabels(ListLabelsRequest) returns (ListLabelsResponse);
+
+  rpc CreateLabel(CreateLabelRequest) returns (Label);
+
+  rpc UpdateLabel(UpdateLabelRequest) returns (Label);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -275,6 +283,33 @@ message ListEventsResponse {
   repeated Event events = 1;
 
   string next_page_token = 2;
+}
+
+message GetLabelRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "tasks.api.saser.se/Label"
+  ];
+}
+
+message ListLabelsRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListLabelsResponse {
+  repeated Label labels = 1;
+
+  string next_page_token = 2;
+}
+
+message CreateLabelRequest {
+  Label label = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateLabelRequest {
+  Label label = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

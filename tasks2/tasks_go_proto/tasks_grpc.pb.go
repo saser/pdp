@@ -32,6 +32,10 @@ type TasksClient interface {
 	UndeferTask(ctx context.Context, in *UndeferTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	GetEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*Event, error)
 	ListEvents(ctx context.Context, in *ListEventsRequest, opts ...grpc.CallOption) (*ListEventsResponse, error)
+	GetLabel(ctx context.Context, in *GetLabelRequest, opts ...grpc.CallOption) (*Label, error)
+	ListLabels(ctx context.Context, in *ListLabelsRequest, opts ...grpc.CallOption) (*ListLabelsResponse, error)
+	CreateLabel(ctx context.Context, in *CreateLabelRequest, opts ...grpc.CallOption) (*Label, error)
+	UpdateLabel(ctx context.Context, in *UpdateLabelRequest, opts ...grpc.CallOption) (*Label, error)
 }
 
 type tasksClient struct {
@@ -168,6 +172,42 @@ func (c *tasksClient) ListEvents(ctx context.Context, in *ListEventsRequest, opt
 	return out, nil
 }
 
+func (c *tasksClient) GetLabel(ctx context.Context, in *GetLabelRequest, opts ...grpc.CallOption) (*Label, error) {
+	out := new(Label)
+	err := c.cc.Invoke(ctx, "/tasks2.Tasks/GetLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tasksClient) ListLabels(ctx context.Context, in *ListLabelsRequest, opts ...grpc.CallOption) (*ListLabelsResponse, error) {
+	out := new(ListLabelsResponse)
+	err := c.cc.Invoke(ctx, "/tasks2.Tasks/ListLabels", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tasksClient) CreateLabel(ctx context.Context, in *CreateLabelRequest, opts ...grpc.CallOption) (*Label, error) {
+	out := new(Label)
+	err := c.cc.Invoke(ctx, "/tasks2.Tasks/CreateLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tasksClient) UpdateLabel(ctx context.Context, in *UpdateLabelRequest, opts ...grpc.CallOption) (*Label, error) {
+	out := new(Label)
+	err := c.cc.Invoke(ctx, "/tasks2.Tasks/UpdateLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TasksServer is the server API for Tasks service.
 // All implementations must embed UnimplementedTasksServer
 // for forward compatibility
@@ -186,6 +226,10 @@ type TasksServer interface {
 	UndeferTask(context.Context, *UndeferTaskRequest) (*Task, error)
 	GetEvent(context.Context, *GetEventRequest) (*Event, error)
 	ListEvents(context.Context, *ListEventsRequest) (*ListEventsResponse, error)
+	GetLabel(context.Context, *GetLabelRequest) (*Label, error)
+	ListLabels(context.Context, *ListLabelsRequest) (*ListLabelsResponse, error)
+	CreateLabel(context.Context, *CreateLabelRequest) (*Label, error)
+	UpdateLabel(context.Context, *UpdateLabelRequest) (*Label, error)
 	mustEmbedUnimplementedTasksServer()
 }
 
@@ -234,6 +278,18 @@ func (UnimplementedTasksServer) GetEvent(context.Context, *GetEventRequest) (*Ev
 }
 func (UnimplementedTasksServer) ListEvents(context.Context, *ListEventsRequest) (*ListEventsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListEvents not implemented")
+}
+func (UnimplementedTasksServer) GetLabel(context.Context, *GetLabelRequest) (*Label, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLabel not implemented")
+}
+func (UnimplementedTasksServer) ListLabels(context.Context, *ListLabelsRequest) (*ListLabelsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListLabels not implemented")
+}
+func (UnimplementedTasksServer) CreateLabel(context.Context, *CreateLabelRequest) (*Label, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateLabel not implemented")
+}
+func (UnimplementedTasksServer) UpdateLabel(context.Context, *UpdateLabelRequest) (*Label, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateLabel not implemented")
 }
 func (UnimplementedTasksServer) mustEmbedUnimplementedTasksServer() {}
 
@@ -500,6 +556,78 @@ func _Tasks_ListEvents_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Tasks_GetLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TasksServer).GetLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tasks2.Tasks/GetLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TasksServer).GetLabel(ctx, req.(*GetLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Tasks_ListLabels_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListLabelsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TasksServer).ListLabels(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tasks2.Tasks/ListLabels",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TasksServer).ListLabels(ctx, req.(*ListLabelsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Tasks_CreateLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TasksServer).CreateLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tasks2.Tasks/CreateLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TasksServer).CreateLabel(ctx, req.(*CreateLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Tasks_UpdateLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TasksServer).UpdateLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tasks2.Tasks/UpdateLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TasksServer).UpdateLabel(ctx, req.(*UpdateLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Tasks_ServiceDesc is the grpc.ServiceDesc for Tasks service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -562,6 +690,22 @@ var Tasks_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListEvents",
 			Handler:    _Tasks_ListEvents_Handler,
+		},
+		{
+			MethodName: "GetLabel",
+			Handler:    _Tasks_GetLabel_Handler,
+		},
+		{
+			MethodName: "ListLabels",
+			Handler:    _Tasks_ListLabels_Handler,
+		},
+		{
+			MethodName: "CreateLabel",
+			Handler:    _Tasks_CreateLabel_Handler,
+		},
+		{
+			MethodName: "UpdateLabel",
+			Handler:    _Tasks_UpdateLabel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
