@@ -10,6 +10,23 @@ import (
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
 )
 
+func checkEvents(t *testing.T, events []*taskspb.Event) {
+	t.Helper()
+	for _, event := range events {
+		name := event.GetName()
+		if _, err := eventPattern.Match(name); err != nil {
+			t.Errorf("eventPattern.Match(%q) err = %v; want nil", name, err)
+		}
+		createTime := event.GetCreateTime()
+		if createTime == nil {
+			t.Error("GetCreateTime() = nil; want non-nil")
+		}
+		if err := createTime.CheckValid(); err != nil {
+			t.Errorf("GetCreateTime().CheckValid() = %v; want nil", err)
+		}
+	}
+}
+
 func TestServer_ListEvents_AddDependency(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
@@ -40,12 +57,78 @@ func TestServer_ListEvents_AddDependency(t *testing.T) {
 		if err != nil {
 			t.Errorf("ListEvents(%v) err = %v; want nil", req, err)
 		}
+
 		got := res.GetEvents()
+		checkEvents(t, got)
+
 		want := []*taskspb.Event{
 			{
 				Parent:  parent,
 				Comment: "This should show up in both `task`s events and `dependency`s events.",
 				Kind: &taskspb.Event_AddDependency_{AddDependency: &taskspb.Event_AddDependency{
+					Task:       task.GetName(),
+					Dependency: dependency.GetName(),
+				}},
+			},
+		}
+		if diff := cmp.Diff(want, got, protocmp.Transform(), protocmp.IgnoreFields(&taskspb.Event{}, "name", "create_time")); diff != "" {
+			t.Errorf("unexpected diff between events (-want +got)\n%s", diff)
+		}
+	}
+}
+
+func TestServer_ListEvents_RemoveDependency(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "This task depends on another",
+		},
+	})
+	dependency := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "This task is depended on",
+		},
+	})
+	c.AddDependencyT(ctx, t, &taskspb.AddDependencyRequest{
+		Task:       task.GetName(),
+		Dependency: dependency.GetName(),
+		Comment:    "[AddDependency] This should show up in both `task`s events and `dependency`s events.",
+	})
+	c.RemoveDependencyT(ctx, t, &taskspb.RemoveDependencyRequest{
+		Task:       task.GetName(),
+		Dependency: dependency.GetName(),
+		Comment:    "[RemoveDependency] This should show up in both `task`s events and `dependency`s events.",
+	})
+
+	for _, parent := range []string{
+		task.GetName(),
+		dependency.GetName(),
+	} {
+		req := &taskspb.ListEventsRequest{
+			Parent: parent,
+		}
+		res, err := c.ListEvents(ctx, req)
+		if err != nil {
+			t.Errorf("ListEvents(%v) err = %v; want nil", req, err)
+		}
+
+		got := res.GetEvents()
+		checkEvents(t, got)
+
+		want := []*taskspb.Event{
+			{
+				Parent:  parent,
+				Comment: "[AddDependency] This should show up in both `task`s events and `dependency`s events.",
+				Kind: &taskspb.Event_AddDependency_{AddDependency: &taskspb.Event_AddDependency{
+					Task:       task.GetName(),
+					Dependency: dependency.GetName(),
+				}},
+			},
+			{
+				Parent:  parent,
+				Comment: "[RemoveDependency] This should show up in both `task`s events and `dependency`s events.",
+				Kind: &taskspb.Event_RemoveDependency_{RemoveDependency: &taskspb.Event_RemoveDependency{
 					Task:       task.GetName(),
 					Dependency: dependency.GetName(),
 				}},

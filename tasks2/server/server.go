@@ -177,6 +177,68 @@ func (s *Server) AddDependency(ctx context.Context, req *taskspb.AddDependencyRe
 	return task, nil
 }
 
+func (s *Server) RemoveDependency(ctx context.Context, req *taskspb.RemoveDependencyRequest) (*taskspb.Task, error) {
+	taskName := req.GetTask()
+	if taskName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty task")
+	}
+	if !taskPattern.Matches(taskName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid task name %q; want format %q", taskName, taskPattern)
+	}
+	dependencyName := req.GetDependency()
+	if dependencyName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty dependency")
+	}
+	if !taskPattern.Matches(dependencyName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid dependency name %q; want format %q", dependencyName, taskPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	taskIdx, ok := s.taskIndices[taskName]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", taskName)
+	}
+	task := s.tasks[taskIdx]
+
+	if _, ok := s.taskIndices[dependencyName]; !ok {
+		return nil, status.Errorf(codes.NotFound, "dependency %q not found", dependencyName)
+	}
+
+	depIdx := -1
+	dependencies := task.GetDependencies()
+	for i, existing := range dependencies {
+		if existing == dependencyName {
+			depIdx = i
+			break
+		}
+	}
+	if depIdx == -1 {
+		return nil, status.Errorf(codes.FailedPrecondition, "no dependency exists from %q on %q", taskName, dependencyName)
+	}
+	task.Dependencies = append(dependencies[:depIdx], dependencies[depIdx+1:]...)
+
+	for _, parent := range []string{
+		taskName,
+		dependencyName,
+	} {
+		event := &taskspb.Event{
+			CreateTime: timestamppb.Now(),
+			Comment:    req.GetComment(),
+			Kind: &taskspb.Event_RemoveDependency_{RemoveDependency: &taskspb.Event_RemoveDependency{
+				Task:       taskName,
+				Dependency: dependencyName,
+			}},
+		}
+		if _, err := s.createEvent(ctx, parent, event); err != nil {
+			return nil, err
+		}
+	}
+
+	return task, nil
+}
+
 func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest) (*taskspb.ListEventsResponse, error) {
 	parent := req.GetParent()
 	if parent == "" {

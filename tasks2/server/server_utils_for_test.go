@@ -62,6 +62,15 @@ func (c testTasksClient) AddDependencyT(ctx context.Context, t *testing.T, req *
 	return task
 }
 
+func (c testTasksClient) RemoveDependencyT(ctx context.Context, t *testing.T, req *taskspb.RemoveDependencyRequest) *taskspb.Task {
+	t.Helper()
+	task, err := c.RemoveDependency(ctx, req)
+	if err != nil {
+		t.Fatalf("RemoveDependency(%v) err = %v; want nil", req, err)
+	}
+	return task
+}
+
 func setup(t *testing.T) testTasksClient {
 	t.Helper()
 	cc := grpctest.NewClientConnT(t, &taskspb.Tasks_ServiceDesc, New())
