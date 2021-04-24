@@ -20,19 +20,19 @@ func TestLookupMessage(t *testing.T) {
 	}{
 		{
 			name:       "Publisher",
-			typeString: "testing.internal.resource.aip.api.saser.se/Publisher",
+			typeString: "type.api.saser.se/aip.resource.internal.testing.Publisher",
 			wantMD:     (&testingpb.Publisher{}).ProtoReflect().Descriptor(),
 			wantOK:     true,
 		},
 		{
 			name:       "Book",
-			typeString: "testing.internal.resource.aip.api.saser.se/Book",
+			typeString: "type.api.saser.se/aip.resource.internal.testing.Book",
 			wantMD:     (&testingpb.Book{}).ProtoReflect().Descriptor(),
 			wantOK:     true,
 		},
 		{
 			name:       "Invalid",
-			typeString: "testing.internal.resource.aip.api.saser.se/Invalid",
+			typeString: "type.api.saser.se/aip.resource.internal.testing.Invalid",
 			wantMD:     nil,
 			wantOK:     false,
 		},
@@ -58,25 +58,25 @@ func TestLookupResource(t *testing.T) {
 	}{
 		{
 			name:       "Publisher",
-			typeString: "testing.internal.resource.aip.api.saser.se/Publisher",
+			typeString: "type.api.saser.se/aip.resource.internal.testing.Publisher",
 			wantRD: &annotations.ResourceDescriptor{
-				Type:    "testing.internal.resource.aip.api.saser.se/Publisher",
+				Type:    "type.api.saser.se/aip.resource.internal.testing.Publisher",
 				Pattern: []string{"publishers/{publisher}"},
 			},
 			wantOK: true,
 		},
 		{
 			name:       "Book",
-			typeString: "testing.internal.resource.aip.api.saser.se/Book",
+			typeString: "type.api.saser.se/aip.resource.internal.testing.Book",
 			wantRD: &annotations.ResourceDescriptor{
-				Type:    "testing.internal.resource.aip.api.saser.se/Book",
+				Type:    "type.api.saser.se/aip.resource.internal.testing.Book",
 				Pattern: []string{"publishers/{publisher}/books/{book}"},
 			},
 			wantOK: true,
 		},
 		{
 			name:       "Invalid",
-			typeString: "testing.internal.resource.aip.api.saser.se/Invalid",
+			typeString: "type.api.saser.se/aip.resource.internal.testing.Invalid",
 			wantRD:     nil,
 			wantOK:     false,
 		},

@@ -21,7 +21,7 @@ func TestDescriptor(t *testing.T) {
 			name: "Publisher",
 			m:    &testingpb.Publisher{},
 			want: &annotations.ResourceDescriptor{
-				Type:    "testing.internal.resource.aip.api.saser.se/Publisher",
+				Type:    "type.api.saser.se/aip.resource.internal.testing.Publisher",
 				Pattern: []string{"publishers/{publisher}"},
 			},
 		},
@@ -29,7 +29,7 @@ func TestDescriptor(t *testing.T) {
 			name: "Book",
 			m:    &testingpb.Book{},
 			want: &annotations.ResourceDescriptor{
-				Type:    "testing.internal.resource.aip.api.saser.se/Book",
+				Type:    "type.api.saser.se/aip.resource.internal.testing.Book",
 				Pattern: []string{"publishers/{publisher}/books/{book}"},
 			},
 		},
