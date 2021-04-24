@@ -46,7 +46,7 @@ service Tasks {
 // Represents something that requires some action to be completed.
 message Task {
   option (google.api.resource) = {
-    type: "tasks.api.saser.se/Task"
+    type: "type.api.saser.se/tasks.Task"
     pattern: "tasks/{task}"
   };
 
@@ -72,7 +72,7 @@ message GetTaskRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
-      type: "tasks.api.saser.se/Task"
+      type: "type.api.saser.se/tasks.Task"
     }
   ];
 }
@@ -119,7 +119,7 @@ message DeleteTaskRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
-      type: "tasks.api.saser.se/Task"
+      type: "type.api.saser.se/tasks.Task"
     }
   ];
 }
