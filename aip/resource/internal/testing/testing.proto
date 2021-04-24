@@ -8,7 +8,7 @@ option go_package = "github.com/Saser/pdp/aip/resource/internal/testing/testing_
 
 message Publisher {
   option (google.api.resource) = {
-    type: "testing.internal.resource.aip.api.saser.se/Publisher"
+    type: "type.api.saser.se/aip.resource.internal.testing.Publisher"
     pattern: "publishers/{publisher}"
   };
 
@@ -19,7 +19,7 @@ message Publisher {
 
 message Book {
   option (google.api.resource) = {
-    type: "testing.internal.resource.aip.api.saser.se/Book"
+    type: "type.api.saser.se/aip.resource.internal.testing.Book"
     pattern: "publishers/{publisher}/books/{book}"
   };
 
