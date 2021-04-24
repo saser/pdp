@@ -52,7 +52,7 @@ service Tasks {
 
 message Task {
   option (google.api.resource) = {
-    type: "tasks.api.saser.se/Task"
+    type: "type.api.saser.se/tasks2.Task"
     pattern: "tasks/{task}"
   };
 
@@ -71,34 +71,34 @@ message Task {
 
 message Event {
   option (google.api.resource) = {
-    type: "tasks.api.saser.se/Event"
+    type: "type.api.saser.se/tasks2.Event"
     pattern: "tasks/{task}/events/{event}"
   };
 
   string name = 1;
 
-  string parent = 2 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+  string parent = 2 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
 
   google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   string comment = 4;
 
   message AddDependency {
-    string task = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
-    string dependency = 2 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+    string task = 1 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
+    string dependency = 2 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
   }
 
   message RemoveDependency {
-    string task = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
-    string dependency = 2 [(google.api.resource_reference).type = "tasks.api.saser.se/Task"];
+    string task = 1 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
+    string dependency = 2 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
   }
 
   message AddLabel {
-    string label = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Label"];
+    string label = 1 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Label"];
   }
 
   message RemoveLabel {
-    string label = 1 [(google.api.resource_reference).type = "tasks.api.saser.se/Label"];
+    string label = 1 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Label"];
   }
 
   message Complete {}
@@ -127,7 +127,7 @@ message Event {
 
 message Label {
   option (google.api.resource) = {
-    type: "tasks.api.saser.se/Label"
+    type: "type.api.saser.se/tasks2.Label"
     pattern: "labels/{label}"
   };
 
@@ -143,7 +143,7 @@ message Label {
 message GetTaskRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 }
 
@@ -170,12 +170,12 @@ message UpdateTaskRequest {
 message AddDependencyRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string dependency = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string comment = 3;
@@ -184,12 +184,12 @@ message AddDependencyRequest {
 message RemoveDependencyRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string dependency = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string comment = 3;
@@ -198,12 +198,12 @@ message RemoveDependencyRequest {
 message AddLabelRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string label = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Label"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Label"
   ];
 
   string comment = 3;
@@ -212,12 +212,12 @@ message AddLabelRequest {
 message RemoveLabelRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string label = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Label"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Label"
   ];
 
   string comment = 3;
@@ -226,7 +226,7 @@ message RemoveLabelRequest {
 message CompleteTaskRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string comment = 2;
@@ -235,7 +235,7 @@ message CompleteTaskRequest {
 message UncompleteTaskRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string comment = 2;
@@ -244,7 +244,7 @@ message UncompleteTaskRequest {
 message DeferTaskRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   Deferral deferral = 2 [(google.api.field_behavior) = REQUIRED];
@@ -255,7 +255,7 @@ message DeferTaskRequest {
 message UndeferTaskRequest {
   string task = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   string comment = 2;
@@ -264,14 +264,14 @@ message UndeferTaskRequest {
 message GetEventRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Event"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Event"
   ];
 }
 
 message ListEventsRequest {
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Task"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
   ];
 
   int32 page_size = 2;
@@ -288,7 +288,7 @@ message ListEventsResponse {
 message GetLabelRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "tasks.api.saser.se/Label"
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Label"
   ];
 }
 
