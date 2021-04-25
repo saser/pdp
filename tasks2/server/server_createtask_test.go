@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
+	"github.com/Saser/pdp/testing/errtest"
+	"github.com/Saser/pdp/testing/grpctest"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/testing/protocmp"
 
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
-	"github.com/Saser/pdp/testing/errtest"
-	"github.com/Saser/pdp/testing/grpctest"
 )
 
 func TestServer_CreateTask(t *testing.T) {

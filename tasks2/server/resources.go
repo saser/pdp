@@ -10,6 +10,7 @@ import (
 var (
 	taskPattern  *resourcename.Pattern
 	eventPattern *resourcename.Pattern
+	labelPattern *resourcename.Pattern
 )
 
 func init() {
@@ -18,4 +19,7 @@ func init() {
 
 	eventRD := resource.DescriptorOf(&taskspb.Event{})
 	eventPattern = resourcename.MustCompile(eventRD.GetPattern()[0])
+
+	labelRD := resource.DescriptorOf(&taskspb.Label{})
+	labelPattern = resourcename.MustCompile(labelRD.GetPattern()[0])
 }

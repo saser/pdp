@@ -21,12 +21,18 @@ const maxPageSize = 100
 type Server struct {
 	taskspb.UnimplementedTasksServer
 
-	mu           sync.Mutex
-	tasks        []*taskspb.Task
-	taskIndices  map[string]int // task name -> index into `tasks`
+	// mu protects all fields in this struct.
+	mu sync.Mutex
+
+	tasks       []*taskspb.Task
+	taskIndices map[string]int // task name -> index into `tasks`
+
 	events       []*taskspb.Event
 	eventIndices map[string]int      // event name -> index into `events`
 	taskEvents   map[string][]string // task name -> event names
+
+	labels       []*taskspb.Label
+	labelIndices map[string]int // label name -> index into `labels`
 }
 
 func New() *Server {
@@ -34,6 +40,7 @@ func New() *Server {
 		taskIndices:  make(map[string]int),
 		eventIndices: make(map[string]int),
 		taskEvents:   make(map[string][]string),
+		labelIndices: make(map[string]int),
 	}
 }
 
@@ -304,6 +311,36 @@ func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest)
 		res.NextPageToken = next.String()
 	}
 	return res, nil
+}
+
+func (s *Server) CreateLabel(ctx context.Context, req *taskspb.CreateLabelRequest) (*taskspb.Label, error) {
+	label := req.GetLabel()
+	if label.GetDisplayName() == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty display name")
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for _, existing := range s.labels {
+		if label.GetDisplayName() == existing.GetDisplayName() {
+			return nil, status.Errorf(codes.AlreadyExists, "label already exists: %q has display name %q", existing.GetName(), existing.GetDisplayName())
+		}
+	}
+
+	idx := len(s.labels)
+	v := resourcename.Values{
+		"label": fmt.Sprint(idx + 1),
+	}
+	name, err := labelPattern.Render(v)
+	if err != nil {
+		log.Printf("CreateLabel failed to render label name: %v", err)
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+	label.Name = name
+	s.labels = append(s.labels, label)
+	s.labelIndices[label.Name] = idx
+	return label, nil
 }
 
 // createEvent creates the given event under the given parent. The event's name and parent fields

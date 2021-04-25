@@ -71,6 +71,15 @@ func (c testTasksClient) RemoveDependencyT(ctx context.Context, t *testing.T, re
 	return task
 }
 
+func (c testTasksClient) CreateLabelT(ctx context.Context, t *testing.T, req *taskspb.CreateLabelRequest) *taskspb.Label {
+	t.Helper()
+	label, err := c.CreateLabel(ctx, req)
+	if err != nil {
+		t.Fatalf("CreateLabel(%v) err = %v; want nil", req, err)
+	}
+	return label
+}
+
 func setup(t *testing.T) testTasksClient {
 	t.Helper()
 	cc := grpctest.NewClientConnT(t, &taskspb.Tasks_ServiceDesc, New())
