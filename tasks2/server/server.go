@@ -18,6 +18,8 @@ import (
 
 const maxPageSize = 100
 
+var internalError = status.Error(codes.Internal, "internal error")
+
 type Server struct {
 	taskspb.UnimplementedTasksServer
 
@@ -119,7 +121,7 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	name, err := taskPattern.Render(v)
 	if err != nil {
 		log.Printf("CreateTask failed to render task name: %v", err)
-		return nil, status.Error(codes.Internal, "internal error")
+		return nil, internalError
 	}
 	task.Name = name
 	s.tasks = append(s.tasks, task)
@@ -294,7 +296,7 @@ func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest)
 		index, ok := s.eventIndices[event]
 		if !ok {
 			log.Printf("no index for event %q (parent %q)", event, parent)
-			return nil, status.Error(codes.Internal, "internal error")
+			return nil, internalError
 		}
 		indices = append(indices, index)
 	}
@@ -335,7 +337,7 @@ func (s *Server) CreateLabel(ctx context.Context, req *taskspb.CreateLabelReques
 	name, err := labelPattern.Render(v)
 	if err != nil {
 		log.Printf("CreateLabel failed to render label name: %v", err)
-		return nil, status.Error(codes.Internal, "internal error")
+		return nil, internalError
 	}
 	label.Name = name
 	s.labels = append(s.labels, label)
@@ -371,7 +373,7 @@ func (s *Server) createEvent(ctx context.Context, parent string, event *taskspb.
 	v, err := eventPattern.Match(parent)
 	if err != nil {
 		log.Printf("parent task %q didn't match event pattern %q", parent, eventPattern)
-		return nil, status.Error(codes.Internal, "internal error")
+		return nil, internalError
 	}
 	taskEvents := s.taskEvents[parent]
 	defer func() {
@@ -382,7 +384,7 @@ func (s *Server) createEvent(ctx context.Context, parent string, event *taskspb.
 	name, err := eventPattern.Render(v)
 	if err != nil {
 		log.Printf("failed to render name for new event: %v", err)
-		return nil, status.Error(codes.Internal, "internal error")
+		return nil, internalError
 	}
 	taskEvents = append(taskEvents, name)
 
