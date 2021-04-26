@@ -13,39 +13,39 @@ import (
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
 )
 
-func TestServer_GetTask(t *testing.T) {
+func TestServer_GetLabel(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
 
-	want := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
-		Task: &taskspb.Task{
-			Title: "some task",
+	want := c.CreateLabelT(ctx, t, &taskspb.CreateLabelRequest{
+		Label: &taskspb.Label{
+			DisplayName: "some label",
 		},
 	})
 
-	req := &taskspb.GetTaskRequest{
+	req := &taskspb.GetLabelRequest{
 		Name: want.GetName(),
 	}
-	got, err := c.GetTask(ctx, req)
+	got, err := c.GetLabel(ctx, req)
 	if err != nil {
-		t.Errorf("GetTask(%v) err = %v; want nil", req, err)
+		t.Errorf("GetLabel(%v) err = %v; want nil", req, err)
 	}
 	if diff := cmp.Diff(want, got, protocmp.Transform()); diff != "" {
-		t.Errorf("diff between CreateTask and GetTask (-want +got)\n%s", diff)
+		t.Errorf("diff between CreateLabel and GetLabel (-want +got)\n%s", diff)
 	}
 }
 
-func TestServer_GetTask_Errors(t *testing.T) {
+func TestServer_GetLabel_Errors(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
 	for _, tt := range []struct {
 		name string
-		req  *taskspb.GetTaskRequest
+		req  *taskspb.GetLabelRequest
 		tf   errtest.TestFunc
 	}{
 		{
 			name: "EmptyName",
-			req: &taskspb.GetTaskRequest{
+			req: &taskspb.GetLabelRequest{
 				Name: "",
 			},
 			tf: errtest.All(
@@ -55,29 +55,29 @@ func TestServer_GetTask_Errors(t *testing.T) {
 		},
 		{
 			name: "InvalidName",
-			req: &taskspb.GetTaskRequest{
+			req: &taskspb.GetLabelRequest{
 				Name: "foobar/1",
 			},
 			tf: errtest.All(
 				grpctest.WantCode(codes.InvalidArgument),
 				errtest.ErrorContains("invalid name"),
 				errtest.ErrorContains(`"foobar/1"`),
-				errtest.ErrorContains(`"tasks/{task}"`),
+				errtest.ErrorContains(`"labels/{label}"`),
 			),
 		},
 		{
 			name: "NotFound",
-			req: &taskspb.GetTaskRequest{
-				Name: "tasks/999",
+			req: &taskspb.GetLabelRequest{
+				Name: "labels/999",
 			},
 			tf: errtest.All(
 				grpctest.WantCode(codes.NotFound),
-				errtest.ErrorContains(`"tasks/999"`),
+				errtest.ErrorContains(`"labels/999"`),
 			),
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := c.GetTask(ctx, tt.req)
+			_, err := c.GetLabel(ctx, tt.req)
 			tt.tf(t, err)
 		})
 	}

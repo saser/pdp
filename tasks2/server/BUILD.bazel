@@ -25,6 +25,7 @@ go_test(
         "server_adddependency_test.go",
         "server_createlabel_test.go",
         "server_createtask_test.go",
+        "server_getlabel_test.go",
         "server_gettask_test.go",
         "server_listevents_test.go",
         "server_listtasks_test.go",

@@ -343,6 +343,24 @@ func (s *Server) CreateLabel(ctx context.Context, req *taskspb.CreateLabelReques
 	return label, nil
 }
 
+func (s *Server) GetLabel(ctx context.Context, req *taskspb.GetLabelRequest) (*taskspb.Label, error) {
+	name := req.GetName()
+	if name == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty name")
+	}
+	if !labelPattern.Matches(name) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid name %q does not have format %q", name, labelPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	idx, ok := s.labelIndices[name]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "label %q not found", name)
+	}
+	return s.labels[idx], nil
+}
+
 // createEvent creates the given event under the given parent. The event's name and parent fields
 // will be overwritten, and the updated event is returned. This method takes care of the internal
 // bookkeeping. Any error returned is created by the status package, and can be returned directly
