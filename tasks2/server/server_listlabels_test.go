@@ -14,83 +14,83 @@ import (
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
 )
 
-func TestServer_ListTasks(t *testing.T) {
+func TestServer_ListLabels(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
 
-	var want []*taskspb.Task
-	for _, task := range []*taskspb.Task{
-		{Title: "Buy milk"},
-		{Title: "Get a haircut"},
-		{Title: "Find a job"},
+	var want []*taskspb.Label
+	for _, label := range []*taskspb.Label{
+		{DisplayName: "High Priority"},
+		{DisplayName: "Really High Priority"},
+		{DisplayName: "Actually High Priority"},
 	} {
-		want = append(want, c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
-			Task: task,
+		want = append(want, c.CreateLabelT(ctx, t, &taskspb.CreateLabelRequest{
+			Label: label,
 		}))
 	}
 
-	req := &taskspb.ListTasksRequest{}
-	res, err := c.ListTasks(ctx, req)
+	req := &taskspb.ListLabelsRequest{}
+	res, err := c.ListLabels(ctx, req)
 	if err != nil {
-		t.Errorf("ListTasks(%v) err = %v; want nil", req, err)
+		t.Errorf("ListLabels(%v) err = %v; want nil", req, err)
 	}
 	if token := res.GetNextPageToken(); token != "" {
 		t.Errorf("res.GetNextPageToken() = %q; want an empty string", token)
 	}
-	got := res.GetTasks()
+	got := res.GetLabels()
 	if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.SortSlices(taskLessFunc)); diff != "" {
-		t.Errorf("diff between created and listed tasks (-want +got)\n%s", diff)
+		t.Errorf("diff between created and listed labels (-want +got)\n%s", diff)
 	}
 }
 
-func TestServer_ListTasks_Pagination(t *testing.T) {
+func TestServer_ListLabels_Pagination(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
 
-	var want []*taskspb.Task
-	for _, task := range []*taskspb.Task{
-		{Title: "Buy milk"},
-		{Title: "Get a haircut"},
-		{Title: "Find a job"},
+	var want []*taskspb.Label
+	for _, label := range []*taskspb.Label{
+		{DisplayName: "High Priority"},
+		{DisplayName: "Really High Priority"},
+		{DisplayName: "Actually High Priority"},
 	} {
-		want = append(want, c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
-			Task: task,
+		want = append(want, c.CreateLabelT(ctx, t, &taskspb.CreateLabelRequest{
+			Label: label,
 		}))
 	}
 
-	var got []*taskspb.Task
-	res1 := c.ListTasksT(ctx, t, &taskspb.ListTasksRequest{
+	var got []*taskspb.Label
+	res1 := c.ListLabelsT(ctx, t, &taskspb.ListLabelsRequest{
 		PageSize: 1,
 	})
 	if res1.GetNextPageToken() == "" {
 		t.Fatal(`res1.GetNextPageToken() = ""; want non-empty`)
 	}
-	got = append(got, res1.GetTasks()...)
+	got = append(got, res1.GetLabels()...)
 
-	res2 := c.ListTasksT(ctx, t, &taskspb.ListTasksRequest{
+	res2 := c.ListLabelsT(ctx, t, &taskspb.ListLabelsRequest{
 		PageToken: res1.GetNextPageToken(),
 	})
 	if token := res2.GetNextPageToken(); token != "" {
 		t.Errorf("res2.GetNextPageToken() = %q; want an empty string", token)
 	}
-	got = append(got, res2.GetTasks()...)
+	got = append(got, res2.GetLabels()...)
 
-	if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.SortSlices(taskLessFunc)); diff != "" {
-		t.Errorf("diff between created and listed tasks (-want +got)\n%s", diff)
+	if diff := cmp.Diff(want, got, protocmp.Transform(), cmpopts.SortSlices(labelLessFunc)); diff != "" {
+		t.Errorf("diff between created and listed labels (-want +got)\n%s", diff)
 	}
 }
 
-func TestServer_ListTasks_Errors(t *testing.T) {
+func TestServer_ListLabels_Errors(t *testing.T) {
 	ctx := context.Background()
 	c := setup(t)
 	for _, tt := range []struct {
 		name string
-		req  *taskspb.ListTasksRequest
+		req  *taskspb.ListLabelsRequest
 		tf   errtest.TestFunc
 	}{
 		{
 			name: "NegativePageSize",
-			req: &taskspb.ListTasksRequest{
+			req: &taskspb.ListLabelsRequest{
 				PageSize: -1,
 			},
 			tf: errtest.All(
@@ -100,7 +100,7 @@ func TestServer_ListTasks_Errors(t *testing.T) {
 		},
 		{
 			name: "InvalidPageToken",
-			req: &taskspb.ListTasksRequest{
+			req: &taskspb.ListLabelsRequest{
 				PageToken: "invalid-page-token",
 			},
 			tf: errtest.All(
@@ -110,7 +110,7 @@ func TestServer_ListTasks_Errors(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := c.ListTasks(ctx, tt.req)
+			_, err := c.ListLabels(ctx, tt.req)
 			tt.tf(t, err)
 		})
 	}

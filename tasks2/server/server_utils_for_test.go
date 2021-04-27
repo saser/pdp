@@ -13,6 +13,10 @@ func taskLessFunc(t1, t2 *taskspb.Task) bool {
 	return t1.GetName() < t2.GetName()
 }
 
+func labelLessFunc(l1, l2 *taskspb.Label) bool {
+	return l1.GetName() < l2.GetName()
+}
+
 type testTasksClient struct {
 	taskspb.TasksClient
 }
@@ -69,6 +73,15 @@ func (c testTasksClient) RemoveDependencyT(ctx context.Context, t *testing.T, re
 		t.Fatalf("RemoveDependency(%v) err = %v; want nil", req, err)
 	}
 	return task
+}
+
+func (c testTasksClient) ListLabelsT(ctx context.Context, t *testing.T, req *taskspb.ListLabelsRequest) *taskspb.ListLabelsResponse {
+	t.Helper()
+	res, err := c.ListLabels(ctx, req)
+	if err != nil {
+		t.Fatalf("ListLabels(%v) err = %v; want nil", req, err)
+	}
+	return res
 }
 
 func (c testTasksClient) CreateLabelT(ctx context.Context, t *testing.T, req *taskspb.CreateLabelRequest) *taskspb.Label {

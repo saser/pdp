@@ -315,6 +315,36 @@ func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest)
 	return res, nil
 }
 
+func (s *Server) ListLabels(ctx context.Context, req *taskspb.ListLabelsRequest) (*taskspb.ListLabelsResponse, error) {
+	pageSize := req.GetPageSize()
+	if pageSize < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "negative page size %d", pageSize)
+	}
+	if pageSize == 0 || pageSize > maxPageSize {
+		pageSize = maxPageSize
+	}
+	pt, err := pagetoken.Parse(req)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid page token %q: %v", req.GetPageToken(), err)
+	}
+
+	start := int(pt.Offset())
+	next := pt.Next(pageSize)
+	end := int(next.Offset())
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	res := &taskspb.ListLabelsResponse{}
+	if end >= len(s.labels) {
+		res.Labels = s.labels[start:]
+		res.NextPageToken = ""
+	} else {
+		res.Labels = s.labels[start:end]
+		res.NextPageToken = next.String()
+	}
+	return res, nil
+}
+
 func (s *Server) CreateLabel(ctx context.Context, req *taskspb.CreateLabelRequest) (*taskspb.Label, error) {
 	label := req.GetLabel()
 	if label.GetDisplayName() == "" {
