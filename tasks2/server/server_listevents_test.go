@@ -139,3 +139,103 @@ func TestServer_ListEvents_RemoveDependency(t *testing.T) {
 		}
 	}
 }
+
+func TestServer_ListEvents_AddLabel(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Some task",
+		},
+	})
+	label := c.CreateLabelT(ctx, t, &taskspb.CreateLabelRequest{
+		Label: &taskspb.Label{
+			DisplayName: "some label",
+		},
+	})
+	c.AddLabelT(ctx, t, &taskspb.AddLabelRequest{
+		Task:    task.GetName(),
+		Label:   label.GetName(),
+		Comment: "This should show up in `task`s events.",
+	})
+
+	req := &taskspb.ListEventsRequest{
+		Parent: task.GetName(),
+	}
+	res, err := c.ListEvents(ctx, req)
+	if err != nil {
+		t.Errorf("ListEvents(%v) err = %v; want nil", req, err)
+	}
+
+	got := res.GetEvents()
+	checkEvents(t, got)
+
+	want := []*taskspb.Event{
+		{
+			Parent:  task.GetName(),
+			Comment: "This should show up in `task`s events.",
+			Kind: &taskspb.Event_AddLabel_{AddLabel: &taskspb.Event_AddLabel{
+				Label: label.GetName(),
+			}},
+		},
+	}
+	if diff := cmp.Diff(want, got, protocmp.Transform(), protocmp.IgnoreFields(&taskspb.Event{}, "name", "create_time")); diff != "" {
+		t.Errorf("unexpected diff between events (-want +got)\n%s", diff)
+	}
+}
+
+func TestServer_ListEvents_RemoveLabel(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Some task",
+		},
+	})
+	label := c.CreateLabelT(ctx, t, &taskspb.CreateLabelRequest{
+		Label: &taskspb.Label{
+			DisplayName: "some label",
+		},
+	})
+	c.AddLabelT(ctx, t, &taskspb.AddLabelRequest{
+		Task:    task.GetName(),
+		Label:   label.GetName(),
+		Comment: "[AddLabel] This should show up in `task`s events.",
+	})
+	c.RemoveLabelT(ctx, t, &taskspb.RemoveLabelRequest{
+		Task:    task.GetName(),
+		Label:   label.GetName(),
+		Comment: "[RemoveLabel] This should show up in `task`s events.",
+	})
+
+	req := &taskspb.ListEventsRequest{
+		Parent: task.GetName(),
+	}
+	res, err := c.ListEvents(ctx, req)
+	if err != nil {
+		t.Errorf("ListEvents(%v) err = %v; want nil", req, err)
+	}
+
+	got := res.GetEvents()
+	checkEvents(t, got)
+
+	want := []*taskspb.Event{
+		{
+			Parent:  task.GetName(),
+			Comment: "[AddLabel] This should show up in `task`s events.",
+			Kind: &taskspb.Event_AddLabel_{AddLabel: &taskspb.Event_AddLabel{
+				Label: label.GetName(),
+			}},
+		},
+		{
+			Parent:  task.GetName(),
+			Comment: "[RemoveLabel] This should show up in `task`s events.",
+			Kind: &taskspb.Event_RemoveLabel_{RemoveLabel: &taskspb.Event_RemoveLabel{
+				Label: label.GetName(),
+			}},
+		},
+	}
+	if diff := cmp.Diff(want, got, protocmp.Transform(), protocmp.IgnoreFields(&taskspb.Event{}, "name", "create_time")); diff != "" {
+		t.Errorf("unexpected diff between events (-want +got)\n%s", diff)
+	}
+}
