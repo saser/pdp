@@ -160,7 +160,7 @@ func (s *Server) AddDependency(ctx context.Context, req *taskspb.AddDependencyRe
 
 	for _, existing := range task.GetDependencies() {
 		if existing == dependencyName {
-			return nil, status.Errorf(codes.AlreadyExists, "%q already depends on %q", taskName, dependencyName)
+			return nil, status.Errorf(codes.FailedPrecondition, "%q already depends on %q", taskName, dependencyName)
 		}
 	}
 

@@ -177,7 +177,7 @@ func TestServer_AddDependency_AlreadyExists(t *testing.T) {
 		t.Fatalf("AddDependency(%v) err = nil; want non-nil", req)
 	}
 	tf := errtest.All(
-		grpctest.WantCode(codes.AlreadyExists),
+		grpctest.WantCode(codes.FailedPrecondition),
 		errtest.ErrorContains("already depends"),
 		errtest.ErrorContains(fmt.Sprintf("%q", task.GetName())),
 		errtest.ErrorContains(fmt.Sprintf("%q", dependency.GetName())),
