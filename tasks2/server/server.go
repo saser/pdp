@@ -248,6 +248,58 @@ func (s *Server) RemoveDependency(ctx context.Context, req *taskspb.RemoveDepend
 	return task, nil
 }
 
+func (s *Server) AddLabel(ctx context.Context, req *taskspb.AddLabelRequest) (*taskspb.Task, error) {
+	taskName := req.GetTask()
+	if taskName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty task")
+	}
+	if !taskPattern.Matches(taskName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid task name %q; want format %q", taskName, taskPattern)
+	}
+	labelName := req.GetLabel()
+	if labelName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty label")
+	}
+	if !labelPattern.Matches(labelName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid label name %q; want format %q", labelName, labelPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	taskIdx, ok := s.taskIndices[taskName]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", taskName)
+	}
+	task := s.tasks[taskIdx]
+
+	if _, ok := s.labelIndices[labelName]; !ok {
+		return nil, status.Errorf(codes.NotFound, "label %q not found", labelName)
+	}
+
+	labels := task.GetLabels()
+	for _, existing := range labels {
+		if existing == labelName {
+			return nil, status.Errorf(codes.FailedPrecondition, "task %q already has label %q", taskName, labelName)
+		}
+	}
+
+	task.Labels = append(labels, labelName)
+
+	event := &taskspb.Event{
+		CreateTime: timestamppb.Now(),
+		Comment:    req.GetComment(),
+		Kind: &taskspb.Event_AddLabel_{AddLabel: &taskspb.Event_AddLabel{
+			Label: labelName,
+		}},
+	}
+	if _, err := s.createEvent(ctx, taskName, event); err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
+
 func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest) (*taskspb.ListEventsResponse, error) {
 	parent := req.GetParent()
 	if parent == "" {
