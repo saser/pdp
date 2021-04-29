@@ -93,6 +93,15 @@ func (c testTasksClient) RemoveLabelT(ctx context.Context, t *testing.T, req *ta
 	return task
 }
 
+func (c testTasksClient) CompleteTaskT(ctx context.Context, t *testing.T, req *taskspb.CompleteTaskRequest) *taskspb.Task {
+	t.Helper()
+	task, err := c.CompleteTask(ctx, req)
+	if err != nil {
+		t.Fatalf("CompleteTask(%v) err = %v; want nil", req, err)
+	}
+	return task
+}
+
 func (c testTasksClient) ListLabelsT(ctx context.Context, t *testing.T, req *taskspb.ListLabelsRequest) *taskspb.ListLabelsResponse {
 	t.Helper()
 	res, err := c.ListLabels(ctx, req)

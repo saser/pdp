@@ -239,3 +239,39 @@ func TestServer_ListEvents_RemoveLabel(t *testing.T) {
 		t.Errorf("unexpected diff between events (-want +got)\n%s", diff)
 	}
 }
+
+func TestServer_ListEvents_CompleteTask(t *testing.T) {
+	ctx := context.Background()
+	c := setup(t)
+	task := c.CreateTaskT(ctx, t, &taskspb.CreateTaskRequest{
+		Task: &taskspb.Task{
+			Title: "Some task",
+		},
+	})
+	task = c.CompleteTaskT(ctx, t, &taskspb.CompleteTaskRequest{
+		Task:    task.GetName(),
+		Comment: "Completed task",
+	})
+
+	req := &taskspb.ListEventsRequest{
+		Parent: task.GetName(),
+	}
+	res, err := c.ListEvents(ctx, req)
+	if err != nil {
+		t.Errorf("ListEvents(%v) err = %v; want nil", req, err)
+	}
+
+	got := res.GetEvents()
+	checkEvents(t, got)
+
+	want := []*taskspb.Event{
+		{
+			Parent:  task.GetName(),
+			Comment: "Completed task",
+			Kind:    &taskspb.Event_Complete_{Complete: &taskspb.Event_Complete{}},
+		},
+	}
+	if diff := cmp.Diff(want, got, protocmp.Transform(), protocmp.IgnoreFields(&taskspb.Event{}, "name", "create_time")); diff != "" {
+		t.Errorf("unexpected diff between events (-want +got)\n%s", diff)
+	}
+}

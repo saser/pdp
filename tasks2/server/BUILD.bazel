@@ -24,6 +24,7 @@ go_test(
     srcs = [
         "server_adddependency_test.go",
         "server_addlabel_test.go",
+        "server_completetask_test.go",
         "server_createlabel_test.go",
         "server_createtask_test.go",
         "server_getlabel_test.go",

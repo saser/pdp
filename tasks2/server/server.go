@@ -356,6 +356,41 @@ func (s *Server) RemoveLabel(ctx context.Context, req *taskspb.RemoveLabelReques
 	return task, nil
 }
 
+func (s *Server) CompleteTask(ctx context.Context, req *taskspb.CompleteTaskRequest) (*taskspb.Task, error) {
+	taskName := req.GetTask()
+	if taskName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty task")
+	}
+	if !taskPattern.Matches(taskName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid task %q doesn't match format %q", taskName, taskPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	taskIdx, ok := s.taskIndices[taskName]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", taskName)
+	}
+	task := s.tasks[taskIdx]
+
+	if task.GetCompleted() {
+		return nil, status.Errorf(codes.FailedPrecondition, "task %q is already completed", taskName)
+	}
+	task.Completed = true
+
+	event := &taskspb.Event{
+		CreateTime: timestamppb.Now(),
+		Comment:    req.GetComment(),
+		Kind:       &taskspb.Event_Complete_{Complete: &taskspb.Event_Complete{}},
+	}
+	if _, err := s.createEvent(ctx, taskName, event); err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
+
 func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest) (*taskspb.ListEventsResponse, error) {
 	parent := req.GetParent()
 	if parent == "" {
