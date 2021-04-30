@@ -391,6 +391,41 @@ func (s *Server) CompleteTask(ctx context.Context, req *taskspb.CompleteTaskRequ
 	return task, nil
 }
 
+func (s *Server) UncompleteTask(ctx context.Context, req *taskspb.UncompleteTaskRequest) (*taskspb.Task, error) {
+	taskName := req.GetTask()
+	if taskName == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty task")
+	}
+	if !taskPattern.Matches(taskName) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid task %q doesn't match format %q", taskName, taskPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	taskIdx, ok := s.taskIndices[taskName]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", taskName)
+	}
+	task := s.tasks[taskIdx]
+
+	if !task.GetCompleted() {
+		return nil, status.Errorf(codes.FailedPrecondition, "task %q is not completed", taskName)
+	}
+	task.Completed = false
+
+	event := &taskspb.Event{
+		CreateTime: timestamppb.Now(),
+		Comment:    req.GetComment(),
+		Kind:       &taskspb.Event_Uncomplete_{Uncomplete: &taskspb.Event_Uncomplete{}},
+	}
+	if _, err := s.createEvent(ctx, taskName, event); err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
+
 func (s *Server) ListEvents(ctx context.Context, req *taskspb.ListEventsRequest) (*taskspb.ListEventsResponse, error) {
 	parent := req.GetParent()
 	if parent == "" {

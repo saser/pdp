@@ -102,6 +102,15 @@ func (c testTasksClient) CompleteTaskT(ctx context.Context, t *testing.T, req *t
 	return task
 }
 
+func (c testTasksClient) UncompleteTaskT(ctx context.Context, t *testing.T, req *taskspb.UncompleteTaskRequest) *taskspb.Task {
+	t.Helper()
+	task, err := c.UncompleteTask(ctx, req)
+	if err != nil {
+		t.Fatalf("UncompleteTask(%v) err = %v; want nil", req, err)
+	}
+	return task
+}
+
 func (c testTasksClient) ListLabelsT(ctx context.Context, t *testing.T, req *taskspb.ListLabelsRequest) *taskspb.ListLabelsResponse {
 	t.Helper()
 	res, err := c.ListLabels(ctx, req)
