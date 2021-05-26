@@ -96,23 +96,6 @@ func TestServer_CreateTask_Errors(t *testing.T) {
 				errtest.ErrorContains(`"labels"`),
 			),
 		},
-		{
-			name: "WithDeferral",
-			req: &taskspb.CreateTaskRequest{
-				Task: &taskspb.Task{
-					Title: "some task",
-					Deferral: &taskspb.Deferral{
-						Constraints: []*taskspb.Deferral_Constraint{
-							{Kind: &taskspb.Deferral_Constraint_Dependency{Dependency: "tasks/123"}},
-						},
-					},
-				},
-			},
-			tf: errtest.All(
-				grpctest.WantCode(codes.InvalidArgument),
-				errtest.ErrorContains(`"deferral"`),
-			),
-		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := c.CreateTask(ctx, tt.req)

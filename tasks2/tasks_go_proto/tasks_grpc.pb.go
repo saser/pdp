@@ -28,8 +28,6 @@ type TasksClient interface {
 	RemoveLabel(ctx context.Context, in *RemoveLabelRequest, opts ...grpc.CallOption) (*Task, error)
 	CompleteTask(ctx context.Context, in *CompleteTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	UncompleteTask(ctx context.Context, in *UncompleteTaskRequest, opts ...grpc.CallOption) (*Task, error)
-	DeferTask(ctx context.Context, in *DeferTaskRequest, opts ...grpc.CallOption) (*Task, error)
-	UndeferTask(ctx context.Context, in *UndeferTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	GetEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*Event, error)
 	ListEvents(ctx context.Context, in *ListEventsRequest, opts ...grpc.CallOption) (*ListEventsResponse, error)
 	GetLabel(ctx context.Context, in *GetLabelRequest, opts ...grpc.CallOption) (*Label, error)
@@ -136,24 +134,6 @@ func (c *tasksClient) UncompleteTask(ctx context.Context, in *UncompleteTaskRequ
 	return out, nil
 }
 
-func (c *tasksClient) DeferTask(ctx context.Context, in *DeferTaskRequest, opts ...grpc.CallOption) (*Task, error) {
-	out := new(Task)
-	err := c.cc.Invoke(ctx, "/tasks2.Tasks/DeferTask", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *tasksClient) UndeferTask(ctx context.Context, in *UndeferTaskRequest, opts ...grpc.CallOption) (*Task, error) {
-	out := new(Task)
-	err := c.cc.Invoke(ctx, "/tasks2.Tasks/UndeferTask", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *tasksClient) GetEvent(ctx context.Context, in *GetEventRequest, opts ...grpc.CallOption) (*Event, error) {
 	out := new(Event)
 	err := c.cc.Invoke(ctx, "/tasks2.Tasks/GetEvent", in, out, opts...)
@@ -222,8 +202,6 @@ type TasksServer interface {
 	RemoveLabel(context.Context, *RemoveLabelRequest) (*Task, error)
 	CompleteTask(context.Context, *CompleteTaskRequest) (*Task, error)
 	UncompleteTask(context.Context, *UncompleteTaskRequest) (*Task, error)
-	DeferTask(context.Context, *DeferTaskRequest) (*Task, error)
-	UndeferTask(context.Context, *UndeferTaskRequest) (*Task, error)
 	GetEvent(context.Context, *GetEventRequest) (*Event, error)
 	ListEvents(context.Context, *ListEventsRequest) (*ListEventsResponse, error)
 	GetLabel(context.Context, *GetLabelRequest) (*Label, error)
@@ -266,12 +244,6 @@ func (UnimplementedTasksServer) CompleteTask(context.Context, *CompleteTaskReque
 }
 func (UnimplementedTasksServer) UncompleteTask(context.Context, *UncompleteTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UncompleteTask not implemented")
-}
-func (UnimplementedTasksServer) DeferTask(context.Context, *DeferTaskRequest) (*Task, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeferTask not implemented")
-}
-func (UnimplementedTasksServer) UndeferTask(context.Context, *UndeferTaskRequest) (*Task, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UndeferTask not implemented")
 }
 func (UnimplementedTasksServer) GetEvent(context.Context, *GetEventRequest) (*Event, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEvent not implemented")
@@ -484,42 +456,6 @@ func _Tasks_UncompleteTask_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Tasks_DeferTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeferTaskRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TasksServer).DeferTask(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tasks2.Tasks/DeferTask",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TasksServer).DeferTask(ctx, req.(*DeferTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Tasks_UndeferTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UndeferTaskRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TasksServer).UndeferTask(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tasks2.Tasks/UndeferTask",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TasksServer).UndeferTask(ctx, req.(*UndeferTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Tasks_GetEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEventRequest)
 	if err := dec(in); err != nil {
@@ -674,14 +610,6 @@ var Tasks_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UncompleteTask",
 			Handler:    _Tasks_UncompleteTask_Handler,
-		},
-		{
-			MethodName: "DeferTask",
-			Handler:    _Tasks_DeferTask_Handler,
-		},
-		{
-			MethodName: "UndeferTask",
-			Handler:    _Tasks_UndeferTask_Handler,
 		},
 		{
 			MethodName: "GetEvent",

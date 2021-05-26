@@ -37,10 +37,6 @@ service Tasks {
 
   rpc UncompleteTask(UncompleteTaskRequest) returns (Task);
 
-  rpc DeferTask(DeferTaskRequest) returns (Task);
-
-  rpc UndeferTask(UndeferTaskRequest) returns (Task);
-
   //////////////////////////////////////////////////////////////////////////////
   // Standard methods for the Event resource.
   //////////////////////////////////////////////////////////////////////////////
@@ -81,8 +77,6 @@ message Task {
   repeated string dependencies = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   repeated string labels = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  Deferral deferral = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 message Event {
@@ -121,14 +115,6 @@ message Event {
 
   message Uncomplete {}
 
-  message Defer {
-    Deferral deferral = 1;
-  }
-
-  message Undefer {
-    bool manual = 1;
-  }
-
   oneof kind {
     AddDependency add_dependency = 5;
     RemoveDependency remove_dependency = 6;
@@ -136,8 +122,6 @@ message Event {
     RemoveLabel remove_label = 8;
     Complete complete = 9;
     Uncomplete uncomplete = 10;
-    Defer defer = 11;
-    Undefer undefer = 12;
   }
 }
 
@@ -257,26 +241,6 @@ message UncompleteTaskRequest {
   string comment = 2;
 }
 
-message DeferTaskRequest {
-  string task = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
-  ];
-
-  Deferral deferral = 2 [(google.api.field_behavior) = REQUIRED];
-
-  string comment = 3;
-}
-
-message UndeferTaskRequest {
-  string task = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
-  ];
-
-  string comment = 2;
-}
-
 message GetEventRequest {
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
@@ -326,19 +290,4 @@ message CreateLabelRequest {
 
 message UpdateLabelRequest {
   Label label = 1 [(google.api.field_behavior) = REQUIRED];
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Other messages.
-////////////////////////////////////////////////////////////////////////////////
-
-message Deferral {
-  message Constraint {
-    oneof kind {
-      string dependency = 1;
-      google.protobuf.Timestamp after_time = 2;
-    }
-  }
-
-  repeated Constraint constraints = 1;
 }

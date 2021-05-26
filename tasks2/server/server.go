@@ -109,9 +109,6 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	if len(task.GetLabels()) > 0 {
 		return nil, status.Error(codes.InvalidArgument, `"labels" is non-empty; must be empty when creating task`)
 	}
-	if task.GetDeferral() != nil {
-		return nil, status.Error(codes.InvalidArgument, `"deferral" is non-empty; must be empty when creating task`)
-	}
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
