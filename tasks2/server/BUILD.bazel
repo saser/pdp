@@ -15,6 +15,7 @@ go_library(
         "//tasks2/tasks_go_proto",
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//proto",
         "@org_golang_google_protobuf//types/known/timestamppb",
     ],
 )
@@ -35,6 +36,7 @@ go_test(
         "server_removedependency_test.go",
         "server_removelabel_test.go",
         "server_uncompletetask_test.go",
+        "server_updatelabel_test.go",
         "server_utils_for_test.go",
     ],
     embed = [":server"],
@@ -45,6 +47,7 @@ go_test(
         "@com_github_google_go_cmp//cmp",
         "@com_github_google_go_cmp//cmp/cmpopts",
         "@org_golang_google_grpc//codes",
+        "@org_golang_google_protobuf//proto",
         "@org_golang_google_protobuf//testing/protocmp",
     ],
 )

@@ -129,6 +129,15 @@ func (c testTasksClient) CreateLabelT(ctx context.Context, t *testing.T, req *ta
 	return label
 }
 
+func (c testTasksClient) UpdateLabelT(ctx context.Context, t *testing.T, req *taskspb.UpdateLabelRequest) *taskspb.Label {
+	t.Helper()
+	label, err := c.UpdateLabel(ctx, req)
+	if err != nil {
+		t.Fatalf("UpdateLabel(%v) err = %v; want nil", req, err)
+	}
+	return label
+}
+
 func setup(t *testing.T) testTasksClient {
 	t.Helper()
 	cc := grpctest.NewClientConnT(t, &taskspb.Tasks_ServiceDesc, New())

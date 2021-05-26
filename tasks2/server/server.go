@@ -11,6 +11,7 @@ import (
 	"github.com/Saser/pdp/aip/resourcename"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	taskspb "github.com/Saser/pdp/tasks2/tasks_go_proto"
@@ -569,6 +570,27 @@ func (s *Server) GetLabel(ctx context.Context, req *taskspb.GetLabelRequest) (*t
 		return nil, status.Errorf(codes.NotFound, "label %q not found", name)
 	}
 	return s.labels[idx], nil
+}
+
+func (s *Server) UpdateLabel(ctx context.Context, req *taskspb.UpdateLabelRequest) (*taskspb.Label, error) {
+	updated := req.GetLabel()
+	name := updated.GetName()
+	if name == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty name")
+	}
+	if !labelPattern.Matches(name) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid name %q does not have format %q", name, labelPattern)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	idx, ok := s.labelIndices[name]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "label %q not found", name)
+	}
+	label := s.labels[idx]
+	proto.Merge(label, updated)
+	return label, nil
 }
 
 // createEvent creates the given event under the given parent. The event's name and parent fields
