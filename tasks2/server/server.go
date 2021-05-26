@@ -127,6 +127,36 @@ func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest)
 	return task, nil
 }
 
+func (s *Server) UpdateTask(ctx context.Context, req *taskspb.UpdateTaskRequest) (*taskspb.Task, error) {
+	updated := req.GetTask()
+	name := updated.GetName()
+	if name == "" {
+		return nil, status.Error(codes.InvalidArgument, "empty name")
+	}
+	if !taskPattern.Matches(name) {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid name %q does not have format %q", name, taskPattern)
+	}
+	if updated.GetCompleted() {
+		return nil, status.Error(codes.InvalidArgument, `cannot update output only field "completed"; use CompleteTask/UncompleteTask RPCs to do that`)
+	}
+	if len(updated.GetDependencies()) > 0 {
+		return nil, status.Error(codes.InvalidArgument, `cannot update output only field "dependencies"; use AddDependency/RemoveDependency RPCs to do that`)
+	}
+	if len(updated.GetLabels()) > 0 {
+		return nil, status.Error(codes.InvalidArgument, `cannot update output only field "labels"; use AddLabel/RemoveLabel RPCs to do that`)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	idx, ok := s.taskIndices[name]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "task %q not found", name)
+	}
+	task := s.tasks[idx]
+	proto.Merge(task, updated)
+	return task, nil
+}
+
 func (s *Server) AddDependency(ctx context.Context, req *taskspb.AddDependencyRequest) (*taskspb.Task, error) {
 	taskName := req.GetTask()
 	if taskName == "" {

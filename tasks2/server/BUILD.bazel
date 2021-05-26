@@ -37,6 +37,7 @@ go_test(
         "server_removelabel_test.go",
         "server_uncompletetask_test.go",
         "server_updatelabel_test.go",
+        "server_updatetask_test.go",
         "server_utils_for_test.go",
     ],
     embed = [":server"],
