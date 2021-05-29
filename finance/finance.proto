@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+package finance;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/field_mask.proto";
+import "google/type/money.proto";
+
+option go_package = "github.com/Saser/pdp/finance/finance_go_proto;financepb";
+
+service Finance {
+  rpc GetAccount(GetAccountRequest) returns (Account);
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse);
+  rpc CreateAccount(CreateAccountRequest) returns (Account);
+  rpc UpdateAccount(UpdateAccountRequest) returns (Account);
+
+  rpc GetCategory(GetCategoryRequest) returns (Category);
+  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse);
+  rpc CreateCategory(CreateCategoryRequest) returns (Category);
+  rpc UpdateCategory(UpdateCategoryRequest) returns (Category);
+
+  rpc GetTransaction(GetTransactionRequest) returns (Transaction);
+  rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
+  rpc CreateTransaction(CreateTransactionRequest) returns (Transaction);
+  rpc UpdateTransaction(UpdateTransactionRequest) returns (Transaction);
+}
+
+message Account {
+  option (google.api.resource) = {
+    type: "type.api.saser.se/finance.Account"
+    pattern: "accounts/{account}"
+  };
+
+  string name = 1;
+
+  string display_name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  enum Kind {
+    KIND_UNSPECIFIED = 0;
+    DEBIT = 1;
+    CREDIT = 2;
+  }
+
+  Kind kind = 3 [(google.api.field_behavior) = REQUIRED];
+
+  google.type.Money starting_balance = 4 [(google.api.field_behavior) = REQUIRED];
+
+  google.type.Money current_balance = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message Category {
+  option (google.api.resource) = {
+    type: "type.api.saser.se/finance.Category"
+    pattern: "categories/{category}"
+  };
+
+  string name = 1;
+
+  string display_name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  string parent_category = 3 [(google.api.resource_reference).type = "type.api.saser.se/finance.Category"];
+}
+
+message Transaction {
+  option (google.api.resource) = {
+    type: "type.api.saser.se/finance.Transaction"
+    pattern: "transactions/{transaction}"
+  };
+
+  string name = 1;
+
+  string account = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "type.api.saser.se/finance.Account"
+  ];
+
+  string counterpart = 3 [(google.api.field_behavior) = REQUIRED];
+
+  google.type.Money amount = 4 [(google.api.field_behavior) = REQUIRED];
+
+  string note = 5;
+
+  message Entry {
+    google.type.Money amount = 1 [(google.api.field_behavior) = REQUIRED];
+
+    string category = 2 [(google.api.resource_reference).type = "type.api.saser.se/finance.Category"];
+
+    repeated string categories = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+    string note = 4;
+  }
+
+  repeated Entry entries = 6 [(google.api.field_behavior) = REQUIRED];
+
+  bool reviewed = 7;
+}
+
+message GetAccountRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "type.api.saser.se/finance.Account"
+  ];
+}
+
+message ListAccountsRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListAccountsResponse {
+  repeated Account accounts = 1;
+
+  string next_page_token = 2;
+}
+
+message CreateAccountRequest {
+  Account account = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateAccountRequest {
+  Account account = 1 [(google.api.field_behavior) = REQUIRED];
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message GetCategoryRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "type.api.saser.se/finance.Category"
+  ];
+}
+
+message ListCategoriesRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListCategoriesResponse {
+  repeated Category categories = 1;
+
+  string next_page_token = 2;
+}
+
+message CreateCategoryRequest {
+  Category category = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateCategoryRequest {
+  Category category = 1 [(google.api.field_behavior) = REQUIRED];
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message GetTransactionRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "type.api.saser.se/finance.Transaction"
+  ];
+}
+
+message ListTransactionsRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListTransactionsResponse {
+  repeated Transaction transactions = 1;
+
+  string next_page_token = 2;
+}
+
+message CreateTransactionRequest {
+  Transaction transaction = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateTransactionRequest {
+  Transaction transaction = 1 [(google.api.field_behavior) = REQUIRED];
+
+  google.protobuf.FieldMask update_mask = 2;
+}
