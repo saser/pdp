@@ -22,6 +22,7 @@ type TasksClient interface {
 	ListTasks(ctx context.Context, in *ListTasksRequest, opts ...grpc.CallOption) (*ListTasksResponse, error)
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	AddComment(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*Task, error)
 	AddDependency(ctx context.Context, in *AddDependencyRequest, opts ...grpc.CallOption) (*Task, error)
 	RemoveDependency(ctx context.Context, in *RemoveDependencyRequest, opts ...grpc.CallOption) (*Task, error)
 	AddLabel(ctx context.Context, in *AddLabelRequest, opts ...grpc.CallOption) (*Task, error)
@@ -74,6 +75,15 @@ func (c *tasksClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opt
 func (c *tasksClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error) {
 	out := new(Task)
 	err := c.cc.Invoke(ctx, "/tasks2.Tasks/UpdateTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tasksClient) AddComment(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*Task, error) {
+	out := new(Task)
+	err := c.cc.Invoke(ctx, "/tasks2.Tasks/AddComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -196,6 +206,7 @@ type TasksServer interface {
 	ListTasks(context.Context, *ListTasksRequest) (*ListTasksResponse, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*Task, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error)
+	AddComment(context.Context, *AddCommentRequest) (*Task, error)
 	AddDependency(context.Context, *AddDependencyRequest) (*Task, error)
 	RemoveDependency(context.Context, *RemoveDependencyRequest) (*Task, error)
 	AddLabel(context.Context, *AddLabelRequest) (*Task, error)
@@ -226,6 +237,9 @@ func (UnimplementedTasksServer) CreateTask(context.Context, *CreateTaskRequest) 
 }
 func (UnimplementedTasksServer) UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
+}
+func (UnimplementedTasksServer) AddComment(context.Context, *AddCommentRequest) (*Task, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddComment not implemented")
 }
 func (UnimplementedTasksServer) AddDependency(context.Context, *AddDependencyRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDependency not implemented")
@@ -344,6 +358,24 @@ func _Tasks_UpdateTask_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TasksServer).UpdateTask(ctx, req.(*UpdateTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Tasks_AddComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TasksServer).AddComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tasks2.Tasks/AddComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TasksServer).AddComment(ctx, req.(*AddCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -586,6 +618,10 @@ var Tasks_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateTask",
 			Handler:    _Tasks_UpdateTask_Handler,
+		},
+		{
+			MethodName: "AddComment",
+			Handler:    _Tasks_AddComment_Handler,
 		},
 		{
 			MethodName: "AddDependency",

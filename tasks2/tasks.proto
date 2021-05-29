@@ -25,6 +25,8 @@ service Tasks {
   // Custom methods for the Task resource.
   //////////////////////////////////////////////////////////////////////////////
 
+  rpc AddComment(AddCommentRequest) returns (Task);
+
   rpc AddDependency(AddDependencyRequest) returns (Task);
 
   rpc RemoveDependency(RemoveDependencyRequest) returns (Task);
@@ -93,6 +95,8 @@ message Event {
 
   string comment = 4;
 
+  message AddComment {}
+
   message AddDependency {
     string task = 1 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
     string dependency = 2 [(google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"];
@@ -116,12 +120,13 @@ message Event {
   message Uncomplete {}
 
   oneof kind {
-    AddDependency add_dependency = 5;
-    RemoveDependency remove_dependency = 6;
-    AddLabel add_label = 7;
-    RemoveLabel remove_label = 8;
-    Complete complete = 9;
-    Uncomplete uncomplete = 10;
+    AddComment add_comment = 5;
+    AddDependency add_dependency = 6;
+    RemoveDependency remove_dependency = 7;
+    AddLabel add_label = 8;
+    RemoveLabel remove_label = 9;
+    Complete complete = 10;
+    Uncomplete uncomplete = 11;
   }
 }
 
@@ -165,6 +170,15 @@ message CreateTaskRequest {
 
 message UpdateTaskRequest {
   Task task = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AddCommentRequest {
+  string task = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "type.api.saser.se/tasks2.Task"
+  ];
+
+  string comment = 2;
 }
 
 message AddDependencyRequest {
