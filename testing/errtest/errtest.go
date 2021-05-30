@@ -1,6 +1,7 @@
 package errtest
 
 import (
+	"errors"
 	"strings"
 	"testing"
 )
@@ -39,6 +40,15 @@ func ErrorContains(s string) TestFunc {
 		tb.Helper()
 		if !strings.Contains(err.Error(), s) {
 			tb.Errorf("err.Error() = %q; want it to contain %q", err.Error(), s)
+		}
+	}
+}
+
+func Is(target error) TestFunc {
+	return func(tb testing.TB, err error) {
+		tb.Helper()
+		if !errors.Is(err, target) {
+			tb.Errorf("errors.Is(%v, %v) = false; want true", err, target)
 		}
 	}
 }
