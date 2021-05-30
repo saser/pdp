@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "server",
+    srcs = [
+        "patterns.go",
+        "server.go",
+    ],
+    importpath = "github.com/Saser/pdp/finance/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//aip/resource",
+        "//aip/resourcename",
+        "//finance/finance_go_proto",
+        "//wellknown/money",
+        "@org_golang_google_genproto//googleapis/type/money",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//proto",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = [
+        "server_account_test.go",
+        "server_utils_for_test.go",
+    ],
+    embed = [":server"],
+    deps = [
+        "//finance/finance_go_proto",
+        "//testing/errtest",
+        "//testing/grpctest",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_genproto//googleapis/type/money",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//testing/protocmp",
+    ],
+)
