@@ -105,6 +105,13 @@ def go_repositories():
         version = "v1.1.2",
     )
     go_repository(
+        name = "com_github_lib_pq",
+        importpath = "github.com/lib/pq",
+        sum = "h1:AqzbZs4ZoCBp+GtejcpCpcxM3zlSMx29dXbUSeVtJb8=",
+        version = "v1.10.2",
+    )
+
+    go_repository(
         name = "com_github_pmezard_go_difflib",
         importpath = "github.com/pmezard/go-difflib",
         sum = "h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=",
