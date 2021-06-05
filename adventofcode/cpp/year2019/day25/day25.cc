@@ -1,4 +1,4 @@
-#include "cpp/year2019/day25/day25.h"
+#include "adventofcode/cpp/year2019/day25/day25.h"
 
 #include <deque>
 #include <iostream>
@@ -10,8 +10,8 @@
 #include <tuple>
 #include <vector>
 
-#include "cpp/adventofcode.h"
-#include "cpp/year2019/intcode/intcode.h"
+#include "adventofcode/cpp/adventofcode.h"
+#include "adventofcode/cpp/year2019/intcode/intcode.h"
 
 using lines_t = std::vector<std::string>;
 using path_t = std::vector<std::string>;

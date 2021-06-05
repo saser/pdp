@@ -4,13 +4,13 @@ cc_library(
     name = "day22",
     srcs = ["day22.cc"],
     hdrs = ["day22.h"],
-    deps = ["//cpp:adventofcode"],
+    deps = ["//adventofcode/cpp:adventofcode"],
 )
 
 cc_test(
     name = "test",
     srcs = ["test.cc"],
-    data = ["//inputs:2019/22"],
+    data = ["//adventofcode/inputs:2019/22"],
     deps = [
         ":day22",
         "@googletest//:gtest_main",
@@ -20,7 +20,7 @@ cc_test(
 cc_binary(
     name = "benchmark",
     srcs = ["benchmark.cc"],
-    data = ["//inputs:2019/22"],
+    data = ["//adventofcode/inputs:2019/22"],
     deps = [
         ":day22",
         "@googlebenchmark//:benchmark_main",

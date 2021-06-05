@@ -6,7 +6,7 @@ cc_library(
     hdrs = ["day04.h"],
     deps = [
         ":internal",
-        "//cpp:adventofcode",
+        "//adventofcode/cpp:adventofcode",
         "@abseil//absl/strings",
     ],
 )
@@ -14,7 +14,7 @@ cc_library(
 cc_test(
     name = "test",
     srcs = ["test.cc"],
-    data = ["//inputs:2019/04"],
+    data = ["//adventofcode/inputs:2019/04"],
     deps = [
         ":day04",
         "@googletest//:gtest_main",
@@ -39,7 +39,7 @@ cc_test(
 cc_binary(
     name = "benchmark",
     srcs = ["benchmark.cc"],
-    data = ["//inputs:2019/04"],
+    data = ["//adventofcode/inputs:2019/04"],
     deps = [
         ":day04",
         "@googlebenchmark//:benchmark_main",

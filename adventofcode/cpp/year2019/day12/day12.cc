@@ -1,4 +1,4 @@
-#include "cpp/year2019/day12/day12.h"
+#include "adventofcode/cpp/year2019/day12/day12.h"
 
 #include <cmath>
 #include <istream>
@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 using state = std::vector<std::pair<int, int>>;
 

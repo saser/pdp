@@ -1,10 +1,10 @@
-#include "cpp/year2019/day02/day02.h"
+#include "adventofcode/cpp/year2019/day02/day02.h"
 
 #include <istream>
 #include <string>
 
-#include "cpp/adventofcode.h"
-#include "cpp/year2019/intcode/intcode.h"
+#include "adventofcode/cpp/adventofcode.h"
+#include "adventofcode/cpp/year2019/intcode/intcode.h"
 
 adventofcode::answer_t solve(std::istream& is, int part);
 

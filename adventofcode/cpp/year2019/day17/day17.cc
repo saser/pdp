@@ -1,12 +1,12 @@
-#include "cpp/year2019/day17/day17.h"
+#include "adventofcode/cpp/year2019/day17/day17.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include "cpp/adventofcode.h"
-#include "cpp/year2019/intcode/intcode.h"
+#include "adventofcode/cpp/adventofcode.h"
+#include "adventofcode/cpp/year2019/intcode/intcode.h"
 
 using grid_t = std::vector<std::vector<char>>;
 

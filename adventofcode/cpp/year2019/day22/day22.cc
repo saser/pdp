@@ -1,4 +1,4 @@
-#include "cpp/year2019/day22/day22.h"
+#include "adventofcode/cpp/year2019/day22/day22.h"
 
 #include <algorithm>
 #include <cmath>
@@ -7,7 +7,7 @@
 #include <regex>
 #include <string>
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 struct deck_t {
   uint64_t modulo;

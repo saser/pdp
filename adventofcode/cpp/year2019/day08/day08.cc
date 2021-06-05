@@ -1,11 +1,11 @@
-#include "cpp/year2019/day08/day08.h"
+#include "adventofcode/cpp/year2019/day08/day08.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 adventofcode::answer_t solve(std::istream& is, int part);
 std::string render(const std::vector<std::vector<char>>& grid);

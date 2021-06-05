@@ -5,15 +5,15 @@ cc_library(
     srcs = ["day11.cc"],
     hdrs = ["day11.h"],
     deps = [
-        "//cpp:adventofcode",
-        "//cpp/year2019/intcode",
+        "//adventofcode/cpp:adventofcode",
+        "//adventofcode/cpp/year2019/intcode",
     ],
 )
 
 cc_test(
     name = "test",
     srcs = ["test.cc"],
-    data = glob(["testdata/*"]) + ["//inputs:2019/11"],
+    data = glob(["testdata/*"]) + ["//adventofcode/inputs:2019/11"],
     deps = [
         ":day11",
         "@googletest//:gtest_main",
@@ -23,7 +23,7 @@ cc_test(
 cc_binary(
     name = "benchmark",
     srcs = ["benchmark.cc"],
-    data = ["//inputs:2019/11"],
+    data = ["//adventofcode/inputs:2019/11"],
     deps = [
         ":day11",
         "@googlebenchmark//:benchmark_main",

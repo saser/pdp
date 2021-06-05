@@ -3,7 +3,7 @@
 
 #include <istream>
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 namespace day12 {
   constexpr unsigned int STEPS = 1000;

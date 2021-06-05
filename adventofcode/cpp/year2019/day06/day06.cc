@@ -1,4 +1,4 @@
-#include "cpp/year2019/day06/day06.h"
+#include "adventofcode/cpp/year2019/day06/day06.h"
 
 #include <istream>
 #include <string>
@@ -8,7 +8,7 @@
 
 #include "absl/strings/str_split.h"
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 typedef std::unordered_map<std::string, std::vector<std::string>> children_tree;
 typedef std::unordered_map<std::string, std::string> parent_tree;

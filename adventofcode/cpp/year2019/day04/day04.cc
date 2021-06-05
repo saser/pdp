@@ -1,12 +1,12 @@
-#include "cpp/year2019/day04/day04.h"
+#include "adventofcode/cpp/year2019/day04/day04.h"
 
 #include <istream>
 #include <string>
 
 #include "absl/strings/str_split.h"
 
-#include "cpp/adventofcode.h"
-#include "cpp/year2019/day04/internal.h"
+#include "adventofcode/cpp/adventofcode.h"
+#include "adventofcode/cpp/year2019/day04/internal.h"
 
 adventofcode::answer_t solve(std::istream& is, bool strict);
 

@@ -1,12 +1,12 @@
-#include "cpp/year2019/day05/day05.h"
+#include "adventofcode/cpp/year2019/day05/day05.h"
 
 #include <istream>
 #include <string>
 
 #include "absl/strings/str_format.h"
 
-#include "cpp/adventofcode.h"
-#include "cpp/year2019/intcode/intcode.h"
+#include "adventofcode/cpp/adventofcode.h"
+#include "adventofcode/cpp/year2019/intcode/intcode.h"
 
 adventofcode::answer_t solve(std::istream& is, int part);
 

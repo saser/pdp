@@ -1,4 +1,4 @@
-#include "cpp/year2019/day04/internal.h"
+#include "adventofcode/cpp/year2019/day04/internal.h"
 
 #include <algorithm>
 #include <vector>

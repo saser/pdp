@@ -1,10 +1,10 @@
-#include "cpp/year2019/day19/day19.h"
+#include "adventofcode/cpp/year2019/day19/day19.h"
 
 #include <istream>
 #include <string>
 
-#include "cpp/adventofcode.h"
-#include "cpp/year2019/intcode/intcode.h"
+#include "adventofcode/cpp/adventofcode.h"
+#include "adventofcode/cpp/year2019/intcode/intcode.h"
 
 struct point_t {
   int64_t x;

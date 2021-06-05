@@ -1,4 +1,4 @@
-#include "cpp/year2019/day16/day16.h"
+#include "adventofcode/cpp/year2019/day16/day16.h"
 
 #include <cmath>
 #include <iostream>
@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 adventofcode::answer_t solve(std::istream& is, int part);
 int output(const std::vector<int>& v, unsigned int n);
