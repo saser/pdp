@@ -1,7 +1,0 @@
-load("//java:repos.bzl", "java_repositories")
-
-java_repositories()
-
-load("//java:deps.bzl", "java_dependencies")
-
-java_dependencies()
