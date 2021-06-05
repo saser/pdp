@@ -1,4 +1,9 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+################################################################################
+# Go
+################################################################################
 
 http_archive(
     name = "io_bazel_rules_go",
@@ -30,3 +35,64 @@ go_rules_dependencies()
 go_register_toolchains(version = "1.16.2")
 
 gazelle_dependencies()
+
+################################################################################
+# C++
+################################################################################
+
+git_repository(
+    name = "googletest",
+    remote = "https://github.com/google/googletest",
+    # `commit` and `shallow_since` was given by first specifying:
+    #     tag = "release-1.10.0"
+    # and then following the debug messages given by Bazel.
+    commit = "703bd9caab50b139428cea1aaff9974ebee5742e",
+    shallow_since = "1570114335 -0400",
+)
+
+git_repository(
+    name = "googlebenchmark",
+    remote = "https://github.com/google/benchmark",
+    # `commit` and `shallow_since` was given by first specifying:
+    #     tag = "v1.5.0"
+    # and then following the debug messages given by Bazel.
+    commit = "090faecb454fbd6e6e17a75ef8146acb037118d4",
+    shallow_since = "1557776538 +0300",
+)
+
+git_repository(
+    name = "abseil",
+    remote = "https://github.com/abseil/abseil-cpp",
+    # `commit` and `shallow_since` was given by first specifying:
+    #     tag = "20190808"
+    # and then following the debug messages given by Bazel.
+    commit = "aa844899c937bde5d2b24f276b59997e5b668bde",
+    shallow_since = "1565288385 -0400",
+)
+
+################################################################################
+# Java
+################################################################################
+
+git_repository(
+    name = "rules_jvm_external",
+    remote = "https://github.com/bazelbuild/rules_jvm_external",
+    # `commit` and `shallow_since` was given by first specifying:
+    #     tag = "3.1"
+    # and then following the debug messages given by Bazel.
+    commit = "9aec21a7eff032dfbdcf728bb608fe1a02c54124",
+    shallow_since = "1577467222 -0500",
+)
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+maven_install(
+    artifacts = [
+        "junit:junit:4.13",
+        "org.openjdk.jmh:jmh-core:1.22",
+        "org.openjdk.jmh:jmh-generator-annprocess:1.22",
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
