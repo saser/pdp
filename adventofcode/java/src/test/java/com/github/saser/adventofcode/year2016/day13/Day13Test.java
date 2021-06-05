@@ -9,7 +9,7 @@ import org.junit.Assert;
 public class Day13Test {
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("inputs/2016/13")) {
+        try (var input = new FileReader("adventofcode/inputs/2016/13")) {
             var output = "92";
             var result = Day13.part1(input);
             Assert.assertEquals("no error", "", result.error);
@@ -19,7 +19,7 @@ public class Day13Test {
 
      @Test
      public void part2Actual() throws IOException {
-         try (var input = new FileReader("inputs/2016/13")) {
+         try (var input = new FileReader("adventofcode/inputs/2016/13")) {
              var output = "124";
              var result = Day13.part2(input);
              Assert.assertEquals("no error", "", result.error);

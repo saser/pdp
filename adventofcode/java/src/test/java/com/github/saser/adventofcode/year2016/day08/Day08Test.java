@@ -10,7 +10,7 @@ import org.junit.Assert;
 public class Day08Test {
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("inputs/2016/08")) {
+        try (var input = new FileReader("adventofcode/inputs/2016/08")) {
             var output = "116";
             var result = Day08.part1(input);
             Assert.assertEquals("no error", "", result.error);
@@ -20,7 +20,7 @@ public class Day08Test {
 
      @Test
      public void part2Actual() throws IOException {
-         try (var input = new FileReader("inputs/2016/08")) {
+         try (var input = new FileReader("adventofcode/inputs/2016/08")) {
              var outputResource = this.getClass().getResourceAsStream("output");
              var outputBytes = new BufferedInputStream(outputResource).readAllBytes();
              var output = new String(outputBytes);

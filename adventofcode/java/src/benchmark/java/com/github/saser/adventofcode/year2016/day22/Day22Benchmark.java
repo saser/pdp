@@ -29,7 +29,7 @@ public class Day22Benchmark {
 
     @Setup
     public void setup() throws IOException {
-        var path = FileSystems.getDefault().getPath("inputs", "2016", "22");
+        var path = FileSystems.getDefault().getPath("adventofcode", "inputs", "2016", "22");
         var contents = Files.readString(path);
         this.input = new StringReader(contents);
     }

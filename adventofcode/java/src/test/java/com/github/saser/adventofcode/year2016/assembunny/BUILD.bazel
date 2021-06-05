@@ -3,10 +3,10 @@ load("@rules_java//java:defs.bzl", "java_test")
 java_test(
     name = "test",
     srcs = glob(["*.java"]),
-    resources = ["//java/src/test/resources/com/github/saser/adventofcode/year2016/assembunny:testdata"],
+    resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/assembunny:testdata"],
     test_class = "com.github.saser.adventofcode.year2016.assembunny.VMTest",
     deps = [
-        "//java/src/main/java/com/github/saser/adventofcode/year2016/assembunny",
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016/assembunny",
         "@maven//:junit_junit",
     ],
 )

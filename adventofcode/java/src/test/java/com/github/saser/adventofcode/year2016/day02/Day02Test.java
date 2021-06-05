@@ -19,7 +19,7 @@ public class Day02Test {
 
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("inputs/2016/02")) {
+        try (var input = new FileReader("adventofcode/inputs/2016/02")) {
             var output = "99332";
             var result = Day02.part1(input);
             Assert.assertEquals("no error", "", result.error);
@@ -38,7 +38,7 @@ public class Day02Test {
 
     @Test
     public void part2Actual() throws IOException {
-        try (var input = new FileReader("inputs/2016/02")) {
+        try (var input = new FileReader("adventofcode/inputs/2016/02")) {
             var output = "DD483";
             var result = Day02.part2(input);
             Assert.assertEquals("no error", "", result.error);

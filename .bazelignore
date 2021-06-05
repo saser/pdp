@@ -5,5 +5,4 @@ adventofcode/bazel-bin
 adventofcode/bazel-out
 adventofcode/bazel-testlogs
 adventofcode/go/
-adventofcode/java/
 adventofcode/rust/
