@@ -4,6 +4,6 @@ package(default_visibility = ["//visibility:public"])
 
 java_library(
     name = "{{.FullDay}}",
-    srcs = glob(["*.java"]),
+    srcs = ["Day{{.PaddedDay}}Test.java"],
     deps = ["//java/src/main/java/com/github/saser/adventofcode"],
 )

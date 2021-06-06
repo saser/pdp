@@ -4,5 +4,5 @@ package(default_visibility = ["//visibility:public"])
 
 java_library(
     name = "assembunny",
-    srcs = glob(["*.java"]),
+    srcs = ["VM.java"],
 )

@@ -4,5 +4,8 @@ package(default_visibility = ["//visibility:public"])
 
 java_library(
     name = "tuple",
-    srcs = glob(["*.java"]),
+    srcs = [
+        "Tuple2.java",
+        "Tuple3.java",
+    ],
 )

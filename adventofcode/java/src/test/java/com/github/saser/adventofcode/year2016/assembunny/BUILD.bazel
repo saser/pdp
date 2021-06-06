@@ -2,7 +2,7 @@ load("@rules_java//java:defs.bzl", "java_test")
 
 java_test(
     name = "test",
-    srcs = glob(["*.java"]),
+    srcs = ["VMTest.java"],
     resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/assembunny:testdata"],
     test_class = "com.github.saser.adventofcode.year2016.assembunny.VMTest",
     deps = [

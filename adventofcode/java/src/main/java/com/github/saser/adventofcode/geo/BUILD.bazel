@@ -4,5 +4,5 @@ package(default_visibility = ["//visibility:public"])
 
 java_library(
     name = "geo",
-    srcs = glob(["*.java"]),
+    srcs = ["Point2D.java"],
 )

@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 java_library(
     name = "day20",
-    srcs = glob(["*.java"]),
+    srcs = ["Day20.java"],
     deps = [
         "//adventofcode/java/result",
         "//adventofcode/java/src/main/java/com/github/saser/adventofcode/tuple",

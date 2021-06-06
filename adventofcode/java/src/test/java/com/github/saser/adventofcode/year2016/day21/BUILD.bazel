@@ -2,7 +2,7 @@ load("@rules_java//java:defs.bzl", "java_test")
 
 java_test(
     name = "test",
-    srcs = glob(["*.java"]),
+    srcs = ["Day21Test.java"],
     data = ["//adventofcode/inputs:2016/21"],
     test_class = "com.github.saser.adventofcode.year2016.day21.Day21Test",
     deps = [

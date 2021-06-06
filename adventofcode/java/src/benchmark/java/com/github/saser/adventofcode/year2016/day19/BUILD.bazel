@@ -2,7 +2,7 @@ load("@rules_java//java:defs.bzl", "java_binary", "java_library")
 
 java_library(
     name = "benchmark_library",
-    srcs = glob(["*.java"]),
+    srcs = ["Day19Benchmark.java"],
     data = ["//adventofcode/inputs:2016/19"],
     plugins = ["//adventofcode/java/src/benchmark:annotation_processor"],
     deps = [

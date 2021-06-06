@@ -4,6 +4,6 @@ package(default_visibility = ["//visibility:public"])
 
 java_library(
     name = "day05",
-    srcs = glob(["*.java"]),
+    srcs = ["Day05.java"],
     deps = ["//adventofcode/java/result"],
 )
