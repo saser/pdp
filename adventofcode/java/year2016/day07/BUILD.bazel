@@ -1,7 +1,7 @@
 load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
 
 java_library(
-    name = "benchmark_library",
+    name = "day07_benchmark_lib",
     srcs = ["Day07Benchmark.java"],
     data = ["//adventofcode/inputs:2016/07"],
     plugins = ["//adventofcode/java:benchmark_annotation_processor"],
@@ -15,7 +15,7 @@ java_binary(
     name = "day07_benchmark",
     main_class = "org.openjdk.jmh.Main",
     runtime_deps = [
-        ":benchmark_library",
+        ":day07_benchmark_lib",
         "@maven//:org_openjdk_jmh_jmh_core",
     ],
 )
