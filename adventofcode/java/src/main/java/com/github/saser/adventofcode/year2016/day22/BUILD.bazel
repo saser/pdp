@@ -1,6 +1,24 @@
-load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
 
-package(default_visibility = ["//visibility:public"])
+java_library(
+    name = "benchmark_library",
+    srcs = ["Day22Benchmark.java"],
+    data = ["//adventofcode/inputs:2016/22"],
+    plugins = ["//adventofcode/java/src/benchmark:annotation_processor"],
+    deps = [
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016/day22",
+        "@maven//:org_openjdk_jmh_jmh_core",
+    ],
+)
+
+java_binary(
+    name = "benchmark",
+    main_class = "org.openjdk.jmh.Main",
+    runtime_deps = [
+        ":benchmark_library",
+        "@maven//:org_openjdk_jmh_jmh_core",
+    ],
+)
 
 java_library(
     name = "day22",
@@ -9,5 +27,18 @@ java_library(
         "//adventofcode/java/result",
         "//adventofcode/java/src/main/java/com/github/saser/adventofcode/geo",
         "//adventofcode/java/src/main/java/com/github/saser/adventofcode/tuple",
+    ],
+)
+
+java_test(
+    name = "test",
+    srcs = ["Day22Test.java"],
+    data = ["//adventofcode/inputs:2016/22"],
+    resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/day22:testdata"],
+    test_class = "com.github.saser.adventofcode.year2016.day22.Day22Test",
+    deps = [
+        "//adventofcode/java/result",
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016/day22",
+        "@maven//:junit_junit",
     ],
 )

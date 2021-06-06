@@ -6,8 +6,5 @@ java_library(
         "Tuple2.java",
         "Tuple3.java",
     ],
-    visibility = [
-        "//adventofcode/java/src/main/java/com/github/saser/adventofcode:__subpackages__",
-        "//adventofcode/java/src/test/java/com/github/saser/adventofcode/tuple:__pkg__",
-    ],
+    visibility = ["//adventofcode/java/src/main:__subpackages__"],
 )
