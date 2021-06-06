@@ -1,9 +1,9 @@
-#ifndef ADVENTOFCODE_YEAR{{.Year}}_DAY{{.PaddedDay}}_H
-#define ADVENTOFCODE_YEAR{{.Year}}_DAY{{.PaddedDay}}_H
+#ifndef ADVENTOFCODE_CPP_YEAR{{.Year}}_DAY{{.PaddedDay}}_H
+#define ADVENTOFCODE_CPP_YEAR{{.Year}}_DAY{{.PaddedDay}}_H
 
 #include <istream>
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 namespace {{.FullDay}} {
   adventofcode::answer_t part1(std::istream& is);

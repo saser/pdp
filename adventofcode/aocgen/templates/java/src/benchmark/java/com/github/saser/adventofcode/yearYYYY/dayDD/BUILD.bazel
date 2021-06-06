@@ -3,10 +3,10 @@ load("@rules_java//java:defs.bzl", "java_binary", "java_library")
 java_library(
     name = "benchmark_library",
     srcs = ["Day{{.PaddedDay}}Benchmark.java"],
-    data = ["//inputs:{{.Year}}/{{.PaddedDay}}"],
-    plugins = ["//java/src/benchmark:annotation_processor"],
+    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    plugins = ["//adventofcode/java/src/benchmark:annotation_processor"],
     deps = [
-        "//java/src/main/java/com/github/saser/adventofcode/{{.FullYear}}/{{.FullDay}}",
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode/{{.FullYear}}/{{.FullDay}}",
         "@maven//:org_openjdk_jmh_jmh_core",
     ],
 )

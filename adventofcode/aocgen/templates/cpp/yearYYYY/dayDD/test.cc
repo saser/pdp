@@ -1,4 +1,4 @@
-#include "cpp/{{.FullYear}}/{{.FullDay}}/{{.FullDay}}.h"
+#include "adventofcode/cpp/{{.FullYear}}/{{.FullDay}}/{{.FullDay}}.h"
 
 #include <fstream>
 #include <sstream>
@@ -6,7 +6,7 @@
 
 #include "gtest/gtest.h"
 
-#include "cpp/adventofcode.h"
+#include "adventofcode/cpp/adventofcode.h"
 
 TEST(Year{{.Year}}Day{{.PaddedDay}}, Part1Example1) {
   std::istringstream input("");

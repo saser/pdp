@@ -2,7 +2,7 @@ package com.github.saser.adventofcode.{{.FullYear}}.{{.FullDay}};
 
 import java.io.Reader;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day{{.PaddedDay}} {
     public static Result part1(Reader r) {

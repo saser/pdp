@@ -1,4 +1,4 @@
-#include "cpp/{{.FullYear}}/{{.FullDay}}/{{.FullDay}}.h"
+#include "adventofcode/cpp/{{.FullYear}}/{{.FullDay}}/{{.FullDay}}.h"
 
 #include <fstream>
 

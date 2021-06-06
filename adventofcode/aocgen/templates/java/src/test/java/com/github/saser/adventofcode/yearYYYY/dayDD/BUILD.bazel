@@ -2,12 +2,12 @@ load("@rules_java//java:defs.bzl", "java_test")
 
 java_test(
     name = "test",
-    srcs = ["Day{{.PaddedDay}}.java"],
-    data = ["//inputs:{{.Year}}/{{.PaddedDay}}"],
+    srcs = ["Day{{.PaddedDay}}Test.java"],
+    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
     test_class = "com.github.saser.adventofcode.{{.FullYear}}.{{.FullDay}}.Day{{.PaddedDay}}Test",
     deps = [
-        "//java/src/main/java/com/github/saser/adventofcode",
-        "//java/src/main/java/com/github/saser/adventofcode/{{.FullYear}}/{{.FullDay}}",
+        "//adventofcode/java/result",
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode/{{.FullYear}}/{{.FullDay}}",
         "@maven//:junit_junit",
     ],
 )

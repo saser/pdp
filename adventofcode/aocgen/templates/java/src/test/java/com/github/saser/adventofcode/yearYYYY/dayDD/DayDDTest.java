@@ -19,7 +19,7 @@ public class Day{{.PaddedDay}}Test {
 
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("inputs/{{.Year}}/{{.PaddedDay}}")) {
+        try (var input = new FileReader("adventofcode/inputs/{{.Year}}/{{.PaddedDay}}")) {
             var output = "";
             var result = Day{{.PaddedDay}}.part1(input);
             Assert.assertEquals("no error", "", result.error);

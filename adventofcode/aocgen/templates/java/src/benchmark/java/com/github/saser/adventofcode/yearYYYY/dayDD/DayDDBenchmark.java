@@ -29,7 +29,7 @@ public class Day{{.PaddedDay}}Benchmark {
 
     @Setup
     public void setup() throws IOException {
-        var path = FileSystems.getDefault().getPath("inputs", "{{.Year}}", "{{.PaddedDay}}");
+        var path = FileSystems.getDefault().getPath("adventofcode", "inputs", "{{.Year}}", "{{.PaddedDay}}");
         var contents = Files.readString(path);
         this.input = new StringReader(contents);
     }
