@@ -12,7 +12,7 @@ java_library(
 )
 
 java_binary(
-    name = "benchmark",
+    name = "day09_benchmark",
     main_class = "org.openjdk.jmh.Main",
     runtime_deps = [
         ":benchmark_library",
@@ -27,7 +27,7 @@ java_library(
 )
 
 java_test(
-    name = "test",
+    name = "day09_test",
     srcs = ["Day09Test.java"],
     data = ["//adventofcode/inputs:2016/09"],
     test_class = "com.github.saser.adventofcode.year2016.day09.Day09Test",

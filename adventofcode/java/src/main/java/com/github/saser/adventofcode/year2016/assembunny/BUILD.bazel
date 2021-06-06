@@ -7,7 +7,7 @@ java_library(
 )
 
 java_test(
-    name = "test",
+    name = "assembunny_test",
     srcs = ["VMTest.java"],
     resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/assembunny:testdata"],
     test_class = "com.github.saser.adventofcode.year2016.assembunny.VMTest",
