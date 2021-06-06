@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.tuple.Tuple2;
 
 public final class Day20 {

@@ -3,7 +3,7 @@ package com.github.saser.adventofcode.year2016.day09;
 import java.io.BufferedReader;
 import java.io.Reader;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day09 {
     public static Result part1(Reader r) {

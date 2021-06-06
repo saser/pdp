@@ -7,7 +7,7 @@ java_test(
     resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/day24:testdata"],
     test_class = "com.github.saser.adventofcode.year2016.day24.Day24Test",
     deps = [
-        "//adventofcode/java/src/main/java/com/github/saser/adventofcode",
+        "//adventofcode/java/result",
         "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016/day24",
         "@maven//:junit_junit",
     ],

@@ -2,7 +2,7 @@ package com.github.saser.adventofcode.year2016.day23;
 
 import java.io.Reader;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day23 {
     public static Result part1(Reader r) {

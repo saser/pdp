@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.stream.Stream;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day18 {
     public static Result part1(Reader r) {

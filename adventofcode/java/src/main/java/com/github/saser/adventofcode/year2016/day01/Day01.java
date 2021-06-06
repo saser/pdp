@@ -5,7 +5,7 @@ import java.io.Reader;
 import java.util.Comparator;
 import java.util.TreeSet;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.geo.Point2D;
 
 public final class Day01 {

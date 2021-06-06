@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day14 {
     public static Result part1(Reader r) {

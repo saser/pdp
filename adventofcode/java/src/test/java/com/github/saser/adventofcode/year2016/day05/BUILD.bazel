@@ -6,7 +6,7 @@ java_test(
     data = ["//adventofcode/inputs:2016/05"],
     test_class = "com.github.saser.adventofcode.year2016.day05.Day05Test",
     deps = [
-        "//adventofcode/java/src/main/java/com/github/saser/adventofcode",
+        "//adventofcode/java/result",
         "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016/day05",
         "@maven//:junit_junit",
     ],

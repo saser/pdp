@@ -2,7 +2,7 @@ package com.github.saser.adventofcode.year2016.day12;
 
 import java.io.Reader;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.year2016.assembunny.VM;
 
 public final class Day12 {

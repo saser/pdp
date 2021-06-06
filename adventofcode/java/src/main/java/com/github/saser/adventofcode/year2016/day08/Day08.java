@@ -5,7 +5,7 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day08 {
     public static Result part1(Reader r) {

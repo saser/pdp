@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.geo.Point2D;
 import com.github.saser.adventofcode.tuple.Tuple2;
 

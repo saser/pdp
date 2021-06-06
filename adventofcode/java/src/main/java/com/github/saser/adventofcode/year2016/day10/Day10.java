@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day10 {
     public static Result part1(Reader r) {

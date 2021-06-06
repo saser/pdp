@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.geo.Point2D;
 import com.github.saser.adventofcode.tuple.Tuple2;
 import com.github.saser.adventofcode.tuple.Tuple3;

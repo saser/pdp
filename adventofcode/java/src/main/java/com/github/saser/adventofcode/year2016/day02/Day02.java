@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.stream.Collectors;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.geo.Point2D;
 
 public final class Day02 {

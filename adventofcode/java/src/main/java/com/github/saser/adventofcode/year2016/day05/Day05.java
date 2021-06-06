@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 
 public final class Day05 {
     public static Result part1(Reader r) {

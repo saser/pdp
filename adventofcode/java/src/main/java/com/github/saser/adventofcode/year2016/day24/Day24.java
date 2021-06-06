@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import com.github.saser.adventofcode.Result;
+import adventofcode.java.result.Result;
 import com.github.saser.adventofcode.geo.Point2D;
 import com.github.saser.adventofcode.tuple.Tuple2;
 import com.github.saser.adventofcode.tuple.Tuple3;

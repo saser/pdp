@@ -6,7 +6,7 @@ java_library(
     name = "day25",
     srcs = glob(["*.java"]),
     deps = [
-        "//adventofcode/java/src/main/java/com/github/saser/adventofcode",
+        "//adventofcode/java/result",
         "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016/assembunny",
     ],
 )
