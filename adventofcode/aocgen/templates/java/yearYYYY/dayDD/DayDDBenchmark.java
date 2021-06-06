@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.{{.FullYear}}.{{.FullDay}};
+package adventofcode.java.{{.FullYear}}.{{.FullDay}};
 
 import java.io.IOException;
 import java.io.Reader;

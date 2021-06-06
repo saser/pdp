@@ -1,0 +1,39 @@
+load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
+
+java_library(
+    name = "{{.FullDay}}",
+    srcs = ["Day{{.PaddedDay}}.java"],
+    deps = ["//adventofcode/java/result"],
+)
+
+java_test(
+    name = "{{.FullDay}}_test",
+    srcs = ["Day{{.PaddedDay}}Test.java"],
+    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    test_class = "adventofcode.java.{{.FullYear}}.{{.FullDay}}.Day{{.PaddedDay}}Test",
+    deps = [
+        ":{{.FullDay}}",
+        "//adventofcode/java/result",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_library(
+    name = "{{.FullDay}}_benchmark_library",
+    srcs = ["Day{{.PaddedDay}}Benchmark.java"],
+    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    plugins = ["//adventofcode/java:benchmark_annotation_processor"],
+    deps = [
+        ":{{.FullDay}}",
+        "@maven//:org_openjdk_jmh_jmh_core",
+    ],
+)
+
+java_binary(
+    name = "{{.FullDay}}_benchmark",
+    main_class = "org.openjdk.jmh.Main",
+    runtime_deps = [
+        ":benchmark_library",
+        "@maven//:org_openjdk_jmh_jmh_core",
+    ],
+)
