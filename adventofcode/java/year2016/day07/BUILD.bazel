@@ -29,8 +29,10 @@ java_library(
 java_test(
     name = "day07_test",
     srcs = ["Day07Test.java"],
-    data = ["//adventofcode/inputs:2016/07"],
-    resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/day07:testdata"],
+    data = [
+        "//adventofcode/inputs:2016/07",
+        "//adventofcode/java/testdata/year2016/day07:testdata",
+    ],
     test_class = "com.github.saser.adventofcode.year2016.day07.Day07Test",
     deps = [
         "//adventofcode/java/result",

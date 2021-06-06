@@ -1,6 +1,7 @@
 package com.github.saser.adventofcode.year2016.assembunny;
 
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.FileReader;
 import java.util.List;
 
 import org.junit.Assert;
@@ -218,18 +219,20 @@ public class VMTest {
     }
 
     @Test
-    public void testDay12Example() {
-        var r = new InputStreamReader(this.getClass().getResourceAsStream("day12example"));
-        var vm = VM.from(r);
-        vm.runAll();
-        Assert.assertEquals(42, vm.a());
+    public void testDay12Example() throws IOException {
+        try (var r = new FileReader("adventofcode/java/testdata/year2016/assembunny/day12example")) {
+            var vm = VM.from(r);
+            vm.runAll();
+            Assert.assertEquals(42, vm.a());
+        }
     }
 
     @Test
-    public void testDay23Example() {
-        var r = new InputStreamReader(this.getClass().getResourceAsStream("day23example"));
-        var vm = VM.from(r);
-        vm.runAll();
-        Assert.assertEquals(3, vm.a());
+    public void testDay23Example() throws IOException {
+        try (var r = new FileReader("adventofcode/java/testdata/year2016/assembunny/day23example")) {
+            var vm = VM.from(r);
+            vm.runAll();
+            Assert.assertEquals(3, vm.a());
+        }
     }
 }

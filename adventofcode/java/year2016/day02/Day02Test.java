@@ -2,19 +2,19 @@ package com.github.saser.adventofcode.year2016.day02;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import org.junit.Test;
 import org.junit.Assert;
 
 public class Day02Test {
     @Test
-    public void part1Example() {
-        var input = new InputStreamReader(this.getClass().getResourceAsStream("example"));
-        var output = "1985";
-        var result = Day02.part1(input);
-        Assert.assertEquals("no error", "", result.error);
-        Assert.assertEquals("correct output", output, result.answer);
+    public void part1Example() throws IOException {
+        try (var input = new FileReader("adventofcode/java/testdata/year2016/day02/example")) {
+            var output = "1985";
+            var result = Day02.part1(input);
+            Assert.assertEquals("no error", "", result.error);
+            Assert.assertEquals("correct output", output, result.answer);
+        }
     }
 
     @Test
@@ -28,12 +28,13 @@ public class Day02Test {
     }
 
     @Test
-    public void part2Example() {
-        var input = new InputStreamReader(this.getClass().getResourceAsStream("example"));
-        var output = "5DB3";
-        var result = Day02.part2(input);
-        Assert.assertEquals("no error", "", result.error);
-        Assert.assertEquals("correct output", output, result.answer);
+    public void part2Example() throws IOException {
+        try (var input = new FileReader("adventofcode/java/testdata/year2016/day02/example")) {
+            var output = "5DB3";
+            var result = Day02.part2(input);
+            Assert.assertEquals("no error", "", result.error);
+            Assert.assertEquals("correct output", output, result.answer);
+        }
     }
 
     @Test
