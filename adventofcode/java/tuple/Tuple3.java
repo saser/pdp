@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.tuple;
+package adventofcode.java.tuple;
 
 import java.util.Objects;
 

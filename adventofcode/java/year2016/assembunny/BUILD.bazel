@@ -10,7 +10,7 @@ java_test(
     name = "assembunny_test",
     srcs = ["VMTest.java"],
     data = ["//adventofcode/java/testdata/year2016/assembunny:testdata"],
-    test_class = "com.github.saser.adventofcode.year2016.assembunny.VMTest",
+    test_class = "adventofcode.java.year2016.assembunny.VMTest",
     deps = [
         "//adventofcode/java/year2016/assembunny",
         "@maven//:junit_junit",

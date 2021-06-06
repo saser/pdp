@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.year2016.day17;
+package adventofcode.java.year2016.day17;
 
 import java.io.IOException;
 import java.io.Reader;

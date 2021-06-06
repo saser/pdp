@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.geo;
+package adventofcode.java.geo;
 
 import java.util.Objects;
 

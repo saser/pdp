@@ -1,9 +1,9 @@
-package com.github.saser.adventofcode.year2016.day12;
+package adventofcode.java.year2016.day12;
 
 import java.io.Reader;
 
 import adventofcode.java.result.Result;
-import com.github.saser.adventofcode.year2016.assembunny.VM;
+import adventofcode.java.year2016.assembunny.VM;
 
 public final class Day12 {
     public static Result part1(Reader r) {

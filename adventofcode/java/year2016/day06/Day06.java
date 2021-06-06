@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.year2016.day06;
+package adventofcode.java.year2016.day06;
 
 import java.io.BufferedReader;
 import java.io.Reader;

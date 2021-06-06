@@ -1,9 +1,9 @@
-package com.github.saser.adventofcode.year2016.day25;
+package adventofcode.java.year2016.day25;
 
 import java.io.Reader;
 
 import adventofcode.java.result.Result;
-import com.github.saser.adventofcode.year2016.assembunny.VM;
+import adventofcode.java.year2016.assembunny.VM;
 
 public final class Day25 {
     // My initial attempt consisted of trying to find a loop in the states of

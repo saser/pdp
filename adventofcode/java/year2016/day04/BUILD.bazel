@@ -33,7 +33,7 @@ java_test(
         "//adventofcode/inputs:2016/04",
         "//adventofcode/java/testdata/year2016/day04:testdata",
     ],
-    test_class = "com.github.saser.adventofcode.year2016.day04.Day04Test",
+    test_class = "adventofcode.java.year2016.day04.Day04Test",
     deps = [
         "//adventofcode/java/result",
         "//adventofcode/java/year2016/day04",

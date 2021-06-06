@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.year2016.day20;
+package adventofcode.java.year2016.day20;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import adventofcode.java.result.Result;
-import com.github.saser.adventofcode.tuple.Tuple2;
+import adventofcode.java.tuple.Tuple2;
 
 public final class Day20 {
     public static Result part1(Reader r) {

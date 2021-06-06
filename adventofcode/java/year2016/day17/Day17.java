@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.year2016.day17;
+package adventofcode.java.year2016.day17;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import adventofcode.java.result.Result;
-import com.github.saser.adventofcode.geo.Point2D;
-import com.github.saser.adventofcode.tuple.Tuple2;
+import adventofcode.java.geo.Point2D;
+import adventofcode.java.tuple.Tuple2;
 
 public final class Day17 {
     public static Result part1(Reader r) {

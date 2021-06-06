@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.year2016.assembunny;
+package adventofcode.java.year2016.assembunny;
 
 import java.io.BufferedReader;
 import java.io.Reader;

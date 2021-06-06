@@ -1,11 +1,11 @@
-package com.github.saser.adventofcode.year2016.day02;
+package adventofcode.java.year2016.day02;
 
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.stream.Collectors;
 
 import adventofcode.java.result.Result;
-import com.github.saser.adventofcode.geo.Point2D;
+import adventofcode.java.geo.Point2D;
 
 public final class Day02 {
     public static Result part1(Reader r) {

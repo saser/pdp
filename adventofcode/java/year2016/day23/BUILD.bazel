@@ -30,7 +30,7 @@ java_test(
     name = "day23_test",
     srcs = ["Day23Test.java"],
     data = ["//adventofcode/inputs:2016/23"],
-    test_class = "com.github.saser.adventofcode.year2016.day23.Day23Test",
+    test_class = "adventofcode.java.year2016.day23.Day23Test",
     deps = [
         "//adventofcode/java/result",
         "//adventofcode/java/year2016/day23",

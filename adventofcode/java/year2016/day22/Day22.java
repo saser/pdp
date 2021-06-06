@@ -1,4 +1,4 @@
-package com.github.saser.adventofcode.year2016.day22;
+package adventofcode.java.year2016.day22;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import adventofcode.java.result.Result;
-import com.github.saser.adventofcode.geo.Point2D;
-import com.github.saser.adventofcode.tuple.Tuple2;
-import com.github.saser.adventofcode.tuple.Tuple3;
+import adventofcode.java.geo.Point2D;
+import adventofcode.java.tuple.Tuple2;
+import adventofcode.java.tuple.Tuple3;
 
 public final class Day22 {
     public static Result part1(Reader r) {
