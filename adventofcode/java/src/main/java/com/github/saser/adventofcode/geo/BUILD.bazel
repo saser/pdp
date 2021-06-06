@@ -1,7 +1,0 @@
-load("@rules_java//java:defs.bzl", "java_library")
-
-java_library(
-    name = "geo",
-    srcs = ["Point2D.java"],
-    visibility = ["//adventofcode/java/src/main:__subpackages__"],
-)

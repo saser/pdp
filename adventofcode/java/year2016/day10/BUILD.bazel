@@ -1,0 +1,39 @@
+load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
+
+java_library(
+    name = "benchmark_library",
+    srcs = ["Day10Benchmark.java"],
+    data = ["//adventofcode/inputs:2016/10"],
+    plugins = ["//adventofcode/java/src/benchmark:annotation_processor"],
+    deps = [
+        "//adventofcode/java/year2016/day10",
+        "@maven//:org_openjdk_jmh_jmh_core",
+    ],
+)
+
+java_binary(
+    name = "day10_benchmark",
+    main_class = "org.openjdk.jmh.Main",
+    runtime_deps = [
+        ":benchmark_library",
+        "@maven//:org_openjdk_jmh_jmh_core",
+    ],
+)
+
+java_library(
+    name = "day10",
+    srcs = ["Day10.java"],
+    deps = ["//adventofcode/java/result"],
+)
+
+java_test(
+    name = "day10_test",
+    srcs = ["Day10Test.java"],
+    data = ["//adventofcode/inputs:2016/10"],
+    test_class = "com.github.saser.adventofcode.year2016.day10.Day10Test",
+    deps = [
+        "//adventofcode/java/result",
+        "//adventofcode/java/year2016/day10",
+        "@maven//:junit_junit",
+    ],
+)

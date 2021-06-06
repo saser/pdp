@@ -1,0 +1,18 @@
+load("@rules_java//java:defs.bzl", "java_library", "java_test")
+
+java_library(
+    name = "assembunny",
+    srcs = ["VM.java"],
+    visibility = ["//adventofcode/java/year2016:__subpackages__"],
+)
+
+java_test(
+    name = "assembunny_test",
+    srcs = ["VMTest.java"],
+    resources = ["//adventofcode/java/src/test/resources/com/github/saser/adventofcode/year2016/assembunny:testdata"],
+    test_class = "com.github.saser.adventofcode.year2016.assembunny.VMTest",
+    deps = [
+        "//adventofcode/java/year2016/assembunny",
+        "@maven//:junit_junit",
+    ],
+)

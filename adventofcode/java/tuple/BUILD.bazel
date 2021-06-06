@@ -1,0 +1,10 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+java_library(
+    name = "tuple",
+    srcs = [
+        "Tuple2.java",
+        "Tuple3.java",
+    ],
+    visibility = ["//adventofcode/java:__subpackages__"],
+)
