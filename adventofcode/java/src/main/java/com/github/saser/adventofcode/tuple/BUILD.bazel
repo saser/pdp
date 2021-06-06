@@ -1,11 +1,13 @@
 load("@rules_java//java:defs.bzl", "java_library")
 
-package(default_visibility = ["//visibility:public"])
-
 java_library(
     name = "tuple",
     srcs = [
         "Tuple2.java",
         "Tuple3.java",
+    ],
+    visibility = [
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode:__subpackages__",
+        "//adventofcode/java/src/test/java/com/github/saser/adventofcode/tuple:__pkg__",
     ],
 )

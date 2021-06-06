@@ -1,8 +1,10 @@
 load("@rules_java//java:defs.bzl", "java_library")
 
-package(default_visibility = ["//visibility:public"])
-
 java_library(
     name = "assembunny",
     srcs = ["VM.java"],
+    visibility = [
+        "//adventofcode/java/src/main/java/com/github/saser/adventofcode/year2016:__subpackages__",
+        "//adventofcode/java/src/test/java/com/github/saser/adventofcode/year2016/assembunny:__pkg__",
+    ],
 )
