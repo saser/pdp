@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Saser/adventofcode/internal/geo"
+	"github.com/Saser/pdp/adventofcode/go/internal/geo"
 )
 
 func Part1(input string) (string, error) {

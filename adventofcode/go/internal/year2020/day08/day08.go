@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Saser/adventofcode/internal/year2020/vm"
+	"github.com/Saser/pdp/adventofcode/go/internal/year2020/vm"
 )
 
 func Part1(input string) (string, error) {

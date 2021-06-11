@@ -3,18 +3,16 @@ package day18
 import (
 	"testing"
 
-	"github.com/Saser/adventofcode/internal/testcase"
-)
-
-const (
-	exampleFile            = "testdata/example"
-	exampleIterationsPart1 = 4
-	exampleIterationsPart2 = 5
-	exampleGridSize        = 6
-	inputFile              = "../testdata/18"
+	"github.com/Saser/pdp/adventofcode/go/internal/testcase"
 )
 
 var (
+	exampleFile            = testcase.Runfile("adventofcode/go/internal/year2015/day18/testdata/example")
+	exampleIterationsPart1 = 4
+	exampleIterationsPart2 = 5
+	exampleGridSize        = 6
+	inputFile              = testcase.Runfile("adventofcode/inputs/2015/18")
+
 	tcPart1 = testcase.NewFile("input", inputFile, "1061")
 	tcPart2 = testcase.NewFile("input", inputFile, "1006")
 )

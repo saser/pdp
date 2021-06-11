@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Saser/adventofcode/internal/geo"
-	"github.com/Saser/adventofcode/internal/linalg"
+	"github.com/Saser/pdp/adventofcode/go/internal/geo"
+	"github.com/Saser/pdp/adventofcode/go/internal/linalg"
 )
 
 func Part1(input string) (string, error) {

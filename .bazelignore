@@ -1,8 +1,7 @@
 _tools/
-adventofcode/aocgen/
+adventofcode/aocgen/templates/
 adventofcode/bazel-adventofcode
 adventofcode/bazel-bin
 adventofcode/bazel-out
 adventofcode/bazel-testlogs
-adventofcode/go/
 adventofcode/rust/

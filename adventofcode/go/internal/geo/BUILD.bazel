@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "geo",
+    srcs = [
+        "direction.go",
+        "point.go",
+        "traveller.go",
+    ],
+    importpath = "github.com/Saser/pdp/adventofcode/go/internal/geo",
+    visibility = ["//adventofcode/go:__subpackages__"],
+)

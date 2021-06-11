@@ -1,0 +1,42 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "aoc_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/go/cmd/aoc",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//adventofcode/go/internal/testcase",
+        "//adventofcode/go/internal/year2015/day01",
+        "//adventofcode/go/internal/year2015/day02",
+        "//adventofcode/go/internal/year2015/day03",
+        "//adventofcode/go/internal/year2015/day04",
+        "//adventofcode/go/internal/year2015/day05",
+        "//adventofcode/go/internal/year2015/day06",
+        "//adventofcode/go/internal/year2015/day07",
+        "//adventofcode/go/internal/year2015/day08",
+        "//adventofcode/go/internal/year2015/day09",
+        "//adventofcode/go/internal/year2015/day10",
+        "//adventofcode/go/internal/year2015/day11",
+        "//adventofcode/go/internal/year2015/day12",
+        "//adventofcode/go/internal/year2015/day13",
+        "//adventofcode/go/internal/year2015/day14",
+        "//adventofcode/go/internal/year2015/day15",
+        "//adventofcode/go/internal/year2015/day16",
+        "//adventofcode/go/internal/year2015/day17",
+        "//adventofcode/go/internal/year2015/day18",
+        "//adventofcode/go/internal/year2015/day19",
+        "//adventofcode/go/internal/year2015/day20",
+        "//adventofcode/go/internal/year2015/day21",
+        "//adventofcode/go/internal/year2015/day22",
+        "//adventofcode/go/internal/year2015/day23",
+        "//adventofcode/go/internal/year2015/day24",
+        "//adventofcode/go/internal/year2015/day25",
+    ],
+)
+
+go_binary(
+    name = "aoc",
+    embed = [":aoc_lib"],
+    visibility = ["//visibility:public"],
+)

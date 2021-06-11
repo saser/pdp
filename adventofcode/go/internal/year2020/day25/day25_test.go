@@ -3,15 +3,15 @@ package day25
 import (
 	"testing"
 
-	"github.com/Saser/adventofcode/internal/testcase"
+	"github.com/Saser/pdp/adventofcode/go/internal/testcase"
 )
 
-const (
-	inputFile   = "../testdata/25"
-	exampleFile = "testdata/example"
-)
+var (
+	exampleFile = testcase.Runfile("adventofcode/go/internal/year2020/day25/testdata/example")
+	inputFile   = testcase.Runfile("adventofcode/inputs/2020/25")
 
-var tcPart1 = testcase.NewFile("input", inputFile, "17980581")
+	tcPart1 = testcase.NewFile("input", inputFile, "17980581")
+)
 
 func TestPart1(t *testing.T) {
 	for _, tc := range []testcase.TestCase{

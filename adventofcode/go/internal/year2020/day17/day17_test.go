@@ -3,15 +3,13 @@ package day17
 import (
 	"testing"
 
-	"github.com/Saser/adventofcode/internal/testcase"
-)
-
-const (
-	inputFile   = "../testdata/17"
-	exampleFile = "testdata/example"
+	"github.com/Saser/pdp/adventofcode/go/internal/testcase"
 )
 
 var (
+	exampleFile = testcase.Runfile("adventofcode/go/internal/year2020/day17/testdata/example")
+	inputFile   = testcase.Runfile("adventofcode/inputs/2020/17")
+
 	tcPart1 = testcase.NewFile("input", inputFile, "295")
 	tcPart2 = testcase.NewFile("input", inputFile, "1972")
 )

@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20210227132407-f2aed9ee205d
+	github.com/bazelbuild/rules_go v0.27.0
 	github.com/cenkalti/backoff/v4 v4.1.1
 	github.com/google/go-cmp v0.5.6
 	github.com/lib/pq v1.10.2

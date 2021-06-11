@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Saser/adventofcode/internal/permutations"
+	"github.com/Saser/pdp/adventofcode/go/internal/permutations"
 )
 
 func Part1(input string) (string, error) {

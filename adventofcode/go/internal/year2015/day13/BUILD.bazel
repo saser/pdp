@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "day13",
+    srcs = ["day13.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/go/internal/year2015/day13",
+    visibility = ["//adventofcode/go:__subpackages__"],
+    deps = ["//adventofcode/go/internal/permutations"],
+)
+
+go_test(
+    name = "day13_test",
+    srcs = ["day13_test.go"],
+    data = glob(["testdata/**"]) + ["//adventofcode/inputs:2015/13"],
+    embed = [":day13"],
+    deps = ["//adventofcode/go/internal/testcase"],
+)

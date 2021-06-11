@@ -5,16 +5,14 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Saser/adventofcode/internal/testcase"
-)
-
-const (
-	inputFile    = "../testdata/07"
-	example1File = "testdata/example1"
-	example2File = "testdata/example2"
+	"github.com/Saser/pdp/adventofcode/go/internal/testcase"
 )
 
 var (
+	example1File = testcase.Runfile("adventofcode/go/internal/year2020/day07/testdata/example1")
+	example2File = testcase.Runfile("adventofcode/go/internal/year2020/day07/testdata/example2")
+	inputFile    = testcase.Runfile("adventofcode/inputs/2020/07")
+
 	tcPart1 = testcase.NewFile("input", inputFile, "112")
 	tcPart2 = testcase.NewFile("input", inputFile, "6260")
 )
