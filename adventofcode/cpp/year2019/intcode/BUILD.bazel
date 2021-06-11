@@ -9,8 +9,8 @@ cc_library(
 )
 
 cc_test(
-    name = "test",
-    srcs = ["test.cc"],
+    name = "intcode_test",
+    srcs = ["intcode_test.cc"],
     deps = [
         ":intcode",
         "@googletest//:gtest_main",

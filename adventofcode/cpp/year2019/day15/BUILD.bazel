@@ -11,8 +11,8 @@ cc_library(
 )
 
 cc_test(
-    name = "test",
-    srcs = ["test.cc"],
+    name = "day15_test",
+    srcs = ["day15_test.cc"],
     data = ["//adventofcode/inputs:2019/15"],
     deps = [
         ":day15",
@@ -21,8 +21,8 @@ cc_test(
 )
 
 cc_binary(
-    name = "benchmark",
-    srcs = ["benchmark.cc"],
+    name = "day15_benchmark",
+    srcs = ["day15_benchmark.cc"],
     data = ["//adventofcode/inputs:2019/15"],
     deps = [
         ":day15",

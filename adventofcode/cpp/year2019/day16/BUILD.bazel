@@ -8,8 +8,8 @@ cc_library(
 )
 
 cc_test(
-    name = "test",
-    srcs = ["test.cc"],
+    name = "day16_test",
+    srcs = ["day16_test.cc"],
     data = ["//adventofcode/inputs:2019/16"],
     deps = [
         ":day16",
@@ -18,8 +18,8 @@ cc_test(
 )
 
 cc_binary(
-    name = "benchmark",
-    srcs = ["benchmark.cc"],
+    name = "day16_benchmark",
+    srcs = ["day16_benchmark.cc"],
     data = ["//adventofcode/inputs:2019/16"],
     deps = [
         ":day16",
