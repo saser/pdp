@@ -81,6 +81,18 @@ git_repository(
 # Java
 ################################################################################
 
+http_archive(
+    name = "rules_java",
+    sha256 = "34b41ec683e67253043ab1a3d1e8b7c61e4e8edefbcad485381328c934d072fe",
+    url = "https://github.com/bazelbuild/rules_java/releases/download/4.0.0/rules_java-4.0.0.tar.gz",
+)
+
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
+rules_java_dependencies()
+
+rules_java_toolchains()
+
 git_repository(
     name = "rules_jvm_external",
     # `commit` and `shallow_since` was given by first specifying:
