@@ -1,4 +1,0 @@
-**/target/
-day*/Cargo.lock
-base/Cargo.lock
-**/*.rs.bk
