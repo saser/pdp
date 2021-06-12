@@ -115,3 +115,21 @@ maven_install(
         "https://repo1.maven.org/maven2",
     ],
 )
+
+################################################################################
+# Rust
+################################################################################
+
+http_archive(
+    name = "rules_rust",
+    sha256 = "b47bb71d60ed92ea8c07b9c841291af38e0f265b7f1b37912c90cce0428c2ce7",
+    strip_prefix = "rules_rust-087bcab8154f5c0d79980ad32cb6ffb8158de649",
+    urls = [
+        # main branch as of 2021-06-12
+        "https://github.com/bazelbuild/rules_rust/archive/087bcab8154f5c0d79980ad32cb6ffb8158de649.tar.gz",
+    ],
+)
+
+load("@rules_rust//rust:repositories.bzl", "rust_repositories")
+
+rust_repositories()
