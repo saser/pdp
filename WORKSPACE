@@ -40,6 +40,13 @@ gazelle_dependencies()
 # C++
 ################################################################################
 
+http_archive(
+    name = "rules_cc",
+    sha256 = "b295cad8c5899e371dde175079c0a2cdc0151f5127acc92366a8c986beb95c76",
+    strip_prefix = "rules_cc-daf6ace7cfeacd6a83e9ff2ed659f416537b6c74",
+    urls = ["https://github.com/bazelbuild/rules_cc/archive/daf6ace7cfeacd6a83e9ff2ed659f416537b6c74.zip"],
+)
+
 git_repository(
     name = "googletest",
     # `commit` and `shallow_since` was given by first specifying:
