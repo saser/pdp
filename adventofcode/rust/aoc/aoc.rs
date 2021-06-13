@@ -1,4 +1,5 @@
 use std::fmt;
+use std::fs;
 use std::str::FromStr;
 
 pub type Solution = fn(input: &str) -> Result<String, String>;
@@ -31,29 +32,38 @@ impl fmt::Display for Part {
     }
 }
 
+pub enum Input<'a> {
+    String(&'a str),
+    File(&'a str),
+}
+
+impl Input<'_> {
+    fn to_string(&self) -> Result<String, String> {
+	match *self {
+	    Input::String(s) => Ok(s.to_string()),
+	    Input::File(path) => fs::read_to_string(path).map_err(|e| e.to_string()),
+	}
+    }
+}
+
+pub fn run_test(input: Input, want: &str, s: Solution) {
+    let input_string = input.to_string().expect("Couldn't convert input to string");
+    let got = s(&input_string).expect("Error in running solution");
+    if got != want {
+	panic!("got = {:?}; want {:?}", got, want)
+    }
+}
+
 #[macro_export]
-macro_rules! test {
-    ($name:ident, $input:expr, $output:expr, $solution:expr) => {
-        #[test]
-        fn $name() {
-            let input: &str = $input;
-            let output: &str = $output;
-            let solution: adventofcode_rust_aoc::Solution = $solution;
-            assert_eq!(output, solution(&mut Box::new(input.as_bytes())).unwrap());
-        }
-    };
-    ($name:ident, file $file:expr, $output:expr, $solution:expr) => {
-        test!($name, include_str!($file), $output, $solution);
-    };
-    ($name:ident, $input:expr, file $file:expr, $solution:expr) => {
-        test!($name, $input, include_str!($file), $solution);
-    };
-    ($name:ident, file $infile:expr, file $outfile:expr, $solution:expr) => {
-        test!(
-            $name,
-            include_str!($infile),
-            include_str!($outfile),
-            $solution
-        );
+macro_rules! testfn {
+    ($name:ident, $input:expr, $want:expr, $solution:expr) => {
+	#[test]
+	fn $name() {
+	    use adventofcode_rust_aoc as aoc;
+	    let input: aoc::Input = $input;
+	    let want: &str = $want;
+	    let solution: aoc::Solution = $solution;
+	    aoc::run_test(input, want, solution);
+	}
     };
 }
