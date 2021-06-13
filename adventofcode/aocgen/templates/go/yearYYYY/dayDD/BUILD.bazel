@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "{{.FullDay}}",
+    srcs = ["{{.FullDay}}.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/go/{{.FullYear}}/{{.FullDay}}",
+    visibility = ["//adventofcode/go:__subpackages__"],
+)
+
+go_test(
+    name = "{{.FullDay}}_test",
+    srcs = ["{{.FullDay}}_test.go"],
+    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    embed = [":{{.FullDay}}"],
+    deps = ["//adventofcode/go/testcase"],
+)

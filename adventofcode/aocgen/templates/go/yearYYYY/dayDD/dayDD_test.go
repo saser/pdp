@@ -3,14 +3,13 @@ package day{{.PaddedDay}}
 import (
 	"testing"
 
-	"github.com/Saser/adventofcode/internal/testcase"
+	"github.com/Saser/pdp/adventofcode/go/testcase"
 )
 
-const inputFile = "../testdata/{{.PaddedDay}}"
-
 var (
-	tcPart1 = testcase.NewFile("input", inputFile, "")
-	tcPart2 = testcase.NewFile("input", inputFile, "")
+	inputFile = testcase.Runfile("adventofcode/inputs/{{.Year}}/{{.PaddedDay}}")
+	tcPart1   = testcase.NewFile("input", inputFile, "")
+	tcPart2   = testcase.NewFile("input", inputFile, "")
 )
 
 func TestPart1(t *testing.T) {
