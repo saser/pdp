@@ -5,12 +5,12 @@ authors = ["Christian Persson <saser@live.se>"]
 edition = "2018"
 
 [lib]
-name = "aoc"
-path = "adventofcode/rust/src/lib.rs"
+name = "placeholder"
+path = "placeholder_lib.rs"
 
 [[bin]]
-name = "aoc"
-path = "adventofcode/rust/src/main.rs"
+name = "placeholder"
+path = "placeholder_bin.rs"
 
 [dependencies]
 chrono = "0.4"
