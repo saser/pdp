@@ -1,0 +1,17 @@
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+rust_library(
+    name = "aoc",
+    srcs = glob([
+        "src/base/*.rs",
+        "src/year2017/*.rs",
+        "src/year2018/*.rs",
+    ]) + ["src/lib.rs"],
+    deps = [
+        "//cargo:chrono",
+        "//cargo:lazy_static",
+        "//cargo:nalgebra",
+        "//cargo:rayon",
+        "//cargo:regex",
+    ],
+)
