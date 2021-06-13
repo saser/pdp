@@ -1,0 +1,100 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
+load(
+    "@rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//cargo", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # BSD-3-Clause from expression "BSD-3-Clause"
+])
+
+# Generated Targets
+
+# Unsupported target "lib" with type "bench" omitted
+
+# Unsupported target "dimensional_genericity" with type "example" omitted
+
+# Unsupported target "homogeneous_coordinates" with type "example" omitted
+
+# Unsupported target "identity" with type "example" omitted
+
+# Unsupported target "linear_system_resolution" with type "example" omitted
+
+# Unsupported target "matrix_construction" with type "example" omitted
+
+# Unsupported target "mvp" with type "example" omitted
+
+# Unsupported target "point_construction" with type "example" omitted
+
+# Unsupported target "raw_pointer" with type "example" omitted
+
+# Unsupported target "scalar_genericity" with type "example" omitted
+
+# Unsupported target "screen_to_view_coords" with type "example" omitted
+
+# Unsupported target "transform_conversion" with type "example" omitted
+
+# Unsupported target "transform_matrix4" with type "example" omitted
+
+# Unsupported target "transform_vector_point" with type "example" omitted
+
+# Unsupported target "transform_vector_point3" with type "example" omitted
+
+# Unsupported target "transformation_pointer" with type "example" omitted
+
+# Unsupported target "unit_wrapper" with type "example" omitted
+
+rust_library(
+    name = "nalgebra",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "default",
+        "matrixmultiply",
+        "std",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2015",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.16.14",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__alga__0_7_2//:alga",
+        "@raze__approx__0_3_2//:approx",
+        "@raze__generic_array__0_11_1//:generic_array",
+        "@raze__matrixmultiply__0_1_15//:matrixmultiply",
+        "@raze__num_complex__0_2_3//:num_complex",
+        "@raze__num_traits__0_2_9//:num_traits",
+        "@raze__rand__0_5_6//:rand",
+        "@raze__typenum__1_11_2//:typenum",
+    ],
+)
+
+# Unsupported target "lib" with type "test" omitted

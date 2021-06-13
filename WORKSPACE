@@ -136,3 +136,22 @@ rust_repositories(
     edition = "2018",
     version = "1.52.1",
 )
+
+http_archive(
+    name = "cargo_raze",
+    sha256 = "0a7986b1a8ec965ee7aa317ac61e82ea08568cfdf36b7ccc4dd3d1aff3b36e0b",
+    strip_prefix = "cargo-raze-0.12.0",
+    url = "https://github.com/google/cargo-raze/archive/v0.12.0.tar.gz",
+)
+
+load("@cargo_raze//:repositories.bzl", "cargo_raze_repositories")
+
+cargo_raze_repositories()
+
+load("@cargo_raze//:transitive_deps.bzl", "cargo_raze_transitive_deps")
+
+cargo_raze_transitive_deps()
+
+load("//cargo:crates.bzl", "raze_fetch_remote_crates")
+
+raze_fetch_remote_crates()

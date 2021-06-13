@@ -19,3 +19,7 @@ lazy_static = "1.2.0"
 nalgebra = "0.16"
 rayon = "1.0"
 regex = "1"
+
+[package.metadata.raze]
+workspace_path = "//cargo"
+genmode = "Remote"
