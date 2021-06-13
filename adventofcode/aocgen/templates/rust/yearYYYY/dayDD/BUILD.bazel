@@ -1,0 +1,15 @@
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
+
+rust_library(
+    name = "{{.FullDay}}",
+    srcs = ["{{.FullDay}}.rs"],
+    crate_name = "adventofcode_rust_{{.FullYear}}_{{.FullDay}}",
+    deps = ["//adventofcode/rust/aoc"],
+)
+
+rust_test(
+    name = "{{.FullDay}}_test",
+    srcs = ["{{.FullDay}}_test.rs"],
+    crate = ":{{.FullDay}}",
+    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+)
