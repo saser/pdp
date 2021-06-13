@@ -8,8 +8,8 @@ cc_library(
 )
 
 cc_test(
-    name = "test",
-    srcs = ["test.cc"],
+    name = "{{.FullDay}}_test",
+    srcs = ["{{.FullDay}}_test.cc"],
     data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
     deps = [
         ":{{.FullDay}}",
@@ -18,8 +18,8 @@ cc_test(
 )
 
 cc_binary(
-    name = "benchmark",
-    srcs = ["benchmark.cc"],
+    name = "{{.FullDay}}_benchmark",
+    srcs = ["{{.FullDay}}_benchmark.cc"],
     data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
     deps = [
         ":{{.FullDay}}",
