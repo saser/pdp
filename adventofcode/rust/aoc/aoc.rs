@@ -1,8 +1,7 @@
 use std::fmt;
-use std::io;
 use std::str::FromStr;
 
-pub type Solution = fn(r: &mut dyn io::Read) -> Result<String, String>;
+pub type Solution = fn(input: &str) -> Result<String, String>;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Part {
