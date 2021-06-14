@@ -1,34 +1,29 @@
-use std::io;
+use adventofcode_rust_aoc as aoc;
+use nalgebra;
 
-use nalgebra::DMatrix;
+type PowerGrid = nalgebra::DMatrix<i64>;
+type RowSumGrid = nalgebra::DMatrix<i64>;
+type ColSumGrid = nalgebra::DMatrix<i64>;
+type StencilGrid = nalgebra::DMatrix<(usize, i64)>;
 
-use crate::base::Part;
-
-type PowerGrid = DMatrix<i64>;
-type RowSumGrid = DMatrix<i64>;
-type ColSumGrid = DMatrix<i64>;
-type StencilGrid = DMatrix<(usize, i64)>;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let serial = input.trim().parse::<i64>().unwrap();
     let power_grid = PowerGrid::from_fn(300, 300, power_level(serial));
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let stencil_grid = stencil_grid(&power_grid, 3);
             let (x, y, (_size, _value)) = max_stencil_xy(&stencil_grid);
             Ok(format!("{},{}", x, y))
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let max_stencil_grid = max_stencil_grid(&power_grid);
             let (x, y, (size, _value)) = max_stencil_xy(&max_stencil_grid);
             Ok(format!("{},{},{}", x, y, size))
@@ -167,23 +162,4 @@ fn max_stencil_xy(stencil_grid: &StencilGrid) -> (usize, usize, (usize, i64)) {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "18", "33,45", part1);
-        test!(example2, "42", "21,61", part1);
-        test!(actual, file env!("YEAR2018_DAY11"), "233,36", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example1, "18", "90,269,16", part2);
-        test!(example2, "42", "232,251,12", part2);
-        test!(actual, file env!("YEAR2018_DAY11"), "231,107,14", part2);
-    }
-}
+mod day11_test;
