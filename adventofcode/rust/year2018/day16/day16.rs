@@ -1,30 +1,27 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections;
 use std::fmt;
-use std::io;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let (samples, program) = parse_input(&input);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let count = samples
                 .iter()
                 .filter(|sample| sample.candidates().len() >= 3)
                 .count();
             Ok(count.to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let opcode_map = determine_opcodes(&samples);
             let final_registers = program.iter().fold(vec![0; 4], |registers, &instruction| {
                 let opcode = opcode_map[&instruction.opcode];
@@ -35,8 +32,8 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
     }
 }
 
-fn determine_opcodes(samples: &[Sample]) -> BTreeMap<usize, Opcode> {
-    let mut samples_by_opcode = BTreeMap::new();
+fn determine_opcodes(samples: &[Sample]) -> collections::BTreeMap<usize, Opcode> {
+    let mut samples_by_opcode = collections::BTreeMap::new();
     for sample in samples {
         let opcode_samples = samples_by_opcode
             .entry(sample.instruction.opcode)
@@ -51,8 +48,8 @@ fn determine_opcodes(samples: &[Sample]) -> BTreeMap<usize, Opcode> {
                 .fold(Opcode::all(), |acc, sample| &acc & &sample.candidates());
             (opcode, candidates)
         })
-        .collect::<BTreeMap<usize, BTreeSet<Opcode>>>();
-    let mut determined = BTreeMap::new();
+        .collect::<collections::BTreeMap<usize, collections::BTreeSet<Opcode>>>();
+    let mut determined = collections::BTreeMap::new();
     while let Some((opcode, single_candidate_set)) = candidates_by_opcode
         .iter()
         .filter(|(_opcode, candidates)| candidates.len() == 1)
@@ -92,7 +89,7 @@ struct Sample {
 }
 
 impl Sample {
-    fn candidates(&self) -> BTreeSet<Opcode> {
+    fn candidates(&self) -> collections::BTreeSet<Opcode> {
         Opcode::all()
             .into_iter()
             .filter(|opcode| opcode.apply(self.instruction, &self.before) == self.after)
@@ -183,8 +180,8 @@ pub enum Opcode {
 }
 
 impl Opcode {
-    fn all() -> BTreeSet<Opcode> {
-        let mut set = BTreeSet::new();
+    fn all() -> collections::BTreeSet<Opcode> {
+        let mut set = collections::BTreeSet::new();
         for &opcode in &[
             Opcode::Addr,
             Opcode::Addi,
@@ -296,19 +293,4 @@ fn parse_instruction(line: &str) -> Instruction {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY16"), "596", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY16"), "554", part2);
-    }
-}
+mod day16_test;

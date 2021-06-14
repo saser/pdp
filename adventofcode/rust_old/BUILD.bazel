@@ -27,7 +27,6 @@ rust_binary(
 rust_test(
     name = "aoc_test",
     compile_data = [
-        "//adventofcode/inputs:2018/16",
         "//adventofcode/inputs:2018/17",
         "//adventofcode/inputs:2018/18",
         "//adventofcode/inputs:2018/19",
@@ -37,7 +36,6 @@ rust_test(
     ],
     crate = ":aoc",
     rustc_env = {
-        "YEAR2018_DAY16": "$(location //adventofcode/inputs:2018/16)",
         "YEAR2018_DAY17": "$(location //adventofcode/inputs:2018/17)",
         "YEAR2018_DAY17_EX": "$(location //adventofcode/rust_old/src/year2018/testdata/day17:ex)",
         "YEAR2018_DAY18": "$(location //adventofcode/inputs:2018/18)",
