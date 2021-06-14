@@ -1,56 +1,18 @@
-use std::cmp::Ordering;
-use std::io;
+use std::cmp;
+use std::collections;
 
-use std::collections::{BTreeMap, BTreeSet, BinaryHeap};
+use adventofcode_rust_aoc as aoc;
 
-use crate::base::Part;
 type Path = Vec<Position>;
-type Cavern = BTreeMap<Position, Tile>;
-type Units = BTreeMap<Position, Unit>;
+type Cavern = collections::BTreeMap<Position, Tile>;
+type Units = collections::BTreeMap<Position, Unit>;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
-}
-
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
-    let (cavern, units) = parse_input(&input);
-    match part {
-        Part::One => {
-            let (full_rounds, _cavern_after_combat, units_after_combat) = combat(&cavern, &units);
-            let hitpoints_sum = units_after_combat
-                .values()
-                .map(|unit| unit.hitpoints as usize)
-                .sum::<usize>();
-            let outcome = full_rounds * hitpoints_sum;
-            Ok(outcome.to_string())
-        }
-        Part::Two => {
-            let (full_rounds, units_after_combat) = (3..)
-                .filter_map(|power| {
-                    let (full_rounds, all_elves_alive, _cavern_after_combat, units_after_combat) =
-                        combat_until_elf_dies(power, &cavern, &units);
-                    if all_elves_alive {
-                        Some((full_rounds, units_after_combat))
-                    } else {
-                        None
-                    }
-                })
-                .next()
-                .unwrap();
-            let hitpoints_sum = units_after_combat
-                .values()
-                .map(|unit| unit.hitpoints as usize)
-                .sum::<usize>();
-            let outcome = full_rounds * hitpoints_sum;
-            Ok(outcome.to_string())
-        }
-    }
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
@@ -60,16 +22,16 @@ struct Position {
 }
 
 impl Ord for Position {
-    fn cmp(&self, other: &Position) -> Ordering {
+    fn cmp(&self, other: &Position) -> cmp::Ordering {
         match self.row.cmp(&other.row) {
-            Ordering::Equal => self.col.cmp(&other.col),
+            cmp::Ordering::Equal => self.col.cmp(&other.col),
             ordering => ordering,
         }
     }
 }
 
 impl PartialOrd for Position {
-    fn partial_cmp(&self, other: &Position) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Position) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
@@ -165,7 +127,7 @@ fn print_cavern(cavern: &Cavern, units: &Units) {
     println!();
 }
 
-fn adjacent_positions(position: Position) -> BTreeSet<Position> {
+fn adjacent_positions(position: Position) -> collections::BTreeSet<Position> {
     [(-1, 0), (0, -1), (1, 0), (0, 1)]
         .into_iter()
         .map(|(drow, dcol)| Position {
@@ -175,7 +137,7 @@ fn adjacent_positions(position: Position) -> BTreeSet<Position> {
         .collect()
 }
 
-fn in_range(position: Position, cavern: &Cavern) -> BTreeSet<Position> {
+fn in_range(position: Position, cavern: &Cavern) -> collections::BTreeSet<Position> {
     adjacent_positions(position)
         .into_iter()
         .filter(|adjacent| {
@@ -184,7 +146,10 @@ fn in_range(position: Position, cavern: &Cavern) -> BTreeSet<Position> {
         .collect()
 }
 
-fn find_target_positions(target_unit_type: UnitType, units: &Units) -> BTreeSet<Position> {
+fn find_target_positions(
+    target_unit_type: UnitType,
+    units: &Units,
+) -> collections::BTreeSet<Position> {
     units
         .iter()
         .filter_map(|(&unit_position, unit)| {
@@ -302,7 +267,7 @@ fn turn(acting_position: Position, cavern: &Cavern, units: &Units) -> (Cavern, U
     let in_range_positions = target_positions
         .iter()
         .flat_map(|&target_position| in_range(target_position, cavern))
-        .collect::<BTreeSet<Position>>();
+        .collect::<collections::BTreeSet<Position>>();
     if in_range_positions.is_empty() {
         // There are no open squares adjacent to any of the targets, so the acting unit cannot
         // move, ending its turn without anything being changed.
@@ -332,7 +297,7 @@ fn turn(acting_position: Position, cavern: &Cavern, units: &Units) -> (Cavern, U
 
 fn perform_attack_if_possible(
     acting_position: Position,
-    target_positions: &BTreeSet<Position>,
+    target_positions: &collections::BTreeSet<Position>,
     cavern: &Cavern,
     units: &Units,
 ) -> Option<(Cavern, Units)> {
@@ -353,7 +318,7 @@ fn perform_attack_if_possible(
 
 fn perform_attack(
     acting_unit: Unit,
-    attackable_positions: &BTreeSet<Position>,
+    attackable_positions: &collections::BTreeSet<Position>,
     cavern: &Cavern,
     units: &Units,
 ) -> (Cavern, Units) {
@@ -376,7 +341,7 @@ fn perform_attack(
 
 fn perform_move(
     start_position: Position,
-    in_range_positions: &BTreeSet<Position>,
+    in_range_positions: &collections::BTreeSet<Position>,
     cavern: &Cavern,
     units: &Units,
 ) -> (Position, Cavern, Units) {
@@ -391,7 +356,7 @@ fn perform_move(
         })
         .min_by(
             |(position1, path1), (position2, path2)| match path1.len().cmp(&path2.len()) {
-                Ordering::Equal => position1.cmp(position2),
+                cmp::Ordering::Equal => position1.cmp(position2),
                 ordering => ordering,
             },
         );
@@ -413,14 +378,14 @@ struct SPEntry {
 }
 
 impl Ord for SPEntry {
-    fn cmp(&self, other: &SPEntry) -> Ordering {
+    fn cmp(&self, other: &SPEntry) -> cmp::Ordering {
         let mut ordering = other.path.len().cmp(&self.path.len());
-        if ordering != Ordering::Equal {
+        if ordering != cmp::Ordering::Equal {
             return ordering;
         }
         for (o, s) in other.path.iter().zip(self.path.iter()) {
             ordering = o.cmp(s);
-            if ordering != Ordering::Equal {
+            if ordering != cmp::Ordering::Equal {
                 break;
             }
         }
@@ -429,14 +394,14 @@ impl Ord for SPEntry {
 }
 
 impl PartialOrd for SPEntry {
-    fn partial_cmp(&self, other: &SPEntry) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &SPEntry) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
 fn shortest_path(from: Position, to: Position, cavern: &Cavern) -> Option<Path> {
-    let mut queue = BinaryHeap::new();
-    let mut visited: BTreeMap<Position, Path> = BTreeMap::new();
+    let mut queue = collections::BinaryHeap::new();
+    let mut visited: collections::BTreeMap<Position, Path> = collections::BTreeMap::new();
     queue.extend(in_range_entries(from, &Vec::new(), cavern));
     while let Some(current) = queue.pop() {
         if current.position == to {
@@ -463,31 +428,40 @@ fn in_range_entries(position: Position, base_path: &Path, cavern: &Cavern) -> Ve
         .collect()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, file env!("YEAR2018_DAY15_EX1"), "27730", part1);
-        test!(example2, file env!("YEAR2018_DAY15_EX2"), "36334", part1);
-        test!(example3, file env!("YEAR2018_DAY15_EX3"), "39514", part1);
-        test!(example4, file env!("YEAR2018_DAY15_EX4"), "27755", part1);
-        test!(example5, file env!("YEAR2018_DAY15_EX5"), "28944", part1);
-        test!(example6, file env!("YEAR2018_DAY15_EX6"), "18740", part1);
-        test!(actual, file env!("YEAR2018_DAY15"), "201638", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example1, file env!("YEAR2018_DAY15_EX1"), "4988", part2);
-        test!(example3, file env!("YEAR2018_DAY15_EX3"), "31284", part2);
-        test!(example4, file env!("YEAR2018_DAY15_EX4"), "3478", part2);
-        test!(example5, file env!("YEAR2018_DAY15_EX5"), "6474", part2);
-        test!(example6, file env!("YEAR2018_DAY15_EX6"), "1140", part2);
-        test!(actual, file env!("YEAR2018_DAY15"), "95764", part2);
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
+    let (cavern, units) = parse_input(&input);
+    match part {
+        aoc::Part::One => {
+            let (full_rounds, _cavern_after_combat, units_after_combat) = combat(&cavern, &units);
+            let hitpoints_sum = units_after_combat
+                .values()
+                .map(|unit| unit.hitpoints as usize)
+                .sum::<usize>();
+            let outcome = full_rounds * hitpoints_sum;
+            Ok(outcome.to_string())
+        }
+        aoc::Part::Two => {
+            let (full_rounds, units_after_combat) = (3..)
+                .filter_map(|power| {
+                    let (full_rounds, all_elves_alive, _cavern_after_combat, units_after_combat) =
+                        combat_until_elf_dies(power, &cavern, &units);
+                    if all_elves_alive {
+                        Some((full_rounds, units_after_combat))
+                    } else {
+                        None
+                    }
+                })
+                .next()
+                .unwrap();
+            let hitpoints_sum = units_after_combat
+                .values()
+                .map(|unit| unit.hitpoints as usize)
+                .sum::<usize>();
+            let outcome = full_rounds * hitpoints_sum;
+            Ok(outcome.to_string())
+        }
     }
 }
+
+#[cfg(test)]
+mod day15_test;
