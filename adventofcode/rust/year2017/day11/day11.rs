@@ -1,19 +1,17 @@
-use crate::base::Part;
-use std::io;
-use std::ops::Add;
+use std::ops;
 use std::str::FromStr;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+use adventofcode_rust_aoc as aoc;
+
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let directions = parse_input(input.trim());
     let (final_position, furthest) = directions
         .as_slice()
@@ -25,11 +23,11 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
             (new_point, new_furthest)
         });
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let distance = final_position.manhattan_distance() / 2;
             Ok(distance.to_string())
         }
-        Part::Two => Ok(furthest.to_string()),
+        aoc::Part::Two => Ok(furthest.to_string()),
     }
 }
 
@@ -62,7 +60,7 @@ impl Point3D {
     }
 }
 
-impl Add for Point3D {
+impl ops::Add for Point3D {
     type Output = Point3D;
 
     fn add(self, other: Point3D) -> Point3D {
@@ -115,23 +113,4 @@ impl FromStr for HexDirection {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "ne,ne,ne", "3", part1);
-        test!(example2, "ne,ne,sw,sw", "0", part1);
-        test!(example3, "ne,ne,s,s", "2", part1);
-        test!(example4, "se,sw,se,sw,sw", "3", part1);
-        test!(actual, file env!("YEAR2017_DAY11"), "761", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2017_DAY11"), "1542", part2);
-    }
-}
+mod day11_test;
