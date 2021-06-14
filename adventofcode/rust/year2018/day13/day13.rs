@@ -1,26 +1,23 @@
-use std::collections::BTreeSet;
-use std::io;
+use std::collections;
 
-use crate::base::grid::Grid;
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
+use adventofcode_rust_grid as grid;
 
-type Tiles = Grid<Tile>;
-type Carts = BTreeSet<Cart>;
+type Tiles = grid::Grid<Tile>;
+type Carts = collections::BTreeSet<Cart>;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let (tiles, carts) = parse_input(&input);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let (mut remaining_carts, mut collision_positions) = tick(&tiles, &carts);
             while collision_positions.is_empty() {
                 let (new_remaining_carts, new_collision_positions) = tick(&tiles, &remaining_carts);
@@ -30,7 +27,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
             let (x, y) = rowcol_to_xy(collision_positions[0]);
             Ok(format!("{},{}", x, y))
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let mut remaining_carts = carts.clone();
             while remaining_carts.len() > 1 {
                 remaining_carts = tick(&tiles, &remaining_carts).0;
@@ -191,8 +188,8 @@ fn parse_input(input: &str) -> (Tiles, Carts) {
     let char_grid: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
     let nrows = char_grid.len();
     let ncols = char_grid.iter().map(|row| row.len()).max().unwrap();
-    let mut tiles = Grid::new(nrows, ncols);
-    let mut carts = BTreeSet::new();
+    let mut tiles = grid::Grid::new(nrows, ncols);
+    let mut carts = collections::BTreeSet::new();
     for (row, row_chars) in char_grid.iter().enumerate() {
         for (col, &c) in row_chars.iter().enumerate() {
             tiles[(row, col)] = Tile::from(char_grid[row][col]);
@@ -272,21 +269,4 @@ fn step_cart(tiles: &Tiles, cart: &Cart) -> Cart {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY13_EX1"), "7,3", part1);
-        test!(actual, file env!("YEAR2018_DAY13"), "16,45", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY13_EX2"), "6,4", part2);
-        test!(actual, file env!("YEAR2018_DAY13"), "21,91", part2);
-    }
-}
+mod day13_test;

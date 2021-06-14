@@ -27,7 +27,6 @@ rust_binary(
 rust_test(
     name = "aoc_test",
     compile_data = [
-        "//adventofcode/inputs:2018/13",
         "//adventofcode/inputs:2018/14",
         "//adventofcode/inputs:2018/15",
         "//adventofcode/inputs:2018/16",
@@ -35,8 +34,6 @@ rust_test(
         "//adventofcode/inputs:2018/18",
         "//adventofcode/inputs:2018/19",
         "//adventofcode/inputs:2018/20",
-        "//adventofcode/rust_old/src/year2018/testdata/day13:ex1",
-        "//adventofcode/rust_old/src/year2018/testdata/day13:ex2",
         "//adventofcode/rust_old/src/year2018/testdata/day15:ex1",
         "//adventofcode/rust_old/src/year2018/testdata/day15:ex2",
         "//adventofcode/rust_old/src/year2018/testdata/day15:ex3",
@@ -48,9 +45,6 @@ rust_test(
     ],
     crate = ":aoc",
     rustc_env = {
-        "YEAR2018_DAY13": "$(location //adventofcode/inputs:2018/13)",
-        "YEAR2018_DAY13_EX1": "$(location //adventofcode/rust_old/src/year2018/testdata/day13:ex1)",
-        "YEAR2018_DAY13_EX2": "$(location //adventofcode/rust_old/src/year2018/testdata/day13:ex2)",
         "YEAR2018_DAY14": "$(location //adventofcode/inputs:2018/14)",
         "YEAR2018_DAY15": "$(location //adventofcode/inputs:2018/15)",
         "YEAR2018_DAY15_EX1": "$(location //adventofcode/rust_old/src/year2018/testdata/day15:ex1)",
