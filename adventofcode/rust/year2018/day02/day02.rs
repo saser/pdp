@@ -1,22 +1,19 @@
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let ids = input.lines();
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let box_id_character_counts = ids.map(character_counts);
             let contains_tuples =
                 box_id_character_counts.map(|counts| contains_any_two_three(&counts));
@@ -26,7 +23,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
                 });
             Ok((total_twos * total_threes).to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let ids = ids.collect::<Vec<&str>>();
             for (i, id1) in ids.iter().enumerate() {
                 for id2 in &ids[i..] {
@@ -41,8 +38,8 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
     }
 }
 
-fn character_counts(box_id: &str) -> HashMap<char, u64> {
-    let mut counts = HashMap::new();
+fn character_counts(box_id: &str) -> collections::HashMap<char, u64> {
+    let mut counts = collections::HashMap::new();
     for c in box_id.chars() {
         let counter = counts.entry(c).or_insert(0);
         *counter += 1;
@@ -50,7 +47,7 @@ fn character_counts(box_id: &str) -> HashMap<char, u64> {
     counts
 }
 
-fn contains_any_two_three(counts: &HashMap<char, u64>) -> (i64, i64) {
+fn contains_any_two_three(counts: &collections::HashMap<char, u64>) -> (i64, i64) {
     let mut contains = (0, 0);
     for &count in counts.values() {
         if count == 2 {
@@ -81,21 +78,4 @@ fn remove_differing_characters(id1: &str, id2: &str) -> (String, u64) {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY02_P1EX"), "12", part1);
-        test!(actual, file env!("YEAR2018_DAY02"), "5880", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY02_P2EX"), "fgij", part2);
-        test!(actual, file env!("YEAR2018_DAY02"), "tiwcdpbseqhxryfmgkvjujvza", part2);
-    }
-}
+mod day02_test;
