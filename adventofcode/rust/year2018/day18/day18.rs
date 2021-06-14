@@ -1,29 +1,26 @@
-use std::cmp::{max, min};
-use std::collections::HashMap;
+use std::cmp;
+use std::collections;
 use std::fmt;
-use std::hash::Hash;
-use std::io;
+use std::hash;
 
-use crate::base::grid::Grid;
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
+use adventofcode_rust_grid as grid;
 
-type Tiles = Grid<Tile>;
+type Tiles = grid::Grid<Tile>;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let tiles = parse_input(&input);
     let iterations = match part {
-        Part::One => 10,
-        Part::Two => 1_000_000_000,
+        aoc::Part::One => 10,
+        aoc::Part::Two => 1_000_000_000,
     };
     let final_tiles = run_iterations(iterations, &tiles);
     let counts = count(final_tiles.iter());
@@ -31,7 +28,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
     Ok(resource_value.to_string())
 }
 
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, Eq, hash::Hash, Ord, PartialEq, PartialOrd)]
 enum Tile {
     Open,
     Tree,
@@ -107,10 +104,10 @@ fn parse_input(input: &str) -> Tiles {
 }
 
 fn surrounding(row: usize, col: usize, tiles: &Tiles) -> Vec<Tile> {
-    let start_row = max(0, row as isize - 1) as usize;
-    let start_col = max(0, col as isize - 1) as usize;
-    let end_row = min((tiles.nrows() - 1) as isize, (row + 1) as isize) as usize;
-    let end_col = min((tiles.ncols() - 1) as isize, (col + 1) as isize) as usize;
+    let start_row = cmp::max(0, row as isize - 1) as usize;
+    let start_col = cmp::max(0, col as isize - 1) as usize;
+    let end_row = cmp::min((tiles.nrows() - 1) as isize, (row + 1) as isize) as usize;
+    let end_col = cmp::min((tiles.ncols() - 1) as isize, (col + 1) as isize) as usize;
 
     let mut surrounding = Vec::new();
     for s_row in start_row..=end_row {
@@ -124,12 +121,12 @@ fn surrounding(row: usize, col: usize, tiles: &Tiles) -> Vec<Tile> {
     surrounding
 }
 
-fn count<T, I>(iter: I) -> HashMap<T, usize>
+fn count<T, I>(iter: I) -> collections::HashMap<T, usize>
 where
-    T: Eq + Hash + Copy,
+    T: Eq + hash::Hash + Copy,
     I: Iterator<Item = T>,
 {
-    let mut map = HashMap::new();
+    let mut map = collections::HashMap::new();
     for item in iter {
         *map.entry(item).or_insert(0) += 1;
     }
@@ -150,7 +147,7 @@ fn iteration(tiles: &Tiles) -> Tiles {
 
 fn run_iterations(iterations: usize, tiles: &Tiles) -> Tiles {
     let mut current_tiles = tiles.clone();
-    let mut seen = HashMap::new();
+    let mut seen = collections::HashMap::new();
     seen.insert(current_tiles.clone(), 0);
     for i in 1..=iterations {
         let new_tiles = iteration(&current_tiles);
@@ -166,20 +163,4 @@ fn run_iterations(iterations: usize, tiles: &Tiles) -> Tiles {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY18_EX"), "1147", part1);
-        test!(actual, file env!("YEAR2018_DAY18"), "545600", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY18"), "202272", part2);
-    }
-}
+mod day18_test;
