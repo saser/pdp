@@ -1,23 +1,19 @@
-use std::io;
+use adventofcode_rust_aoc as aoc;
 
-use crate::base::Part;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let tokens = parse_tokens(input.trim())?;
     let (score, removed_garbage) = process_tokens(&tokens);
     match part {
-        Part::One => Ok(score.to_string()),
-        Part::Two => Ok(removed_garbage.to_string()),
+        aoc::Part::One => Ok(score.to_string()),
+        aoc::Part::Two => Ok(removed_garbage.to_string()),
     }
 }
 
@@ -90,34 +86,4 @@ fn process_tokens(tokens: &[Token]) -> (u64, u64) {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "{}", "1", part1);
-        test!(example2, "{{{}}}", "6", part1);
-        test!(example3, "{{},{}}", "5", part1);
-        test!(example4, "{{{},{},{{}}}}", "16", part1);
-        test!(example5, "{<a>,<a>,<a>,<a>}", "1", part1);
-        test!(example6, "{{<ab>},{<ab>},{<ab>},{<ab>}}", "9", part1);
-        test!(example7, "{{<!!>},{<!!>},{<!!>},{<!!>}}", "9", part1);
-        test!(example8, "{{<a!>},{<a!>},{<a!>},{<ab>}}", "3", part1);
-        test!(actual, file "../../../inputs/2017/09", "21037", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example1, "<>", "0", part2);
-        test!(example2, "<random characters>", "17", part2);
-        test!(example3, "<<<<>", "3", part2);
-        test!(example4, "<{!>}>", "2", part2);
-        test!(example5, "<!!>", "0", part2);
-        test!(example6, "<!!!>>", "0", part2);
-        test!(example7, "<{o\"i!a,<{i<a>", "10", part2);
-        test!(actual, file "../../../inputs/2017/09", "9495", part2);
-    }
-}
+mod day09_test;
