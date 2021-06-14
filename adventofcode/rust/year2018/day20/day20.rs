@@ -1,24 +1,21 @@
-use std::collections::{HashMap, HashSet, VecDeque};
-use std::io;
+use std::collections;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let regex = parse(input.trim());
     let graph = construct(&regex);
     match part {
-        Part::One => Ok(furthest(&graph).to_string()),
-        Part::Two => {
+        aoc::Part::One => Ok(furthest(&graph).to_string()),
+        aoc::Part::Two => {
             let distances = distances(&graph);
             let count = distances
                 .values()
@@ -29,7 +26,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
     }
 }
 
-type Graph = HashMap<Position, HashSet<Position>>;
+type Graph = collections::HashMap<Position, collections::HashSet<Position>>;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 struct Position {
@@ -148,7 +145,7 @@ fn is_terminal(c: char) -> bool {
 
 fn construct(regex: &Regex) -> Graph {
     let mut graph = Graph::new();
-    let mut positions = HashSet::new();
+    let mut positions = collections::HashSet::new();
     positions.insert(Position::origin());
     construct_regex(regex, &positions, &mut graph);
     graph
@@ -156,9 +153,9 @@ fn construct(regex: &Regex) -> Graph {
 
 fn construct_regex(
     regex: &Regex,
-    positions: &HashSet<Position>,
+    positions: &collections::HashSet<Position>,
     graph: &mut Graph,
-) -> HashSet<Position> {
+) -> collections::HashSet<Position> {
     let mut new_positions = positions.clone();
     for token in &regex.tokens {
         match token {
@@ -175,10 +172,10 @@ fn construct_regex(
 
 fn construct_terminals(
     terminals: &[char],
-    positions: &HashSet<Position>,
+    positions: &collections::HashSet<Position>,
     graph: &mut Graph,
-) -> HashSet<Position> {
-    let mut new_positions = HashSet::new();
+) -> collections::HashSet<Position> {
+    let mut new_positions = collections::HashSet::new();
     for &position in positions {
         let mut current_position = position;
         for t in terminals {
@@ -191,11 +188,11 @@ fn construct_terminals(
             };
             graph
                 .entry(current_position)
-                .or_insert_with(HashSet::new)
+                .or_insert_with(collections::HashSet::new)
                 .insert(next_position);
             graph
                 .entry(next_position)
-                .or_insert_with(HashSet::new)
+                .or_insert_with(collections::HashSet::new)
                 .insert(current_position);
             current_position = next_position;
         }
@@ -206,20 +203,20 @@ fn construct_terminals(
 
 fn construct_branch(
     regexes: &[Regex],
-    positions: &HashSet<Position>,
+    positions: &collections::HashSet<Position>,
     graph: &mut Graph,
-) -> HashSet<Position> {
-    let mut new_positions = HashSet::new();
+) -> collections::HashSet<Position> {
+    let mut new_positions = collections::HashSet::new();
     for regex in regexes {
         new_positions.extend(construct_regex(regex, positions, graph));
     }
     new_positions
 }
 
-fn distances(graph: &Graph) -> HashMap<Position, u64> {
-    let mut distances = HashMap::new();
+fn distances(graph: &Graph) -> collections::HashMap<Position, u64> {
+    let mut distances = collections::HashMap::new();
     let mut furthest_distance = 0;
-    let mut queue = VecDeque::new();
+    let mut queue = collections::VecDeque::new();
     queue.push_back((Position::origin(), 0));
     while let Some((position, distance)) = queue.pop_front() {
         if distances.contains_key(&position) {
@@ -241,39 +238,4 @@ fn furthest(graph: &Graph) -> u64 {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "^WNE$", "3", part1);
-        test!(example2, "^ENWWW(NEEE|SSE(EE|N))$", "10", part1);
-        test!(
-            example3,
-            "^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$",
-            "18",
-            part1
-        );
-        test!(
-            example4,
-            "^ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))$",
-            "23",
-            part1
-        );
-        test!(
-            example5,
-            "^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$",
-            "31",
-            part1
-        );
-        test!(actual, file env!("YEAR2018_DAY20"), "4214", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY20"), "8492", part2);
-    }
-}
+mod day20_test;

@@ -4,7 +4,6 @@ rust_library(
     name = "aoc",
     srcs = glob([
         "src/base/*.rs",
-        "src/year2018/*.rs",
     ]) + ["src/lib.rs"],
     deps = [
         "//cargo:chrono",
@@ -26,11 +25,5 @@ rust_binary(
 
 rust_test(
     name = "aoc_test",
-    compile_data = [
-        "//adventofcode/inputs:2018/20",
-    ],
     crate = ":aoc",
-    rustc_env = {
-        "YEAR2018_DAY20": "$(location //adventofcode/inputs:2018/20)",
-    },
 )
