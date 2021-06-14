@@ -1,26 +1,23 @@
-use std::io;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let mut vector = initialize_vector();
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let lengths = parse_input_as_lengths(input.trim());
             Ok(hash_and_multiply(&mut vector, &lengths).to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let lengths = parse_input_as_bytes(input.trim());
             Ok(full_hash(&mut vector, &lengths))
         }
@@ -137,40 +134,4 @@ pub fn full_hash_str(input: &str) -> String {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        #[test]
-        fn example() {
-            let input = "3,4,1,5";
-
-            let lengths = parse_input_as_lengths(input);
-            let mut vector = vec![0, 1, 2, 3, 4];
-            knot_hash(&mut vector, &lengths, 0, 0);
-            let product = vector[0] * vector[1];
-
-            assert_eq!(12, product);
-        }
-
-        test!(actual, file "../../../inputs/2017/10", "1980", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example1, "", "a2582a3a0e66e6e86e3812dcb672a272", part2);
-        test!(
-            example2,
-            "AoC 2017",
-            "33efeb34ea91902bb2f59c9920caa6cd",
-            part2
-        );
-        test!(example3, "1,2,3", "3efbe78a8d82f29979031a4aa0b16a9d", part2);
-        test!(example4, "1,2,4", "63960835bcdc130f0b66d7ff4f6a5a8e", part2);
-        test!(actual, file "../../../inputs/2017/10", "899124dac21012ebc32e2f4d11eaec55", part2);
-    }
-}
+mod day10_test;
