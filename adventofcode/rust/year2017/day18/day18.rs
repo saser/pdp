@@ -1,19 +1,20 @@
-use std::collections::{HashMap, VecDeque};
-use std::io::{BufRead, BufReader, Read};
+use std::collections;
+use std::io;
+use std::io::BufRead;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn Read, part: Part) -> Result<String, String> {
-    let instructions = BufReader::new(r)
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
+    let instructions = io::BufReader::new(input.as_bytes())
         .lines()
         .map(|line| line.expect("input line read failed"))
         .map(|ref line| Instruction::from_str(line))
@@ -21,7 +22,7 @@ fn solve(r: &mut dyn Read, part: Part) -> Result<String, String> {
         .collect::<Vec<Instruction>>();
     let mut vm0 = VM::new(&instructions);
     let mut outs0 = vm0.run();
-    if part == Part::One {
+    if part == aoc::Part::One {
         return Ok(outs0.back().unwrap().to_string());
     }
     let mut vm0_sent = outs0.len();
@@ -48,8 +49,8 @@ fn solve(r: &mut dyn Read, part: Part) -> Result<String, String> {
 
 struct VM {
     instructions: Vec<Instruction>,
-    registers: HashMap<char, i64>,
-    inputs: VecDeque<i64>,
+    registers: collections::HashMap<char, i64>,
+    inputs: collections::VecDeque<i64>,
     pc: isize,
 }
 
@@ -57,14 +58,14 @@ impl VM {
     fn new(instructions: &[Instruction]) -> Self {
         VM {
             instructions: instructions.to_vec(),
-            registers: HashMap::new(),
-            inputs: VecDeque::new(),
+            registers: collections::HashMap::new(),
+            inputs: collections::VecDeque::new(),
             pc: 0,
         }
     }
 
-    fn run(&mut self) -> VecDeque<i64> {
-        let mut outs = VecDeque::new();
+    fn run(&mut self) -> collections::VecDeque<i64> {
+        let mut outs = collections::VecDeque::new();
         while let Some(opt_out) = self.step() {
             if let Some(i) = opt_out {
                 outs.push_back(i);
@@ -183,21 +184,4 @@ impl FromStr for Operand {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2017_DAY18_P1EX"), "4", part1);
-        test!(actual, file env!("YEAR2017_DAY18"), "3188", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2017_DAY18_P2EX"), "3", part2);
-        test!(actual, file env!("YEAR2017_DAY18"), "7112", part2);
-    }
-}
+mod day18_test;
