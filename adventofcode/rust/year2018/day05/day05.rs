@@ -1,27 +1,23 @@
-use std::io;
+use adventofcode_rust_aoc as aoc;
+use rayon::iter::IntoParallelRefIterator;
+use rayon::iter::ParallelIterator;
 
-use rayon::prelude::*;
-
-use crate::base::Part;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
-    input = input.trim().to_string();
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
+    let input = input.trim().to_string();
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let after_reactions = fully_react(input.chars());
             Ok(after_reactions.len().to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let chars = (b'a'..=b'z').map(char::from).collect::<Vec<char>>();
             let best = chars
                 .par_iter()
@@ -106,25 +102,4 @@ fn reacts(c1: char, c2: char) -> bool {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "aA", "0", part1);
-        test!(example2, "abBA", "0", part1);
-        test!(example3, "abAB", "4", part1);
-        test!(example4, "aabAAB", "6", part1);
-        test!(example5, "dabAcCaCBAcCcaDA", "10", part1);
-        test!(actual, file env!("YEAR2018_DAY05"), "9686", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, "dabAcCaCBAcCcaDA", "4", part2);
-        test!(actual, file env!("YEAR2018_DAY05"), "5524", part2);
-    }
-}
+mod day05_test;
