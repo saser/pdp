@@ -1,27 +1,24 @@
-use std::io;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
-    input = input.trim().to_string();
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
+    let input = input.trim().to_string();
     let made_recipes = parse_input(&input);
     let nr_recipes = made_recipes + 10;
     let mut scores = Vec::with_capacity(nr_recipes);
     scores.extend(&[3, 7]);
     let mut indices = [0, 1];
     match part {
-        Part::One => {
+        aoc::Part::One => {
             generate_scores(&mut scores, &mut indices, nr_recipes);
             let following_ten = scores.iter().skip(made_recipes).take(10);
             let s = following_ten
@@ -29,7 +26,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
                 .collect::<String>();
             Ok(s)
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let pattern = input
                 .chars()
                 .map(|c| c.to_string())
@@ -125,27 +122,4 @@ where
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "9", "5158916779", part1);
-        test!(example2, "5", "0124515891", part1);
-        test!(example3, "18", "9251071085", part1);
-        test!(example4, "2018", "5941429882", part1);
-        test!(actual, file env!("YEAR2018_DAY14"), "5371393113", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example1, "51589", "9", part2);
-        test!(example2, "01245", "5", part2);
-        test!(example3, "92510", "18", part2);
-        test!(example4, "59414", "2018", part2);
-        test!(actual, file env!("YEAR2018_DAY14"), "20286858", part2);
-    }
-}
+mod day14_test;
