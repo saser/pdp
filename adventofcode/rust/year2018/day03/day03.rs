@@ -1,23 +1,19 @@
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 use std::str::FromStr;
 
-use lazy_static::lazy_static;
-use regex::Regex;
+use adventofcode_rust_aoc as aoc;
+use lazy_static;
+use regex;
 
-use crate::base::Part;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let claims = input
         .lines()
         .map(Claim::from_str)
@@ -25,14 +21,14 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
         .collect::<Vec<Claim>>();
     let map = build_map(&claims);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let count = map
                 .values()
                 .filter(|point_claims| point_claims.len() > 1)
                 .count();
             Ok(count.to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let mut candidate_claims = map
                 .values()
                 .filter(|point_claims| point_claims.len() == 1)
@@ -75,9 +71,9 @@ impl FromStr for Claim {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        lazy_static! {
-            static ref CLAIM_RE: Regex =
-                Regex::new(r"#(?P<id>\d+) @ (?P<x>\d+),(?P<y>\d+): (?P<dx>\d+)x(?P<dy>\d+)")
+        lazy_static::lazy_static! {
+            static ref CLAIM_RE: regex::Regex =
+                regex::Regex::new(r"#(?P<id>\d+) @ (?P<x>\d+),(?P<y>\d+): (?P<dx>\d+)x(?P<dy>\d+)")
                     .unwrap();
         }
         let captures = CLAIM_RE.captures(s).unwrap();
@@ -90,8 +86,8 @@ impl FromStr for Claim {
     }
 }
 
-fn build_map(claims: &[Claim]) -> HashMap<(usize, usize), Vec<&Claim>> {
-    let mut map = HashMap::new();
+fn build_map(claims: &[Claim]) -> collections::HashMap<(usize, usize), Vec<&Claim>> {
+    let mut map = collections::HashMap::new();
     for claim in claims {
         for i in claim.x..claim.x + claim.dx {
             for j in claim.y..claim.y + claim.dy {
@@ -104,51 +100,4 @@ fn build_map(claims: &[Claim]) -> HashMap<(usize, usize), Vec<&Claim>> {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod parsing {
-        use super::*;
-
-        #[test]
-        fn single_digits() {
-            let input = "#1 @ 1,3: 4x4";
-            let expected = Claim {
-                id: 1,
-                x: 1,
-                y: 3,
-                dx: 4,
-                dy: 4,
-            };
-            assert_eq!(expected, Claim::from_str(input).unwrap());
-        }
-
-        #[test]
-        fn multiple_digits() {
-            let input = "#123 @ 19,443: 40x32";
-            let expected = Claim {
-                id: 123,
-                x: 19,
-                y: 443,
-                dx: 40,
-                dy: 32,
-            };
-            assert_eq!(expected, Claim::from_str(input).unwrap());
-        }
-    }
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY03_EX"), "4", part1);
-        test!(actual, file env!("YEAR2018_DAY03"), "113716", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY03_EX"), "3", part2);
-        test!(actual, file env!("YEAR2018_DAY03"), "742", part2);
-    }
-}
+mod day03_test;
