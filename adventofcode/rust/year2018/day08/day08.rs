@@ -1,27 +1,24 @@
-use std::io;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let numbers = parse_input(input.trim());
     let root = parse_tree(&numbers);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let sum = root.metadata_sum();
             Ok(sum.to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let sum = root.value_sum();
             Ok(sum.to_string())
         }
@@ -86,21 +83,4 @@ fn parse_tree_aux(numbers: &[u64]) -> (Node, &[u64]) {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2", "138", part1);
-        test!(actual, file env!("YEAR2018_DAY08"), "40908", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2", "66", part2);
-        test!(actual, file env!("YEAR2018_DAY08"), "25910", part2);
-    }
-}
+mod day08_test;
