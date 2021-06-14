@@ -1,24 +1,21 @@
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 
-use crate::base::grid::*;
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
+use adventofcode_rust_grid as grid;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let number = parse_input(input.trim());
     match part {
-        Part::One => Ok(distance_to_center(number).to_string()),
-        Part::Two => Ok(first_after_number_by_summing(number).to_string()),
+        aoc::Part::One => Ok(distance_to_center(number).to_string()),
+        aoc::Part::Two => Ok(first_after_number_by_summing(number).to_string()),
     }
 }
 
@@ -27,7 +24,7 @@ fn parse_input(input: &str) -> u64 {
 }
 
 struct SpiralTraveler {
-    traveler: Traveler,
+    traveler: grid::Traveler,
     current_layer: u64,
     steps_to_corners: Vec<u64>,
     to_corner: u64,
@@ -36,8 +33,8 @@ struct SpiralTraveler {
 
 impl SpiralTraveler {
     fn new() -> SpiralTraveler {
-        let mut traveler = Traveler::default();
-        traveler.direction = Direction::East;
+        let mut traveler = grid::Traveler::default();
+        traveler.direction = grid::Direction::East;
         SpiralTraveler {
             traveler,
             current_layer: 1,
@@ -49,9 +46,9 @@ impl SpiralTraveler {
 }
 
 impl Iterator for SpiralTraveler {
-    type Item = Point;
+    type Item = grid::Point;
 
-    fn next(&mut self) -> Option<Point> {
+    fn next(&mut self) -> Option<grid::Point> {
         self.traveler.step();
 
         self.to_next_layer -= 1;
@@ -66,7 +63,7 @@ impl Iterator for SpiralTraveler {
 
         self.to_corner -= 1;
         if self.to_corner == 0 {
-            self.traveler.turn(Turn::CounterClockwise);
+            self.traveler.turn(grid::Turn::CounterClockwise);
             self.to_corner = self.steps_to_corners.pop().unwrap();
         }
         Some(self.traveler.pos)
@@ -75,16 +72,16 @@ impl Iterator for SpiralTraveler {
 
 struct Spiral {
     spiral_traveler: SpiralTraveler,
-    grid: HashMap<Point, u64>,
-    pos: Point,
+    grid: collections::HashMap<grid::Point, u64>,
+    pos: grid::Point,
     value: u64,
     next_value_fun: Box<dyn Fn(&Spiral) -> u64>,
 }
 
 impl Spiral {
     fn new(next_value_fun: Box<dyn Fn(&Spiral) -> u64>) -> Spiral {
-        let initial_pos = Point { x: 0, y: 0 };
-        let mut initial_grid = HashMap::new();
+        let initial_pos = grid::Point { x: 0, y: 0 };
+        let mut initial_grid = collections::HashMap::new();
         initial_grid.insert(initial_pos, 1);
         Spiral {
             spiral_traveler: SpiralTraveler::new(),
@@ -97,9 +94,9 @@ impl Spiral {
 }
 
 impl Iterator for Spiral {
-    type Item = (Point, u64);
+    type Item = (grid::Point, u64);
 
-    fn next(&mut self) -> Option<(Point, u64)> {
+    fn next(&mut self) -> Option<(grid::Point, u64)> {
         let ret = (self.pos, self.value);
         self.pos = self.spiral_traveler.next().unwrap();
         self.value = (self.next_value_fun)(self);
@@ -112,14 +109,14 @@ fn first_after_number_by_summing(target_number: u64) -> u64 {
     let mut spiral = Spiral::new(Box::new(|spiral| {
         let current_pos = spiral.pos;
         let deltas = [
-            Point { x: 1, y: 0 },
-            Point { x: 1, y: 1 },
-            Point { x: 0, y: 1 },
-            Point { x: -1, y: 1 },
-            Point { x: -1, y: 0 },
-            Point { x: -1, y: -1 },
-            Point { x: 0, y: -1 },
-            Point { x: 1, y: -1 },
+            grid::Point { x: 1, y: 0 },
+            grid::Point { x: 1, y: 1 },
+            grid::Point { x: 0, y: 1 },
+            grid::Point { x: -1, y: 1 },
+            grid::Point { x: -1, y: 0 },
+            grid::Point { x: -1, y: -1 },
+            grid::Point { x: 0, y: -1 },
+            grid::Point { x: 1, y: -1 },
         ];
         deltas
             .iter()
@@ -137,24 +134,6 @@ fn distance_to_center(target_number: u64) -> u64 {
     pos.manhattan_distance()
 }
 
+
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "1", "0", part1);
-        test!(example2, "12", "3", part1);
-        test!(example3, "23", "2", part1);
-        test!(example4, "1024", "31", part1);
-        test!(actual, file "../../../inputs/2017/03", "371", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file "../../../inputs/2017/03", "369601", part2);
-    }
-}
+mod day03_test;
