@@ -1,27 +1,24 @@
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let (pots, map) = parse_input(&input);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let n = 20;
             let sum = sum_after_n_generations(n, &pots, &map);
             Ok(sum.to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let n = 50_000_000_000;
             let sum = sum_after_n_generations(n, &pots, &map);
             Ok(sum.to_string())
@@ -120,7 +117,7 @@ fn n_generations_from(
     map: &[usize],
     first_one: isize,
 ) -> (Vec<usize>, isize) {
-    let mut seen = HashMap::new();
+    let mut seen = collections::HashMap::new();
     let mut current_pots = pots.clone();
     let mut current_first_one = first_one;
     seen.insert(current_pots.clone(), (start_gen, current_first_one));
@@ -159,20 +156,4 @@ fn sum_after_n_generations(n: usize, pots: &Vec<usize>, map: &[usize]) -> isize 
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY12"), "3221", part1);
-        test!(example, file env!("YEAR2018_DAY12_EX"), "325", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY12"), "2600000001872", part2);
-    }
-}
+mod day12_test;
