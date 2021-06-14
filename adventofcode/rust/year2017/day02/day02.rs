@@ -68,6 +68,5 @@ fn divisors(nums: &[u32]) -> u32 {
     unreachable!()
 }
 
-
 #[cfg(test)]
 mod day02_test;

@@ -35,6 +35,5 @@ fn sum_matching(digits: &[u32], offset: usize) -> u32 {
     sum
 }
 
-
 #[cfg(test)]
 mod day01_test;

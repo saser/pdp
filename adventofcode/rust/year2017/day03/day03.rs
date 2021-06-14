@@ -134,6 +134,5 @@ fn distance_to_center(target_number: u64) -> u64 {
     pos.manhattan_distance()
 }
 
-
 #[cfg(test)]
 mod day03_test;
