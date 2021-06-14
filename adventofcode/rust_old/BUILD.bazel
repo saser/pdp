@@ -27,7 +27,6 @@ rust_binary(
 rust_test(
     name = "aoc_test",
     compile_data = [
-        "//adventofcode/inputs:2018/10",
         "//adventofcode/inputs:2018/11",
         "//adventofcode/inputs:2018/12",
         "//adventofcode/inputs:2018/13",
@@ -38,9 +37,6 @@ rust_test(
         "//adventofcode/inputs:2018/18",
         "//adventofcode/inputs:2018/19",
         "//adventofcode/inputs:2018/20",
-        "//adventofcode/rust_old/src/year2018/testdata/day10:actual.out",
-        "//adventofcode/rust_old/src/year2018/testdata/day10:ex.in",
-        "//adventofcode/rust_old/src/year2018/testdata/day10:ex.out",
         "//adventofcode/rust_old/src/year2018/testdata/day12:ex",
         "//adventofcode/rust_old/src/year2018/testdata/day13:ex1",
         "//adventofcode/rust_old/src/year2018/testdata/day13:ex2",
@@ -55,10 +51,6 @@ rust_test(
     ],
     crate = ":aoc",
     rustc_env = {
-        "YEAR2018_DAY10": "$(location //adventofcode/inputs:2018/10)",
-        "YEAR2018_DAY10_ACTUAL_OUT": "$(location //adventofcode/rust_old/src/year2018/testdata/day10:actual.out)",
-        "YEAR2018_DAY10_EX_IN": "$(location //adventofcode/rust_old/src/year2018/testdata/day10:ex.in)",
-        "YEAR2018_DAY10_EX_OUT": "$(location //adventofcode/rust_old/src/year2018/testdata/day10:ex.out)",
         "YEAR2018_DAY11": "$(location //adventofcode/inputs:2018/11)",
         "YEAR2018_DAY12": "$(location //adventofcode/inputs:2018/12)",
         "YEAR2018_DAY12_EX": "$(location //adventofcode/rust_old/src/year2018/testdata/day12:ex)",
