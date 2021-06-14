@@ -1,4 +1,4 @@
-load("@rules_rust//rust:defs.bzl", "rust_library")
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
 
 rust_library(
     name = "aoc",
@@ -13,5 +13,14 @@ rust_library(
         "//cargo:nalgebra",
         "//cargo:rayon",
         "//cargo:regex",
+    ],
+)
+
+rust_binary(
+    name = "aoc_bin",
+    srcs = ["src/main.rs"],
+    deps = [
+        ":aoc",
+        "//cargo:clap",
     ],
 )
