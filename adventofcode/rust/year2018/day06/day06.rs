@@ -1,41 +1,38 @@
-use std::collections::{HashMap, HashSet};
-use std::io;
+use std::collections;
 use std::str::FromStr;
 
-use rayon::prelude::*;
+use adventofcode_rust_aoc as aoc;
+use adventofcode_rust_grid as grid;
+use rayon::iter::IntoParallelRefIterator;
+use rayon::iter::ParallelIterator;
 
-use crate::base::grid::Point;
-use crate::base::Part;
+type Coordinates = collections::HashMap<char, grid::Point>;
+type Distances = collections::HashMap<char, u64>;
 
-type Coordinates = HashMap<char, Point>;
-type Distances = HashMap<char, u64>;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let coordinates = parse_input(input.trim());
     let bb = BoundingBox::from_points(
         coordinates
             .values()
             .cloned()
-            .collect::<Vec<Point>>()
+            .collect::<Vec<grid::Point>>()
             .as_slice(),
     );
     let distances = bounding_box_distances(&bb, &coordinates);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let minimal_distances = all_minimal_distances(&distances);
             let edge_points = bb.edge_points();
-            let mut infinite_coordinates = HashSet::new();
-            let mut closest_points = HashMap::new();
+            let mut infinite_coordinates = collections::HashSet::new();
+            let mut closest_points = collections::HashMap::new();
             for (point, coordinates) in minimal_distances.iter() {
                 if coordinates.len() == 1 {
                     let c = coordinates[0];
@@ -53,7 +50,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
                 .unwrap();
             Ok(max_area.to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let limit = 10_000;
             let count = distances
                 .par_iter()
@@ -68,7 +65,7 @@ fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
 
 fn parse_input(input: &str) -> Coordinates {
     let alphabet = (b'A'..).map(char::from);
-    let points = input.lines().map(Point::from_str).map(Result::unwrap);
+    let points = input.lines().map(grid::Point::from_str).map(Result::unwrap);
     alphabet.zip(points).collect()
 }
 
@@ -81,7 +78,7 @@ struct BoundingBox {
 }
 
 impl BoundingBox {
-    fn from_points(points: &[Point]) -> Self {
+    fn from_points(points: &[grid::Point]) -> Self {
         let first_point = points[0];
         let mut x_min = first_point.x;
         let mut x_max = first_point.x;
@@ -109,33 +106,34 @@ impl BoundingBox {
         1 + (self.x_min - self.x_max).abs() as u64
     }
 
-    fn points(&self) -> HashSet<Point> {
-        let mut points = HashSet::with_capacity((self.width() * self.height()) as usize);
+    fn points(&self) -> collections::HashSet<grid::Point> {
+        let mut points =
+            collections::HashSet::with_capacity((self.width() * self.height()) as usize);
         for x in self.x_min..=self.x_max {
             for y in self.y_min..=self.y_max {
-                points.insert(Point { x, y });
+                points.insert(grid::Point { x, y });
             }
         }
         points
     }
 
-    fn edge_points(&self) -> HashSet<Point> {
+    fn edge_points(&self) -> collections::HashSet<grid::Point> {
         let mut points = Vec::with_capacity(2 * (self.width() + self.height()) as usize - 4);
         for x in self.x_min..self.x_max {
-            points.push(Point { x, y: self.y_min });
-            points.push(Point { x, y: self.y_max });
+            points.push(grid::Point { x, y: self.y_min });
+            points.push(grid::Point { x, y: self.y_max });
         }
         for y in self.y_min..self.y_max {
-            points.push(Point { x: self.x_min, y });
-            points.push(Point { x: self.x_max, y });
+            points.push(grid::Point { x: self.x_min, y });
+            points.push(grid::Point { x: self.x_max, y });
         }
-        let mut set = HashSet::with_capacity(points.len());
+        let mut set = collections::HashSet::with_capacity(points.len());
         set.extend(points);
         set
     }
 }
 
-fn distances(point: &Point, coordinates: &Coordinates) -> Distances {
+fn distances(point: &grid::Point, coordinates: &Coordinates) -> Distances {
     coordinates
         .par_iter()
         .map(|(&c, &coord_point)| (c, point.manhattan_distance_to(coord_point)))
@@ -145,7 +143,7 @@ fn distances(point: &Point, coordinates: &Coordinates) -> Distances {
 fn bounding_box_distances(
     bb: &BoundingBox,
     coordinates: &Coordinates,
-) -> HashMap<Point, Distances> {
+) -> collections::HashMap<grid::Point, Distances> {
     bb.points()
         .par_iter()
         .map(|&point| (point, distances(&point, coordinates)))
@@ -161,27 +159,13 @@ fn minimal_distances(distances: &Distances) -> Vec<char> {
         .collect()
 }
 
-fn all_minimal_distances(map: &HashMap<Point, Distances>) -> HashMap<Point, Vec<char>> {
+fn all_minimal_distances(
+    map: &collections::HashMap<grid::Point, Distances>,
+) -> collections::HashMap<grid::Point, Vec<char>> {
     map.par_iter()
         .map(|(&point, distances)| (point, minimal_distances(distances)))
         .collect()
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file "./testdata/day06/ex", "17", part1);
-        test!(actual, file env!("YEAR2018_DAY06"), "3687", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY06"), "40134", part2);
-    }
-}
+mod day06_test;
