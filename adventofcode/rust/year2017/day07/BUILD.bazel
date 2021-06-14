@@ -1,0 +1,22 @@
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
+
+rust_library(
+    name = "day07",
+    srcs = ["day07.rs"],
+    crate_name = "adventofcode_rust_year2017_day07",
+    deps = [
+        "//adventofcode/rust/aoc",
+        "//cargo:lazy_static",
+        "//cargo:regex",
+    ],
+)
+
+rust_test(
+    name = "day07_test",
+    srcs = ["day07_test.rs"],
+    crate = ":day07",
+    data = [
+        "//adventofcode/inputs:2017/07",
+        "//adventofcode/rust/year2017/testdata/day07:ex",
+    ],
+)

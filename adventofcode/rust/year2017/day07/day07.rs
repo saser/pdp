@@ -1,27 +1,23 @@
-use lazy_static::lazy_static;
-use regex::Regex;
-
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
+use lazy_static;
+use regex;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let programs = parse_input(&input);
     let tower = construct_tower(&programs);
     let bottom_program = find_bottom_program(&tower);
-    if part == Part::One {
+    if part == aoc::Part::One {
         Ok(bottom_program.name.clone())
     } else {
         let tower_weights = calculate_tower_weights(&tower, &bottom_program);
@@ -42,9 +38,9 @@ struct Program {
 impl FromStr for Program {
     type Err = String;
     fn from_str(s: &str) -> Result<Program, String> {
-        lazy_static! {
-            static ref NAME_AND_WEIGHT: Regex =
-                Regex::new(r"(?P<name>\w+) \((?P<weight>\d+)\)").unwrap();
+        lazy_static::lazy_static! {
+            static ref NAME_AND_WEIGHT: regex::Regex =
+                regex::Regex::new(r"(?P<name>\w+) \((?P<weight>\d+)\)").unwrap();
         }
         let parts: Vec<&str> = s.split(" -> ").collect();
         let (name_and_weight, programs) = (
@@ -70,7 +66,7 @@ impl FromStr for Program {
     }
 }
 
-fn parse_input(input: &str) -> HashMap<String, Program> {
+fn parse_input(input: &str) -> collections::HashMap<String, Program> {
     input
         .lines()
         .map(Program::from_str)
@@ -79,7 +75,9 @@ fn parse_input(input: &str) -> HashMap<String, Program> {
         .collect()
 }
 
-fn construct_tower(programs: &HashMap<String, Program>) -> HashMap<String, Program> {
+fn construct_tower(
+    programs: &collections::HashMap<String, Program>,
+) -> collections::HashMap<String, Program> {
     let mut tower = programs.clone();
     let progs_holding_up: Vec<Program> = tower
         .values()
@@ -94,7 +92,7 @@ fn construct_tower(programs: &HashMap<String, Program>) -> HashMap<String, Progr
     tower
 }
 
-fn find_bottom_program(tower: &HashMap<String, Program>) -> Program {
+fn find_bottom_program(tower: &collections::HashMap<String, Program>) -> Program {
     tower
         .values()
         .find(|prog| prog.held_up_by.is_none())
@@ -103,17 +101,17 @@ fn find_bottom_program(tower: &HashMap<String, Program>) -> Program {
 }
 
 fn calculate_tower_weights(
-    tower: &HashMap<String, Program>,
+    tower: &collections::HashMap<String, Program>,
     root: &Program,
-) -> HashMap<String, u64> {
+) -> collections::HashMap<String, u64> {
     if root.holding_up.is_none() {
-        let mut map = HashMap::new();
+        let mut map = collections::HashMap::new();
         map.insert(root.name.clone(), root.weight);
         return map;
     }
 
     let held_up_progs = root.holding_up.clone().unwrap();
-    let mut map = HashMap::new();
+    let mut map = collections::HashMap::new();
     let mut weight = 0;
     for prog in &held_up_progs {
         map.extend(calculate_tower_weights(tower, tower.get(prog).unwrap()));
@@ -126,15 +124,15 @@ fn calculate_tower_weights(
 
 #[allow(clippy::question_mark)]
 fn find_correct_weight(
-    tower: &HashMap<String, Program>,
-    tower_weights: &HashMap<String, u64>,
+    tower: &collections::HashMap<String, Program>,
+    tower_weights: &collections::HashMap<String, u64>,
     root: &Program,
 ) -> Option<u64> {
     if root.holding_up.is_none() {
         return None;
     }
 
-    let mut map: HashMap<u64, Vec<String>> = HashMap::new();
+    let mut map: collections::HashMap<u64, Vec<String>> = collections::HashMap::new();
     for held_up_prog in &root.holding_up.clone().unwrap() {
         let correct_weight =
             find_correct_weight(tower, tower_weights, tower.get(held_up_prog).unwrap());
@@ -162,42 +160,4 @@ fn find_correct_weight(
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod parse_tests {
-        use super::*;
-
-        #[test]
-        fn program_not_holding_up() {
-            let input = "pbga (66)";
-            let program = Program::from_str(input).unwrap();
-            assert_eq!("pbga", &program.name);
-            assert_eq!(66, program.weight);
-        }
-
-        #[test]
-        fn program_holding_up() {
-            let input = "fwft (72) -> ktlj, cntj, xhth";
-            let program = Program::from_str(input).unwrap();
-            assert_eq!("fwft", &program.name);
-            assert_eq!(72, program.weight);
-            assert_eq!(&["ktlj", "cntj", "xhth"], &program.holding_up.unwrap()[..]);
-        }
-    }
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file "testdata/day07/ex", "tknk", part1);
-        test!(actual, file "../../../inputs/2017/07", "bpvhwhh", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file "testdata/day07/ex", "60", part2);
-        test!(actual, file "../../../inputs/2017/07", "256", part2);
-    }
-}
+mod day07_test;
