@@ -1,24 +1,21 @@
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let banks = parse_input(&input);
     let (redistributions, loop_size) = count_redistributions(&banks);
     let answer = match part {
-        Part::One => redistributions,
-        Part::Two => loop_size,
+        aoc::Part::One => redistributions,
+        aoc::Part::Two => loop_size,
     };
     Ok(answer.to_string())
 }
@@ -33,7 +30,7 @@ fn parse_input(input: &str) -> Vec<u64> {
 }
 
 fn count_redistributions(banks: &[u64]) -> (u64, u64) {
-    let mut distributions: HashMap<Vec<u64>, u64> = HashMap::new();
+    let mut distributions: collections::HashMap<Vec<u64>, u64> = collections::HashMap::new();
 
     let mut counter = 0;
     let mut distribution = Vec::from(banks);
@@ -82,21 +79,4 @@ fn find_max_index<T: Ord + Copy>(banks: &[T]) -> usize {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, "0 2 7 0", "5", part1);
-        test!(actual, file "../../../inputs/2017/06", "5042", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, "0 2 7 0", "4", part2);
-        test!(actual, file "../../../inputs/2017/06", "1086", part2);
-    }
-}
+mod day06_test;
