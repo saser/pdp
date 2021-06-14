@@ -1,6 +1,4 @@
-use std::io;
-
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
 // After noticing that part 2 ran for an eternity (and still did not halt), I noticed that the
 // program was running some kind of loop. I reverse-engineered the instructions (with a few hints
@@ -40,18 +38,18 @@ use crate::base::Part;
 // is that my solution is specific for my input, and I'm not sure that it would work on anyone
 // else's input.
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(_r: &mut dyn io::Read, part: Part) -> Result<String, String> {
+fn solve(_input: &str, part: aoc::Part) -> Result<String, String> {
     let target = match part {
-        Part::One => 861,
-        Part::Two => 10_551_261,
+        aoc::Part::One => 861,
+        aoc::Part::Two => 10_551_261,
     };
     Ok(sum_factors(target).to_string())
 }
@@ -65,19 +63,4 @@ fn sum_factors(target: u64) -> u64 {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY19"), "1344", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2018_DAY19"), "16078144", part2);
-    }
-}
+mod day19_test;
