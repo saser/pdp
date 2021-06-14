@@ -1,22 +1,19 @@
-use std::io;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let fun = match part {
-        Part::One => min_max,
-        Part::Two => divisors,
+        aoc::Part::One => min_max,
+        aoc::Part::Two => divisors,
     };
     Ok(input
         .lines()
@@ -71,28 +68,6 @@ fn divisors(nums: &[u32]) -> u32 {
     unreachable!()
 }
 
+
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example1, "5 1 9 5", "8", part1);
-        test!(example2, "7 5 3", "4", part1);
-        test!(example3, "2 4 6 8", "6", part1);
-        test!(example_all, file "testdata/day02/p1ex", "18", part1);
-        test!(actual, file "../../../inputs/2017/02", "36766", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example1, "5 9 2 8", "4", part2);
-        test!(example2, "9 4 7 3", "3", part2);
-        test!(example3, "3 8 6 5", "2", part2);
-        test!(example_all, file "testdata/day02/p2ex", "9", part2);
-        test!(actual, file "../../../inputs/2017/02", "261", part2);
-    }
-}
+mod day02_test;

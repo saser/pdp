@@ -1,0 +1,4 @@
+exports_files([
+    "p1ex",
+    "p2ex",
+])
