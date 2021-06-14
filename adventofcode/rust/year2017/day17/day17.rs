@@ -1,26 +1,23 @@
-use std::io;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let length = parse_input(input.trim());
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let (vec, final_position) = build_ring_buffer(2017, length);
             Ok(vec[final_position + 1].to_string())
         }
-        Part::Two => Ok(value_after_zero(50_000_000, length).to_string()),
+        aoc::Part::Two => Ok(value_after_zero(50_000_000, length).to_string()),
     }
 }
 
@@ -57,20 +54,4 @@ fn value_after_zero(final_value: usize, length: usize) -> usize {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, "3", "638", part1);
-        test!(actual, file env!("YEAR2017_DAY17"), "1311", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2017_DAY17"), "39170601", part2);
-    }
-}
+mod day17_test;
