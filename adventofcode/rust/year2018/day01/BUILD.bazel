@@ -1,0 +1,26 @@
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
+
+rust_library(
+    name = "day01",
+    srcs = ["day01.rs"],
+    crate_name = "adventofcode_rust_year2018_day01",
+    deps = ["//adventofcode/rust/aoc"],
+)
+
+rust_test(
+    name = "day01_test",
+    srcs = ["day01_test.rs"],
+    crate = ":day01",
+    data = [
+        "//adventofcode/inputs:2018/01",
+        "//adventofcode/rust/year2018/testdata/day01:p1ex1",
+        "//adventofcode/rust/year2018/testdata/day01:p1ex2",
+        "//adventofcode/rust/year2018/testdata/day01:p1ex3",
+        "//adventofcode/rust/year2018/testdata/day01:p1ex4",
+        "//adventofcode/rust/year2018/testdata/day01:p2ex1",
+        "//adventofcode/rust/year2018/testdata/day01:p2ex2",
+        "//adventofcode/rust/year2018/testdata/day01:p2ex3",
+        "//adventofcode/rust/year2018/testdata/day01:p2ex4",
+        "//adventofcode/rust/year2018/testdata/day01:p2ex5",
+    ],
+)
