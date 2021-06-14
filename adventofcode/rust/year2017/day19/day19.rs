@@ -1,25 +1,21 @@
-use std::io;
+use adventofcode_rust_aoc as aoc;
+use adventofcode_rust_grid as grid;
 
-use crate::base::grid::*;
-use crate::base::Part;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let grid = parse_input(&input);
     let traveler = TileTraveler::from(&grid);
     let (count, letters) = travel(&traveler);
     match part {
-        Part::One => Ok(letters),
-        Part::Two => Ok(count.to_string()),
+        aoc::Part::One => Ok(letters),
+        aoc::Part::Two => Ok(count.to_string()),
     }
 }
 
@@ -31,13 +27,13 @@ fn parse_line(line: &str) -> Vec<Tile> {
     line.chars().map(Tile::from).collect()
 }
 
-fn find_starting_point(grid: &[Vec<Tile>]) -> Point {
+fn find_starting_point(grid: &[Vec<Tile>]) -> grid::Point {
     let (column, _) = grid[0]
         .iter()
         .enumerate()
         .find(|&(_, &pipe)| pipe == Tile::Vertical)
         .unwrap();
-    Point {
+    grid::Point {
         x: column as i64,
         y: 0,
     }
@@ -58,15 +54,15 @@ fn travel(traveler: &TileTraveler) -> (u64, String) {
 #[derive(Clone, Eq, PartialEq)]
 struct TileTraveler {
     grid: Vec<Vec<Tile>>,
-    traveler: Traveler,
+    traveler: grid::Traveler,
 }
 
 impl TileTraveler {
     fn from(grid: &[Vec<Tile>]) -> TileTraveler {
         let grid = grid.to_owned();
-        let traveler = Traveler {
+        let traveler = grid::Traveler {
             pos: find_starting_point(&grid),
-            direction: Direction::North,
+            direction: grid::Direction::North,
         };
         TileTraveler { grid, traveler }
     }
@@ -86,15 +82,15 @@ impl Iterator for Tiles {
     type Item = Tile;
 
     fn next(&mut self) -> Option<Tile> {
-        let Point { x, y } = self.tile_traveler.traveler.pos;
+        let grid::Point { x, y } = self.tile_traveler.traveler.pos;
         let current_tile = self.tile_traveler.grid[y as usize][x as usize];
 
         let next_dir = if let Tile::Corner = current_tile {
-            [Turn::Clockwise, Turn::CounterClockwise]
+            [grid::Turn::Clockwise, grid::Turn::CounterClockwise]
                 .iter()
                 .map(|&turn| self.tile_traveler.traveler.direction.turn(turn))
                 .find(|dir| {
-                    let Point { x, y } = self.tile_traveler.traveler.pos + dir.as_point();
+                    let grid::Point { x, y } = self.tile_traveler.traveler.pos + dir.as_point();
                     self.tile_traveler.grid[y as usize][x as usize] != Tile::Empty
                 })
         } else {
@@ -103,7 +99,7 @@ impl Iterator for Tiles {
         .unwrap_or(self.tile_traveler.traveler.direction);
         self.tile_traveler.traveler.direction = next_dir;
 
-        let Point {
+        let grid::Point {
             x: next_x,
             y: next_y,
         } = self.tile_traveler.traveler.peek_step();
@@ -141,21 +137,4 @@ impl From<char> for Tile {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2017_DAY19_EX"), "ABCDEF", part1);
-        test!(actual, file env!("YEAR2017_DAY19"), "LIWQYKMRP", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2017_DAY19_EX"), "38", part2);
-        test!(actual, file env!("YEAR2017_DAY19"), "16764", part2);
-    }
-}
+mod day19_test;
