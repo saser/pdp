@@ -1,27 +1,23 @@
-use std::collections::VecDeque;
-use std::io;
+use std::collections;
 use std::str::FromStr;
 
-use lazy_static::lazy_static;
-use regex::Regex;
+use adventofcode_rust_aoc as aoc;
+use lazy_static;
+use regex;
 
-use crate::base::Part;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let mut programs = generate_programs(16);
     let iterations = match part {
-        Part::One => 1,
-        Part::Two => 1_000_000_000,
+        aoc::Part::One => 1,
+        aoc::Part::Two => 1_000_000_000,
     };
     let moves = parse_input(&input);
     let final_configuration = perform_moves_n(&mut programs, &moves, iterations);
@@ -39,10 +35,10 @@ impl FromStr for Move {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Move, String> {
-        lazy_static! {
-            static ref SPIN_RE: Regex = Regex::new(r"s(?P<size>\d+)").unwrap();
-            static ref EXCHANGE_RE: Regex = Regex::new(r"x(?P<pos1>\d+)/(?P<pos2>\d+)").unwrap();
-            static ref PARTNER_RE: Regex = Regex::new(r"p(?P<name1>\w)/(?P<name2>\w)").unwrap();
+        lazy_static::lazy_static! {
+            static ref SPIN_RE: regex::Regex = regex::Regex::new(r"s(?P<size>\d+)").unwrap();
+            static ref EXCHANGE_RE: regex::Regex = regex::Regex::new(r"x(?P<pos1>\d+)/(?P<pos2>\d+)").unwrap();
+            static ref PARTNER_RE: regex::Regex = regex::Regex::new(r"p(?P<name1>\w)/(?P<name2>\w)").unwrap();
         }
         if let Some(captures) = SPIN_RE.captures(s) {
             let spin = usize::from_str(&captures["size"]).unwrap();
@@ -69,7 +65,7 @@ fn parse_input(input: &str) -> Vec<Move> {
         .collect()
 }
 
-fn generate_programs(count: usize) -> VecDeque<char> {
+fn generate_programs(count: usize) -> collections::VecDeque<char> {
     if count > 16 {
         panic!("too high count: {}", count);
     }
@@ -77,7 +73,7 @@ fn generate_programs(count: usize) -> VecDeque<char> {
     "abcdefghijklmnop".chars().take(count).collect()
 }
 
-fn programs_to_string(programs: &VecDeque<char>) -> String {
+fn programs_to_string(programs: &collections::VecDeque<char>) -> String {
     programs
         .iter()
         .map(char::to_string)
@@ -85,7 +81,7 @@ fn programs_to_string(programs: &VecDeque<char>) -> String {
         .join("")
 }
 
-fn perform_move(programs: &mut VecDeque<char>, m: Move) {
+fn perform_move(programs: &mut collections::VecDeque<char>, m: Move) {
     match m {
         Move::Spin(spin) => {
             for _ in 0..spin {
@@ -110,7 +106,11 @@ fn perform_move(programs: &mut VecDeque<char>, m: Move) {
     }
 }
 
-fn perform_moves_n(programs: &mut VecDeque<char>, moves: &[Move], iterations: usize) -> String {
+fn perform_moves_n(
+    programs: &mut collections::VecDeque<char>,
+    moves: &[Move],
+    iterations: usize,
+) -> String {
     let mut seen: Vec<String> = Vec::with_capacity(1_000_000);
     let mut final_configuration = programs_to_string(programs);
     seen.push(final_configuration.clone());
@@ -132,29 +132,4 @@ fn perform_moves_n(programs: &mut VecDeque<char>, moves: &[Move], iterations: us
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        #[test]
-        fn example() {
-            let input = "s1,x3/4,pe/b";
-            let mut programs = generate_programs(5);
-            let moves = parse_input(input);
-            perform_moves_n(&mut programs, &moves, 1);
-            let expected = "baedc";
-            assert_eq!(expected, programs_to_string(&programs));
-        }
-
-        test!(actual, file env!("YEAR2017_DAY16"), "kgdchlfniambejop", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(actual, file env!("YEAR2017_DAY16"), "fjpmholcibdgeakn", part2);
-    }
-}
+mod day16_test;
