@@ -1,34 +1,30 @@
-use std::collections::BTreeSet;
-use std::io;
+use std::collections;
 use std::iter;
 
-use lazy_static::lazy_static;
-use regex::Regex;
+use adventofcode_rust_aoc as aoc;
+use adventofcode_rust_grid as grid;
+use lazy_static;
+use regex;
 
-use crate::base::grid::Grid as BaseGrid;
-use crate::base::Part;
+type Grid = grid::Grid<char>;
 
-type Grid = BaseGrid<char>;
-
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let (mut grid, adjusted_spring, spring_offset) = parse_input(&input);
     flow(adjusted_spring.down(), &mut grid);
     match part {
-        Part::One => {
+        aoc::Part::One => {
             let count = grid.iter().filter(|&&c| water(c)).count() - spring_offset;
             Ok(count.to_string())
         }
-        Part::Two => {
+        aoc::Part::Two => {
             let count = grid.iter().filter(|&&c| c == '~').count();
             Ok(count.to_string())
         }
@@ -80,7 +76,9 @@ impl Into<(usize, usize)> for Position {
 fn parse_input(input: &str) -> (Grid, Position, usize) {
     let clay = input
         .lines()
-        .fold(BTreeSet::new(), |acc, line| &acc | &parse_line(line));
+        .fold(collections::BTreeSet::new(), |acc, line| {
+            &acc | &parse_line(line)
+        });
     let spring = Position { row: 0, col: 500 };
     let with_spring = clay.iter().chain(iter::once(&spring));
     let clay_rows = with_spring.clone().map(|position| position.row);
@@ -107,9 +105,9 @@ fn parse_input(input: &str) -> (Grid, Position, usize) {
     (grid, adjusted_spring, spring_offset)
 }
 
-fn parse_line(line: &str) -> BTreeSet<Position> {
-    lazy_static! {
-        static ref VEIN_RE: Regex = Regex::new(
+fn parse_line(line: &str) -> collections::BTreeSet<Position> {
+    lazy_static::lazy_static! {
+        static ref VEIN_RE: regex::Regex = regex::Regex::new(
             r"(?P<n1>x|y)=(?P<c1>\d+), (?P<n2>x|y)=(?P<c2_start>\d+)\.\.(?P<c2_end>\d+)"
         )
         .unwrap();
@@ -232,21 +230,4 @@ fn free(c: char) -> bool {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY17_EX"), "57", part1);
-        test!(actual, file env!("YEAR2018_DAY17"), "31471", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2018_DAY17_EX"), "29", part2);
-        test!(actual, file env!("YEAR2018_DAY17"), "24169", part2);
-    }
-}
+mod day17_test;
