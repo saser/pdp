@@ -1,31 +1,27 @@
-use lazy_static::lazy_static;
-use regex::Regex;
-
 use std::cmp;
-use std::collections::HashMap;
-use std::io;
+use std::collections;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
+use lazy_static;
+use regex;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let instructions = parse_input(&input);
     let registers = initialize_registers(&instructions);
     let (final_registers, highest_value) = perform_instructions(&registers, &instructions);
     let max_register = final_registers.values().max().unwrap();
     match part {
-        Part::One => Ok(max_register.to_string()),
-        Part::Two => Ok(highest_value.to_string()),
+        aoc::Part::One => Ok(max_register.to_string()),
+        aoc::Part::Two => Ok(highest_value.to_string()),
     }
 }
 
@@ -37,8 +33,8 @@ fn parse_input(input: &str) -> Vec<Instruction> {
         .collect()
 }
 
-fn initialize_registers(instructions: &[Instruction]) -> HashMap<String, i64> {
-    let mut map = HashMap::new();
+fn initialize_registers(instructions: &[Instruction]) -> collections::HashMap<String, i64> {
+    let mut map = collections::HashMap::new();
     for instruction in instructions {
         map.entry(instruction.register.clone()).or_insert(0);
     }
@@ -56,7 +52,7 @@ fn do_comparison(comparison: Comparison, a: i64, b: i64) -> bool {
     }
 }
 
-fn check_condition(registers: &HashMap<String, i64>, condition: &Condition) -> bool {
+fn check_condition(registers: &collections::HashMap<String, i64>, condition: &Condition) -> bool {
     let register_value = *registers.get(&condition.register).unwrap();
     do_comparison(condition.cmp, register_value, condition.value)
 }
@@ -69,9 +65,9 @@ fn perform_operation(operation: Operation, previous_value: i64) -> i64 {
 }
 
 fn perform_instruction(
-    (registers, highest_value): (&HashMap<String, i64>, i64),
+    (registers, highest_value): (&collections::HashMap<String, i64>, i64),
     instruction: &Instruction,
-) -> (HashMap<String, i64>, i64) {
+) -> (collections::HashMap<String, i64>, i64) {
     let mut map = registers.clone();
     let mut new_highest_value = highest_value;
     if check_condition(registers, &instruction.cond) {
@@ -87,9 +83,9 @@ fn perform_instruction(
 }
 
 fn perform_instructions(
-    registers: &HashMap<String, i64>,
+    registers: &collections::HashMap<String, i64>,
     instructions: &[Instruction],
-) -> (HashMap<String, i64>, i64) {
+) -> (collections::HashMap<String, i64>, i64) {
     instructions
         .iter()
         .fold((registers.clone(), 0), |(regs, highest), instruction| {
@@ -107,8 +103,8 @@ impl FromStr for Operation {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Operation, String> {
-        lazy_static! {
-            static ref RE: Regex = Regex::new(r"(?P<op>inc|dec) (?P<value>-?\d+)").unwrap();
+        lazy_static::lazy_static! {
+            static ref RE: regex::Regex = regex::Regex::new(r"(?P<op>inc|dec) (?P<value>-?\d+)").unwrap();
         }
         let captures = RE.captures(s).unwrap();
         let value = i64::from_str(&captures["value"]).unwrap();
@@ -157,9 +153,9 @@ impl FromStr for Condition {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Condition, String> {
-        lazy_static! {
-            static ref RE: Regex =
-                Regex::new(r"(?P<register>\w+) (?P<cmp><|>|<=|>=|==|!=) (?P<value>-?\d+)").unwrap();
+        lazy_static::lazy_static! {
+            static ref RE: regex::Regex =
+                regex::Regex::new(r"(?P<register>\w+) (?P<cmp><|>|<=|>=|==|!=) (?P<value>-?\d+)").unwrap();
         }
         let captures = RE.captures(s).unwrap();
         let register = captures["register"].to_string();
@@ -194,21 +190,4 @@ impl FromStr for Instruction {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file "testdata/day08/ex", "1", part1);
-        test!(actual, file "../../../inputs/2017/08", "6012", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file "testdata/day08/ex", "10", part2);
-        test!(actual, file "../../../inputs/2017/08", "6369", part2);
-    }
-}
+mod day08_test;
