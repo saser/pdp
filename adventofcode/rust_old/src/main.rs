@@ -60,8 +60,6 @@ fn imain() -> i32 {
     // Choose solution function based on arguments.
     let solution: Result<aoc::Solution, String> = match (year, day, part) {
         // Year 2017.
-        (2017, 15, 1) => Ok(aoc::year2017::day15::part1),
-        (2017, 15, 2) => Ok(aoc::year2017::day15::part2),
         (2017, 16, 1) => Ok(aoc::year2017::day16::part1),
         (2017, 16, 2) => Ok(aoc::year2017::day16::part2),
         (2017, 17, 1) => Ok(aoc::year2017::day17::part1),

@@ -1,27 +1,24 @@
-use std::io;
 use std::str::FromStr;
 
-use crate::base::Part;
+use adventofcode_rust_aoc as aoc;
 
 const MUL_A: u64 = 16807;
 const MUL_B: u64 = 48271;
 const MOD: u64 = 2_147_483_647;
 
-pub fn part1(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::One)
+pub fn part1(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::One)
 }
 
-pub fn part2(r: &mut dyn io::Read) -> Result<String, String> {
-    solve(r, Part::Two)
+pub fn part2(input: &str) -> Result<String, String> {
+    solve(input, aoc::Part::Two)
 }
 
-fn solve(r: &mut dyn io::Read, part: Part) -> Result<String, String> {
-    let mut input = String::new();
-    r.read_to_string(&mut input).map_err(|e| e.to_string())?;
+fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
     let (start_a, start_b) = parse_input(&input);
     let (repetitions, constraints) = match part {
-        Part::One => (40_000_000, (1, 1)),
-        Part::Two => (5_000_000, (4, 8)),
+        aoc::Part::One => (40_000_000, (1, 1)),
+        aoc::Part::Two => (5_000_000, (4, 8)),
     };
     let matching_pairs = (0..repetitions)
         .scan((start_a, start_b), |pair, _| {
@@ -64,21 +61,4 @@ fn lowest_16_bits_matching((value_a, value_b): (u64, u64)) -> bool {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test;
-
-    mod part1 {
-        use super::*;
-
-        test!(example, file env!("YEAR2017_DAY15_EX"), "588", part1);
-        test!(actual, file env!("YEAR2017_DAY15"), "609", part1);
-    }
-
-    mod part2 {
-        use super::*;
-
-        test!(example, file env!("YEAR2017_DAY15_EX"), "309", part2);
-        test!(actual, file env!("YEAR2017_DAY15"), "253", part2);
-    }
-}
+mod day15_test;
