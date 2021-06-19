@@ -149,12 +149,12 @@ mod tests {
             assert_eq!(expected, programs_to_string(&programs));
         }
 
-        test!(actual, file "../../../inputs/2017/16", "kgdchlfniambejop", part1);
+        test!(actual, file env!("YEAR2017_DAY16"), "kgdchlfniambejop", part1);
     }
 
     mod part2 {
         use super::*;
 
-        test!(actual, file "../../../inputs/2017/16", "fjpmholcibdgeakn", part2);
+        test!(actual, file env!("YEAR2017_DAY16"), "fjpmholcibdgeakn", part2);
     }
 }

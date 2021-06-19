@@ -136,7 +136,7 @@ mod tests {
         test!(example2, "5", "0124515891", part1);
         test!(example3, "18", "9251071085", part1);
         test!(example4, "2018", "5941429882", part1);
-        test!(actual, file "../../../inputs/2018/14", "5371393113", part1);
+        test!(actual, file env!("YEAR2018_DAY14"), "5371393113", part1);
     }
 
     mod part2 {
@@ -146,6 +146,6 @@ mod tests {
         test!(example2, "01245", "5", part2);
         test!(example3, "92510", "18", part2);
         test!(example4, "59414", "2018", part2);
-        test!(actual, file "../../../inputs/2018/14", "20286858", part2);
+        test!(actual, file env!("YEAR2018_DAY14"), "20286858", part2);
     }
 }

@@ -471,23 +471,23 @@ mod tests {
     mod part1 {
         use super::*;
 
-        test!(example1, file "testdata/day15/ex1", "27730", part1);
-        test!(example2, file "testdata/day15/ex2", "36334", part1);
-        test!(example3, file "testdata/day15/ex3", "39514", part1);
-        test!(example4, file "testdata/day15/ex4", "27755", part1);
-        test!(example5, file "testdata/day15/ex5", "28944", part1);
-        test!(example6, file "testdata/day15/ex6", "18740", part1);
-        test!(actual, file "../../../inputs/2018/15", "201638", part1);
+        test!(example1, file env!("YEAR2018_DAY15_EX1"), "27730", part1);
+        test!(example2, file env!("YEAR2018_DAY15_EX2"), "36334", part1);
+        test!(example3, file env!("YEAR2018_DAY15_EX3"), "39514", part1);
+        test!(example4, file env!("YEAR2018_DAY15_EX4"), "27755", part1);
+        test!(example5, file env!("YEAR2018_DAY15_EX5"), "28944", part1);
+        test!(example6, file env!("YEAR2018_DAY15_EX6"), "18740", part1);
+        test!(actual, file env!("YEAR2018_DAY15"), "201638", part1);
     }
 
     mod part2 {
         use super::*;
 
-        test!(example1, file "testdata/day15/ex1", "4988", part2);
-        test!(example3, file "testdata/day15/ex3", "31284", part2);
-        test!(example4, file "testdata/day15/ex4", "3478", part2);
-        test!(example5, file "testdata/day15/ex5", "6474", part2);
-        test!(example6, file "testdata/day15/ex6", "1140", part2);
-        test!(actual, file "../../../inputs/2018/15", "95764", part2);
+        test!(example1, file env!("YEAR2018_DAY15_EX1"), "4988", part2);
+        test!(example3, file env!("YEAR2018_DAY15_EX3"), "31284", part2);
+        test!(example4, file env!("YEAR2018_DAY15_EX4"), "3478", part2);
+        test!(example5, file env!("YEAR2018_DAY15_EX5"), "6474", part2);
+        test!(example6, file env!("YEAR2018_DAY15_EX6"), "1140", part2);
+        test!(actual, file env!("YEAR2018_DAY15"), "95764", part2);
     }
 }

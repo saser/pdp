@@ -89,12 +89,12 @@ mod tests {
         test!(example4, &make_input(17, 1104), "2764", part1);
         test!(example5, &make_input(21, 6111), "54718", part1);
         test!(example6, &make_input(30, 5807), "37305", part1);
-        test!(actual, file "../../../inputs/2018/09", "436720", part1);
+        test!(actual, file env!("YEAR2018_DAY09"), "436720", part1);
     }
 
     mod part2 {
         use super::*;
 
-        test!(actual, file "../../../inputs/2018/09", "3527845091", part2);
+        test!(actual, file env!("YEAR2018_DAY09"), "3527845091", part2);
     }
 }

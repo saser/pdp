@@ -71,14 +71,14 @@ mod tests {
     mod part1 {
         use super::*;
 
-        test!(example, file "testdata/day13/ex", "24", part1);
-        test!(actual, file "../../../inputs/2017/13", "2508", part1);
+        test!(example, file env!("YEAR2017_DAY13_EX"), "24", part1);
+        test!(actual, file env!("YEAR2017_DAY13"), "2508", part1);
     }
 
     mod part2 {
         use super::*;
 
-        test!(example, file "testdata/day13/ex", "10", part2);
-        test!(actual, file "../../../inputs/2017/13", "3913186", part2);
+        test!(example, file env!("YEAR2017_DAY13_EX"), "10", part2);
+        test!(actual, file env!("YEAR2017_DAY13"), "3913186", part2);
     }
 }

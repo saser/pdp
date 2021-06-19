@@ -118,13 +118,13 @@ mod tests {
         test!(example3, "abAB", "4", part1);
         test!(example4, "aabAAB", "6", part1);
         test!(example5, "dabAcCaCBAcCcaDA", "10", part1);
-        test!(actual, file "../../../inputs/2018/05", "9686", part1);
+        test!(actual, file env!("YEAR2018_DAY05"), "9686", part1);
     }
 
     mod part2 {
         use super::*;
 
         test!(example, "dabAcCaCBAcCcaDA", "4", part2);
-        test!(actual, file "../../../inputs/2018/05", "5524", part2);
+        test!(actual, file env!("YEAR2018_DAY05"), "5524", part2);
     }
 }

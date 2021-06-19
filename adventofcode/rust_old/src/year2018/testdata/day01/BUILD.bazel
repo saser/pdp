@@ -1,0 +1,11 @@
+exports_files([
+    "p1ex1",
+    "p1ex2",
+    "p1ex3",
+    "p1ex4",
+    "p2ex1",
+    "p2ex2",
+    "p2ex3",
+    "p2ex4",
+    "p2ex5",
+])

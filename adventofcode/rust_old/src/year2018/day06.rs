@@ -176,12 +176,12 @@ mod tests {
         use super::*;
 
         test!(example, file "./testdata/day06/ex", "17", part1);
-        test!(actual, file "../../../inputs/2018/06", "3687", part1);
+        test!(actual, file env!("YEAR2018_DAY06"), "3687", part1);
     }
 
     mod part2 {
         use super::*;
 
-        test!(actual, file "../../../inputs/2018/06", "40134", part2);
+        test!(actual, file env!("YEAR2018_DAY06"), "40134", part2);
     }
 }
