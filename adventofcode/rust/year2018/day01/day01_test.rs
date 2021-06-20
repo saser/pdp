@@ -5,32 +5,32 @@ mod part1 {
 
     aoc::testfn!(
         example1,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p1ex1"),
-        "3",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p1ex1"),
+        aoc::Data::String("3"),
         crate::part1
     );
     aoc::testfn!(
         example2,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p1ex2"),
-        "3",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p1ex2"),
+        aoc::Data::String("3"),
         crate::part1
     );
     aoc::testfn!(
         example3,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p1ex3"),
-        "0",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p1ex3"),
+        aoc::Data::String("0"),
         crate::part1
     );
     aoc::testfn!(
         example4,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p1ex4"),
-        "-6",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p1ex4"),
+        aoc::Data::String("-6"),
         crate::part1
     );
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2018/01"),
-        "416",
+        aoc::Data::File("adventofcode/inputs/2018/01"),
+        aoc::Data::String("416"),
         crate::part1
     );
 }
@@ -40,38 +40,38 @@ mod part2 {
 
     aoc::testfn!(
         example1,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p2ex1"),
-        "2",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p2ex1"),
+        aoc::Data::String("2"),
         crate::part2
     );
     aoc::testfn!(
         example2,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p2ex2"),
-        "0",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p2ex2"),
+        aoc::Data::String("0"),
         crate::part2
     );
     aoc::testfn!(
         example3,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p2ex3"),
-        "10",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p2ex3"),
+        aoc::Data::String("10"),
         crate::part2
     );
     aoc::testfn!(
         example4,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p2ex4"),
-        "5",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p2ex4"),
+        aoc::Data::String("5"),
         crate::part2
     );
     aoc::testfn!(
         example5,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day01/p2ex5"),
-        "14",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day01/p2ex5"),
+        aoc::Data::String("14"),
         crate::part2
     );
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2018/01"),
-        "56752",
+        aoc::Data::File("adventofcode/inputs/2018/01"),
+        aoc::Data::String("56752"),
         crate::part2
     );
 }

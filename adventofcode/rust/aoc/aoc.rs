@@ -32,25 +32,26 @@ impl fmt::Display for Part {
     }
 }
 
-pub enum Input<'a> {
+pub enum Data<'a> {
     String(&'a str),
     File(&'a str),
 }
 
-impl Input<'_> {
+impl Data<'_> {
     fn to_string(&self) -> Result<String, String> {
         match *self {
-            Input::String(s) => Ok(s.to_string()),
-            Input::File(path) => fs::read_to_string(path).map_err(|e| e.to_string()),
+            Data::String(s) => Ok(s.to_string()),
+            Data::File(path) => fs::read_to_string(path).map_err(|e| e.to_string()),
         }
     }
 }
 
-pub fn run_test(input: Input, want: &str, s: Solution) {
+pub fn run_test(input: Data, want: Data, s: Solution) {
     let input_string = input.to_string().expect("Couldn't convert input to string");
+    let want_string = want.to_string().expect("Couldn't convert want to string");
     let got = s(&input_string).expect("Error in running solution");
-    if got != want {
-        panic!("got = {:?}; want {:?}", got, want)
+    if got != want_string {
+        panic!("got = {:?}; want {:?}", got, want_string)
     }
 }
 
@@ -60,8 +61,8 @@ macro_rules! testfn {
         #[test]
         fn $name() {
             use adventofcode_rust_aoc as aoc;
-            let input: aoc::Input = $input;
-            let want: &str = $want;
+            let input: aoc::Data = $input;
+            let want: aoc::Data = $want;
             let solution: aoc::Solution = $solution;
             aoc::run_test(input, want, solution);
         }

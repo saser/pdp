@@ -2,70 +2,110 @@ use adventofcode_rust_aoc as aoc;
 
 mod part1 {
     use super::*;
-    aoc::testfn!(example1, aoc::Input::String("{}"), "1", crate::part1);
-    aoc::testfn!(example2, aoc::Input::String("{{{}}}"), "6", crate::part1);
-    aoc::testfn!(example3, aoc::Input::String("{{},{}}"), "5", crate::part1);
+    aoc::testfn!(
+        example1,
+        aoc::Data::String("{}"),
+        aoc::Data::String("1"),
+        crate::part1
+    );
+    aoc::testfn!(
+        example2,
+        aoc::Data::String("{{{}}}"),
+        aoc::Data::String("6"),
+        crate::part1
+    );
+    aoc::testfn!(
+        example3,
+        aoc::Data::String("{{},{}}"),
+        aoc::Data::String("5"),
+        crate::part1
+    );
     aoc::testfn!(
         example4,
-        aoc::Input::String("{{{},{},{{}}}}"),
-        "16",
+        aoc::Data::String("{{{},{},{{}}}}"),
+        aoc::Data::String("16"),
         crate::part1
     );
     aoc::testfn!(
         example5,
-        aoc::Input::String("{<a>,<a>,<a>,<a>}"),
-        "1",
+        aoc::Data::String("{<a>,<a>,<a>,<a>}"),
+        aoc::Data::String("1"),
         crate::part1
     );
     aoc::testfn!(
         example6,
-        aoc::Input::String("{{<ab>},{<ab>},{<ab>},{<ab>}}"),
-        "9",
+        aoc::Data::String("{{<ab>},{<ab>},{<ab>},{<ab>}}"),
+        aoc::Data::String("9"),
         crate::part1
     );
     aoc::testfn!(
         example7,
-        aoc::Input::String("{{<!!>},{<!!>},{<!!>},{<!!>}}"),
-        "9",
+        aoc::Data::String("{{<!!>},{<!!>},{<!!>},{<!!>}}"),
+        aoc::Data::String("9"),
         crate::part1
     );
     aoc::testfn!(
         example8,
-        aoc::Input::String("{{<a!>},{<a!>},{<a!>},{<ab>}}"),
-        "3",
+        aoc::Data::String("{{<a!>},{<a!>},{<a!>},{<ab>}}"),
+        aoc::Data::String("3"),
         crate::part1
     );
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2017/09"),
-        "21037",
+        aoc::Data::File("adventofcode/inputs/2017/09"),
+        aoc::Data::String("21037"),
         crate::part1
     );
 }
 
 mod part2 {
     use super::*;
-    aoc::testfn!(example1, aoc::Input::String("<>"), "0", crate::part2);
     aoc::testfn!(
-        example2,
-        aoc::Input::String("<random characters>"),
-        "17",
+        example1,
+        aoc::Data::String("<>"),
+        aoc::Data::String("0"),
         crate::part2
     );
-    aoc::testfn!(example3, aoc::Input::String("<<<<>"), "3", crate::part2);
-    aoc::testfn!(example4, aoc::Input::String("<{!>}>"), "2", crate::part2);
-    aoc::testfn!(example5, aoc::Input::String("<!!>"), "0", crate::part2);
-    aoc::testfn!(example6, aoc::Input::String("<!!!>>"), "0", crate::part2);
+    aoc::testfn!(
+        example2,
+        aoc::Data::String("<random characters>"),
+        aoc::Data::String("17"),
+        crate::part2
+    );
+    aoc::testfn!(
+        example3,
+        aoc::Data::String("<<<<>"),
+        aoc::Data::String("3"),
+        crate::part2
+    );
+    aoc::testfn!(
+        example4,
+        aoc::Data::String("<{!>}>"),
+        aoc::Data::String("2"),
+        crate::part2
+    );
+    aoc::testfn!(
+        example5,
+        aoc::Data::String("<!!>"),
+        aoc::Data::String("0"),
+        crate::part2
+    );
+    aoc::testfn!(
+        example6,
+        aoc::Data::String("<!!!>>"),
+        aoc::Data::String("0"),
+        crate::part2
+    );
     aoc::testfn!(
         example7,
-        aoc::Input::String("<{o\"i!a,<{i<a>"),
-        "10",
+        aoc::Data::String("<{o\"i!a,<{i<a>"),
+        aoc::Data::String("10"),
         crate::part2
     );
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2017/09"),
-        "9495",
+        aoc::Data::File("adventofcode/inputs/2017/09"),
+        aoc::Data::String("9495"),
         crate::part2
     );
 }

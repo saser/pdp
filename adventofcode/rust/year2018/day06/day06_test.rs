@@ -4,14 +4,14 @@ mod part1 {
     use super::*;
     aoc::testfn!(
         example,
-        aoc::Input::File("adventofcode/rust/year2018/testdata/day06/ex"),
-        "17",
+        aoc::Data::File("adventofcode/rust/year2018/testdata/day06/ex"),
+        aoc::Data::String("17"),
         crate::part1
     );
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2018/06"),
-        "3687",
+        aoc::Data::File("adventofcode/inputs/2018/06"),
+        aoc::Data::String("3687"),
         crate::part1
     );
 }
@@ -20,8 +20,8 @@ mod part2 {
     use super::*;
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2018/06"),
-        "40134",
+        aoc::Data::File("adventofcode/inputs/2018/06"),
+        aoc::Data::String("40134"),
         crate::part2
     );
 }

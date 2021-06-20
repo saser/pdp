@@ -15,8 +15,8 @@ mod part1 {
 
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2017/16"),
-        "kgdchlfniambejop",
+        aoc::Data::File("adventofcode/inputs/2017/16"),
+        aoc::Data::String("kgdchlfniambejop"),
         crate::part1
     );
 }
@@ -25,8 +25,8 @@ mod part2 {
     use super::*;
     aoc::testfn!(
         actual,
-        aoc::Input::File("adventofcode/inputs/2017/16"),
-        "fjpmholcibdgeakn",
+        aoc::Data::File("adventofcode/inputs/2017/16"),
+        aoc::Data::String("fjpmholcibdgeakn"),
         crate::part2
     );
 }
