@@ -4,8 +4,8 @@ rust_library(
     name = "day10",
     srcs = ["day10.rs"],
     crate_name = "adventofcode_rust_year2017_day10",
-    deps = ["//adventofcode/rust/aoc"],
     visibility = ["//adventofcode/rust/year2017/day14:__pkg__"],
+    deps = ["//adventofcode/rust/aoc"],
 )
 
 rust_test(
