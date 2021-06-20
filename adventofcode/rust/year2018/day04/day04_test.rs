@@ -10,7 +10,7 @@ mod part1 {
     );
     aoc::testfn!(
         actual,
-        aoc::Data::File("adventofcode/inputs/2018/04"),
+        aoc::Data::File("adventofcode/data/year2018/day04/actual.in"),
         aoc::Data::String("125444"),
         crate::part1
     );
@@ -26,7 +26,7 @@ mod part2 {
     );
     aoc::testfn!(
         actual,
-        aoc::Data::File("adventofcode/inputs/2018/04"),
+        aoc::Data::File("adventofcode/data/year2018/day04/actual.in"),
         aoc::Data::String("18325"),
         crate::part2
     );

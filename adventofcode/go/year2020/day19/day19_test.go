@@ -9,7 +9,7 @@ import (
 var (
 	part1ExampleFile = testcase.Runfile("adventofcode/go/year2020/day19/testdata/p1example")
 	part2ExampleFile = testcase.Runfile("adventofcode/go/year2020/day19/testdata/p2example")
-	inputFile        = testcase.Runfile("adventofcode/inputs/2020/19")
+	inputFile        = testcase.Runfile("adventofcode/data/year2020/day19/actual.in")
 
 	tcPart1 = testcase.NewFile("input", inputFile, "111")
 	tcPart2 = testcase.NewFile("input", inputFile, "343")

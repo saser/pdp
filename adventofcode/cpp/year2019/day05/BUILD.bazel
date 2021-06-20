@@ -14,7 +14,7 @@ cc_library(
 cc_test(
     name = "day05_test",
     srcs = ["day05_test.cc"],
-    data = ["//adventofcode/inputs:2019/05"],
+    data = ["//adventofcode/data/year2019/day05:actual.in"],
     deps = [
         ":day05",
         "@googletest//:gtest_main",
@@ -24,7 +24,7 @@ cc_test(
 cc_binary(
     name = "day05_benchmark",
     srcs = ["day05_benchmark.cc"],
-    data = ["//adventofcode/inputs:2019/05"],
+    data = ["//adventofcode/data/year2019/day05:actual.in"],
     deps = [
         ":day05",
         "@googlebenchmark//:benchmark_main",

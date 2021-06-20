@@ -6,7 +6,7 @@ import (
 	"github.com/Saser/pdp/adventofcode/go/testcase"
 )
 
-var inputFile = testcase.Runfile("adventofcode/inputs/2020/05")
+var inputFile = testcase.Runfile("adventofcode/data/year2020/day05/actual.in")
 
 var (
 	tcPart1 = testcase.NewFile("input", inputFile, "832")

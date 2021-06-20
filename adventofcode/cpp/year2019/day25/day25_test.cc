@@ -8,7 +8,7 @@
 #include "adventofcode/cpp/adventofcode.h"
 
 TEST(Year2019Day25, Part1Actual) {
-  std::ifstream input("adventofcode/inputs/2019/25");
+  std::ifstream input("adventofcode/data/year2019/day25/actual.in");
   std::string output = "2622472";
   adventofcode::answer_t a = day25::part1(input);
   EXPECT_EQ("", a.error);

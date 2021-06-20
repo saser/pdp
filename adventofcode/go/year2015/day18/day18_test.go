@@ -11,7 +11,7 @@ var (
 	exampleIterationsPart1 = 4
 	exampleIterationsPart2 = 5
 	exampleGridSize        = 6
-	inputFile              = testcase.Runfile("adventofcode/inputs/2015/18")
+	inputFile              = testcase.Runfile("adventofcode/data/year2015/day18/actual.in")
 
 	tcPart1 = testcase.NewFile("input", inputFile, "1061")
 	tcPart2 = testcase.NewFile("input", inputFile, "1006")

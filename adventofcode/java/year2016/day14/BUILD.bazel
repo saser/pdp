@@ -3,7 +3,7 @@ load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
 java_library(
     name = "day14_benchmark_lib",
     srcs = ["Day14Benchmark.java"],
-    data = ["//adventofcode/inputs:2016/14"],
+    data = ["//adventofcode/data/year2016/day14:actual.in"],
     plugins = ["//adventofcode/java:benchmark_annotation_processor"],
     deps = [
         "//adventofcode/java/year2016/day14",
@@ -29,7 +29,7 @@ java_library(
 java_test(
     name = "day14_test",
     srcs = ["Day14Test.java"],
-    data = ["//adventofcode/inputs:2016/14"],
+    data = ["//adventofcode/data/year2016/day14:actual.in"],
     test_class = "adventofcode.java.year2016.day14.Day14Test",
     deps = [
         "//adventofcode/java/result",

@@ -11,7 +11,7 @@ import org.junit.Assert;
 public class Day08Test {
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("adventofcode/inputs/2016/08")) {
+        try (var input = new FileReader("adventofcode/data/year2016/day08/actual.in")) {
             var output = "116";
             var result = Day08.part1(input);
             Assert.assertEquals("no error", "", result.error);
@@ -21,7 +21,7 @@ public class Day08Test {
 
      @Test
      public void part2Actual() throws IOException {
-         try (var input = new FileReader("adventofcode/inputs/2016/08");
+         try (var input = new FileReader("adventofcode/data/year2016/day08/actual.in");
               var outputStream = new FileInputStream("adventofcode/java/testdata/year2016/day08/output")) {
              var outputBytes = new BufferedInputStream(outputStream).readAllBytes();
              var output = new String(outputBytes);

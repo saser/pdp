@@ -13,7 +13,7 @@ cc_library(
 cc_test(
     name = "day06_test",
     srcs = ["day06_test.cc"],
-    data = glob(["testdata/*"]) + ["//adventofcode/inputs:2019/06"],
+    data = glob(["testdata/*"]) + ["//adventofcode/data/year2019/day06:actual.in"],
     deps = [
         ":day06",
         "@googletest//:gtest_main",
@@ -23,7 +23,7 @@ cc_test(
 cc_binary(
     name = "day06_benchmark",
     srcs = ["day06_benchmark.cc"],
-    data = ["//adventofcode/inputs:2019/06"],
+    data = ["//adventofcode/data/year2019/day06:actual.in"],
     deps = [
         ":day06",
         "@googlebenchmark//:benchmark_main",

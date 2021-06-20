@@ -10,7 +10,7 @@ go_library(
 go_test(
     name = "day18_test",
     srcs = ["day18_test.go"],
-    data = glob(["testdata/**"]) + ["//adventofcode/inputs:2015/18"],
+    data = glob(["testdata/**"]) + ["//adventofcode/data/year2015/day18:actual.in"],
     embed = [":day18"],
     deps = ["//adventofcode/go/testcase"],
 )

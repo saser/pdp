@@ -15,7 +15,7 @@ mod part1 {
 
     aoc::testfn!(
         actual,
-        aoc::Data::File("adventofcode/inputs/2017/16"),
+        aoc::Data::File("adventofcode/data/year2017/day16/actual.in"),
         aoc::Data::String("kgdchlfniambejop"),
         crate::part1
     );
@@ -25,7 +25,7 @@ mod part2 {
     use super::*;
     aoc::testfn!(
         actual,
-        aoc::Data::File("adventofcode/inputs/2017/16"),
+        aoc::Data::File("adventofcode/data/year2017/day16/actual.in"),
         aoc::Data::String("fjpmholcibdgeakn"),
         crate::part2
     );

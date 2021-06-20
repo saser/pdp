@@ -10,7 +10,7 @@ cc_library(
 cc_test(
     name = "day24_test",
     srcs = ["day24_test.cc"],
-    data = glob(["testdata/*"]) + ["//adventofcode/inputs:2019/24"],
+    data = glob(["testdata/*"]) + ["//adventofcode/data/year2019/day24:actual.in"],
     deps = [
         ":day24",
         "@googletest//:gtest_main",
@@ -20,7 +20,7 @@ cc_test(
 cc_binary(
     name = "day24_benchmark",
     srcs = ["day24_benchmark.cc"],
-    data = ["//adventofcode/inputs:2019/24"],
+    data = ["//adventofcode/data/year2019/day24:actual.in"],
     deps = [
         ":day24",
         "@googlebenchmark//:benchmark_main",

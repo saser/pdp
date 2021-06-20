@@ -16,7 +16,7 @@ rust_test(
     srcs = ["day03_test.rs"],
     crate = ":day03",
     data = [
-        "//adventofcode/inputs:2018/03",
+        "//adventofcode/data/year2018/day03:actual.in",
         "//adventofcode/rust/year2018/testdata/day03:ex",
     ],
 )

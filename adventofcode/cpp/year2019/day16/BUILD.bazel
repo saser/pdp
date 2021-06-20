@@ -10,7 +10,7 @@ cc_library(
 cc_test(
     name = "day16_test",
     srcs = ["day16_test.cc"],
-    data = ["//adventofcode/inputs:2019/16"],
+    data = ["//adventofcode/data/year2019/day16:actual.in"],
     deps = [
         ":day16",
         "@googletest//:gtest_main",
@@ -20,7 +20,7 @@ cc_test(
 cc_binary(
     name = "day16_benchmark",
     srcs = ["day16_benchmark.cc"],
-    data = ["//adventofcode/inputs:2019/16"],
+    data = ["//adventofcode/data/year2019/day16:actual.in"],
     deps = [
         ":day16",
         "@googlebenchmark//:benchmark_main",

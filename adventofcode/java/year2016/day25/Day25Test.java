@@ -9,7 +9,7 @@ import org.junit.Assert;
 public class Day25Test {
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("adventofcode/inputs/2016/25")) {
+        try (var input = new FileReader("adventofcode/data/year2016/day25/actual.in")) {
             var output = "192";
             var result = Day25.part1(input);
             Assert.assertEquals("no error", "", result.error);

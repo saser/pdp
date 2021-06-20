@@ -53,7 +53,7 @@ TEST(Year2019Day18, Part1Example5) {
 }
 
 TEST(Year2019Day18, Part1Actual) {
-  std::ifstream input("adventofcode/inputs/2019/18");
+  std::ifstream input("adventofcode/data/year2019/day18/actual.in");
   std::string output = "5402";
   adventofcode::answer_t a = day18::part1(input);
   EXPECT_EQ("", a.error);
@@ -98,7 +98,7 @@ TEST(Year2019Day18, Part2Example4) {
 }
 
 TEST(Year2019Day18, Part2Actual) {
-  std::ifstream input("adventofcode/inputs/2019/18");
+  std::ifstream input("adventofcode/data/year2019/day18/actual.in");
   std::string output = "2138";
   adventofcode::answer_t a = day18::part2(input);
   EXPECT_EQ("", a.error);

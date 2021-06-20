@@ -5,7 +5,7 @@
 #include "benchmark/benchmark.h"
 
 static void Year2019Day22Part1(benchmark::State& state) {
-  std::ifstream input("adventofcode/inputs/2019/22");
+  std::ifstream input("adventofcode/data/year2019/day22/actual.in");
   for (auto _ : state) {
     day22::part1(input);
     input.clear();
@@ -15,7 +15,7 @@ static void Year2019Day22Part1(benchmark::State& state) {
 BENCHMARK(Year2019Day22Part1);
 
 static void Year2019Day22Part2(benchmark::State& state) {
-  std::ifstream input("adventofcode/inputs/2019/22");
+  std::ifstream input("adventofcode/data/year2019/day22/actual.in");
   for (auto _ : state) {
     day22::part2(input);
     input.clear();
