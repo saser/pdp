@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package adventofcode;
+
+option go_package = "github.com/Saser/pdp/adventofcode/adventofcode_go_proto";
+
+// An identifier for a single problem.
+message ProblemID {
+  // Which year the problem is in.
+  int32 year = 1;
+
+  // Which day of the year the problem is in.
+  int32 day = 2;
+
+  enum Part {
+    PART_UNSPECIFIED = 0;
+    ONE = 1;
+    TWO = 2;
+  }
+
+  // Which part of the problem this is.
+  Part part = 3;
+}
+
+// A complete instance of a problem, consisting of an identifier for the problem, as well as an
+// input and a corresponding answer.
+message ProblemInstance {
+  // Which problem this is an instance of.
+  ProblemID problem_id = 1;
+
+  // A name for this instance, e.g., "actual" or "example1".
+  string name = 2;
+
+  // The input as it is given on the Advent of Code website.
+  string input = 3;
+
+  // The answer as it is given on the Advent of Code website.
+  string answer = 4;
+}
