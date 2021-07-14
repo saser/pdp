@@ -1,9 +1,9 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "get_lib",
-    srcs = ["get.go"],
-    importpath = "github.com/Saser/pdp/adventofcode/data/get",
+    name = "getanswer_lib",
+    srcs = ["getanswer.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/data/getanswer",
     visibility = ["//visibility:private"],
     deps = [
         "@org_golang_x_net//publicsuffix",
@@ -12,7 +12,7 @@ go_library(
 )
 
 go_binary(
-    name = "get",
-    embed = [":get_lib"],
+    name = "getanswer",
+    embed = [":getanswer_lib"],
     visibility = ["//visibility:public"],
 )
