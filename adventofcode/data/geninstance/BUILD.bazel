@@ -5,7 +5,10 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/Saser/pdp/adventofcode/data/geninstance",
     visibility = ["//visibility:private"],
-    deps = ["//adventofcode/adventofcode_go_proto"],
+    deps = [
+        "//adventofcode/adventofcode_go_proto",
+        "@org_golang_google_protobuf//encoding/prototext",
+    ],
 )
 
 go_binary(
