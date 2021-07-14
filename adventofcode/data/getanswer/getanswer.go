@@ -113,12 +113,6 @@ func parseAnswers(body string) []string {
 	return answers
 }
 
-func main() {
-	if err := emain(); err != nil {
-		log.Print(err)
-	}
-}
-
 func problemRequest(ctx context.Context, year, day int) (*http.Request, error) {
 	url := fmt.Sprintf("%s/%d/day/%d", baseURL, year, day)
 	r, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -126,4 +120,10 @@ func problemRequest(ctx context.Context, year, day int) (*http.Request, error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+func main() {
+	if err := emain(); err != nil {
+		log.Print(err)
+	}
 }
