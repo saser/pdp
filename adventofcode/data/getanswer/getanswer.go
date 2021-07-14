@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	session = flag.String("session", "", "The session cookie.")
+	session = flag.String("session", "", `The value to use for the "session" cookie.`)
 
 	answerRE = regexp.MustCompile(`Your puzzle answer was \<code\>(.+?)\</code\>`)
 )
