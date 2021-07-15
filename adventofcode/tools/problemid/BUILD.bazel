@@ -16,5 +16,9 @@ go_test(
     name = "problemid_test",
     srcs = ["flag_test.go"],
     embed = [":problemid"],
-    deps = ["//adventofcode/adventofcode_go_proto"],
+    deps = [
+        "//adventofcode/adventofcode_go_proto",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_protobuf//testing/protocmp",
+    ],
 )
