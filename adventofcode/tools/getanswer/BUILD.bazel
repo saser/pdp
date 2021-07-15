@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 go_library(
     name = "getanswer_lib",
     srcs = ["getanswer.go"],
-    importpath = "github.com/Saser/pdp/adventofcode/data/getanswer",
+    importpath = "github.com/Saser/pdp/adventofcode/tools/getanswer",
     visibility = ["//visibility:private"],
     deps = [
         "@org_golang_x_net//publicsuffix",
