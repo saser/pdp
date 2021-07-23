@@ -60,3 +60,8 @@ func Flag(fs *flag.FlagSet, name string, value *adventofcodepb.ProblemID, usage 
 	fs.Var(v, name, usage)
 	return v.id
 }
+
+func FlagVar(fs *flag.FlagSet, value *adventofcodepb.ProblemID, name string, usage string) {
+	v := &problemIDValue{id: value}
+	fs.Var(v, name, usage)
+}

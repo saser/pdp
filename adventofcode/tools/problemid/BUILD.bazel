@@ -19,6 +19,7 @@ go_test(
     deps = [
         "//adventofcode/adventofcode_go_proto",
         "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_protobuf//proto",
         "@org_golang_google_protobuf//testing/protocmp",
     ],
 )
