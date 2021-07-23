@@ -9,9 +9,10 @@ require (
 	github.com/google/go-cmp v0.5.6
 	github.com/lib/pq v1.10.2
 	github.com/ory/dockertest/v3 v3.6.5
-	golang.org/x/net v0.0.0-20191003171128-d98b1b443823
+	github.com/spf13/cobra v1.2.1
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
+	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c
 	google.golang.org/grpc v1.38.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0

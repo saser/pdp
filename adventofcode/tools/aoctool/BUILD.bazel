@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "aoctool_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/tools/aoctool",
+    visibility = ["//visibility:private"],
+    deps = ["//adventofcode/tools/aoctool/cmd"],
+)
+
+go_binary(
+    name = "aoctool",
+    embed = [":aoctool_lib"],
+    visibility = ["//visibility:public"],
+)
