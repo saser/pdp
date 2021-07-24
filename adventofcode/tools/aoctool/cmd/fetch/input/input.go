@@ -1,8 +1,12 @@
 package input
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
 
+	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch/client"
 	"github.com/spf13/cobra"
 )
 
@@ -10,6 +14,7 @@ var (
 	cmd = &cobra.Command{
 		Use:   "input",
 		Short: "Download the input to a problem from the Advent of Code website.",
+		Long:  "Authenticates using the given session to download the input from the Advent of Code website. The input is printed to stdout.",
 		RunE:  runE,
 	}
 
@@ -29,10 +34,28 @@ func Cmd() *cobra.Command {
 }
 
 func runE(cmd *cobra.Command, args []string) error {
+	if year < 2015 || year > 2020 {
+		return fmt.Errorf("--year=%d is outside range [2015, 2020]", year)
+	}
+	if day < 1 || day > 25 {
+		return fmt.Errorf("--day=%d is outside range [1, 25]", day)
+	}
 	session, err := cmd.Flags().GetString("session")
 	if err != nil {
 		return err
 	}
-	fmt.Printf("fetch input: year=%d, day=%d (session=%q)\n", year, day, session)
+
+	c, err := client.New(session)
+	if err != nil {
+		return err
+	}
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+	input, err := c.GetInput(ctx, year, day)
+	if err != nil {
+		return err
+	}
+	fmt.Print(input)
 	return nil
 }
