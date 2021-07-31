@@ -5,5 +5,8 @@ go_library(
     srcs = ["generate.go"],
     importpath = "github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate",
     visibility = ["//visibility:public"],
-    deps = ["@com_github_spf13_cobra//:cobra"],
+    deps = [
+        "//adventofcode/tools/aoctool/cmd/generate/instance",
+        "@com_github_spf13_cobra//:cobra",
+    ],
 )
