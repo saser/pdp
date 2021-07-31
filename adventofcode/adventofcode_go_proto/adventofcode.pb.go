@@ -20,71 +20,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ProblemID_Part int32
-
-const (
-	ProblemID_PART_UNSPECIFIED ProblemID_Part = 0
-	ProblemID_ONE              ProblemID_Part = 1
-	ProblemID_TWO              ProblemID_Part = 2
-)
-
-// Enum value maps for ProblemID_Part.
-var (
-	ProblemID_Part_name = map[int32]string{
-		0: "PART_UNSPECIFIED",
-		1: "ONE",
-		2: "TWO",
-	}
-	ProblemID_Part_value = map[string]int32{
-		"PART_UNSPECIFIED": 0,
-		"ONE":              1,
-		"TWO":              2,
-	}
-)
-
-func (x ProblemID_Part) Enum() *ProblemID_Part {
-	p := new(ProblemID_Part)
-	*p = x
-	return p
-}
-
-func (x ProblemID_Part) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (ProblemID_Part) Descriptor() protoreflect.EnumDescriptor {
-	return file_adventofcode_adventofcode_proto_enumTypes[0].Descriptor()
-}
-
-func (ProblemID_Part) Type() protoreflect.EnumType {
-	return &file_adventofcode_adventofcode_proto_enumTypes[0]
-}
-
-func (x ProblemID_Part) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use ProblemID_Part.Descriptor instead.
-func (ProblemID_Part) EnumDescriptor() ([]byte, []int) {
-	return file_adventofcode_adventofcode_proto_rawDescGZIP(), []int{0, 0}
-}
-
 // An identifier for a single problem.
-type ProblemID struct {
+type Problem struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Which year the problem is in.
+	// Which year the problem is in. Must be a value in the range [2015, 2020].
 	Year int32 `protobuf:"varint,1,opt,name=year,proto3" json:"year,omitempty"`
-	// Which day of the year the problem is in.
+	// Which day of the year the problem is in. Must be a value in the range [1, 25].
 	Day int32 `protobuf:"varint,2,opt,name=day,proto3" json:"day,omitempty"`
-	// Which part of the problem this is.
-	Part ProblemID_Part `protobuf:"varint,3,opt,name=part,proto3,enum=adventofcode.ProblemID_Part" json:"part,omitempty"`
+	// Which part of the problem this is. Must be either 1 or 2.
+	Part int32 `protobuf:"varint,3,opt,name=part,proto3" json:"part,omitempty"`
 }
 
-func (x *ProblemID) Reset() {
-	*x = ProblemID{}
+func (x *Problem) Reset() {
+	*x = Problem{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_adventofcode_adventofcode_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -92,13 +43,13 @@ func (x *ProblemID) Reset() {
 	}
 }
 
-func (x *ProblemID) String() string {
+func (x *Problem) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ProblemID) ProtoMessage() {}
+func (*Problem) ProtoMessage() {}
 
-func (x *ProblemID) ProtoReflect() protoreflect.Message {
+func (x *Problem) ProtoReflect() protoreflect.Message {
 	mi := &file_adventofcode_adventofcode_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -110,51 +61,49 @@ func (x *ProblemID) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ProblemID.ProtoReflect.Descriptor instead.
-func (*ProblemID) Descriptor() ([]byte, []int) {
+// Deprecated: Use Problem.ProtoReflect.Descriptor instead.
+func (*Problem) Descriptor() ([]byte, []int) {
 	return file_adventofcode_adventofcode_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ProblemID) GetYear() int32 {
+func (x *Problem) GetYear() int32 {
 	if x != nil {
 		return x.Year
 	}
 	return 0
 }
 
-func (x *ProblemID) GetDay() int32 {
+func (x *Problem) GetDay() int32 {
 	if x != nil {
 		return x.Day
 	}
 	return 0
 }
 
-func (x *ProblemID) GetPart() ProblemID_Part {
+func (x *Problem) GetPart() int32 {
 	if x != nil {
 		return x.Part
 	}
-	return ProblemID_PART_UNSPECIFIED
+	return 0
 }
 
 // A complete instance of a problem, consisting of an identifier for the problem, as well as an
 // input and a corresponding answer.
-type ProblemInstance struct {
+type Instance struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// Which problem this is an instance of.
-	ProblemId *ProblemID `protobuf:"bytes,1,opt,name=problem_id,json=problemId,proto3" json:"problem_id,omitempty"`
-	// A name for this instance, e.g., "actual" or "example1".
-	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Problem *Problem `protobuf:"bytes,1,opt,name=problem,proto3" json:"problem,omitempty"`
 	// The input as it is given on the Advent of Code website.
-	Input string `protobuf:"bytes,3,opt,name=input,proto3" json:"input,omitempty"`
+	Input string `protobuf:"bytes,2,opt,name=input,proto3" json:"input,omitempty"`
 	// The answer as it is given on the Advent of Code website.
-	Answer string `protobuf:"bytes,4,opt,name=answer,proto3" json:"answer,omitempty"`
+	Answer string `protobuf:"bytes,3,opt,name=answer,proto3" json:"answer,omitempty"`
 }
 
-func (x *ProblemInstance) Reset() {
-	*x = ProblemInstance{}
+func (x *Instance) Reset() {
+	*x = Instance{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_adventofcode_adventofcode_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -162,13 +111,13 @@ func (x *ProblemInstance) Reset() {
 	}
 }
 
-func (x *ProblemInstance) String() string {
+func (x *Instance) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ProblemInstance) ProtoMessage() {}
+func (*Instance) ProtoMessage() {}
 
-func (x *ProblemInstance) ProtoReflect() protoreflect.Message {
+func (x *Instance) ProtoReflect() protoreflect.Message {
 	mi := &file_adventofcode_adventofcode_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -180,33 +129,26 @@ func (x *ProblemInstance) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ProblemInstance.ProtoReflect.Descriptor instead.
-func (*ProblemInstance) Descriptor() ([]byte, []int) {
+// Deprecated: Use Instance.ProtoReflect.Descriptor instead.
+func (*Instance) Descriptor() ([]byte, []int) {
 	return file_adventofcode_adventofcode_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ProblemInstance) GetProblemId() *ProblemID {
+func (x *Instance) GetProblem() *Problem {
 	if x != nil {
-		return x.ProblemId
+		return x.Problem
 	}
 	return nil
 }
 
-func (x *ProblemInstance) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *ProblemInstance) GetInput() string {
+func (x *Instance) GetInput() string {
 	if x != nil {
 		return x.Input
 	}
 	return ""
 }
 
-func (x *ProblemInstance) GetAnswer() string {
+func (x *Instance) GetAnswer() string {
 	if x != nil {
 		return x.Answer
 	}
@@ -219,29 +161,22 @@ var file_adventofcode_adventofcode_proto_rawDesc = []byte{
 	0x0a, 0x1f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x2f, 0x61,
 	0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x12, 0x0c, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x22,
-	0x93, 0x01, 0x0a, 0x09, 0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x49, 0x44, 0x12, 0x12, 0x0a,
-	0x04, 0x79, 0x65, 0x61, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x79, 0x65, 0x61,
-	0x72, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x61, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x03,
-	0x64, 0x61, 0x79, 0x12, 0x30, 0x0a, 0x04, 0x70, 0x61, 0x72, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x0e, 0x32, 0x1c, 0x2e, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65,
-	0x2e, 0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x49, 0x44, 0x2e, 0x50, 0x61, 0x72, 0x74, 0x52,
-	0x04, 0x70, 0x61, 0x72, 0x74, 0x22, 0x2e, 0x0a, 0x04, 0x50, 0x61, 0x72, 0x74, 0x12, 0x14, 0x0a,
-	0x10, 0x50, 0x41, 0x52, 0x54, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
-	0x44, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x4f, 0x4e, 0x45, 0x10, 0x01, 0x12, 0x07, 0x0a, 0x03,
-	0x54, 0x57, 0x4f, 0x10, 0x02, 0x22, 0x8b, 0x01, 0x0a, 0x0f, 0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65,
-	0x6d, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x12, 0x36, 0x0a, 0x0a, 0x70, 0x72, 0x6f,
-	0x62, 0x6c, 0x65, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e,
-	0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x50, 0x72, 0x6f,
-	0x62, 0x6c, 0x65, 0x6d, 0x49, 0x44, 0x52, 0x09, 0x70, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x49,
-	0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61,
-	0x6e, 0x73, 0x77, 0x65, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6e, 0x73,
-	0x77, 0x65, 0x72, 0x42, 0x39, 0x5a, 0x37, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x53, 0x61, 0x73, 0x65, 0x72, 0x2f, 0x70, 0x64, 0x70, 0x2f, 0x61, 0x64, 0x76, 0x65,
-	0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f,
-	0x66, 0x63, 0x6f, 0x64, 0x65, 0x5f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x43, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x12, 0x12, 0x0a, 0x04, 0x79, 0x65,
+	0x61, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x79, 0x65, 0x61, 0x72, 0x12, 0x10,
+	0x0a, 0x03, 0x64, 0x61, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x03, 0x64, 0x61, 0x79,
+	0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x72, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04,
+	0x70, 0x61, 0x72, 0x74, 0x22, 0x69, 0x0a, 0x08, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65,
+	0x12, 0x2f, 0x0a, 0x07, 0x70, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x15, 0x2e, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65,
+	0x2e, 0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x52, 0x07, 0x70, 0x72, 0x6f, 0x62, 0x6c, 0x65,
+	0x6d, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65,
+	0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x42,
+	0x39, 0x5a, 0x37, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x53, 0x61,
+	0x73, 0x65, 0x72, 0x2f, 0x70, 0x64, 0x70, 0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66,
+	0x63, 0x6f, 0x64, 0x65, 0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64,
+	0x65, 0x5f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -256,21 +191,18 @@ func file_adventofcode_adventofcode_proto_rawDescGZIP() []byte {
 	return file_adventofcode_adventofcode_proto_rawDescData
 }
 
-var file_adventofcode_adventofcode_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_adventofcode_adventofcode_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_adventofcode_adventofcode_proto_goTypes = []interface{}{
-	(ProblemID_Part)(0),     // 0: adventofcode.ProblemID.Part
-	(*ProblemID)(nil),       // 1: adventofcode.ProblemID
-	(*ProblemInstance)(nil), // 2: adventofcode.ProblemInstance
+	(*Problem)(nil),  // 0: adventofcode.Problem
+	(*Instance)(nil), // 1: adventofcode.Instance
 }
 var file_adventofcode_adventofcode_proto_depIdxs = []int32{
-	0, // 0: adventofcode.ProblemID.part:type_name -> adventofcode.ProblemID.Part
-	1, // 1: adventofcode.ProblemInstance.problem_id:type_name -> adventofcode.ProblemID
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 0: adventofcode.Instance.problem:type_name -> adventofcode.Problem
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_adventofcode_adventofcode_proto_init() }
@@ -280,7 +212,7 @@ func file_adventofcode_adventofcode_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_adventofcode_adventofcode_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProblemID); i {
+			switch v := v.(*Problem); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -292,7 +224,7 @@ func file_adventofcode_adventofcode_proto_init() {
 			}
 		}
 		file_adventofcode_adventofcode_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProblemInstance); i {
+			switch v := v.(*Instance); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -309,14 +241,13 @@ func file_adventofcode_adventofcode_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_adventofcode_adventofcode_proto_rawDesc,
-			NumEnums:      1,
+			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_adventofcode_adventofcode_proto_goTypes,
 		DependencyIndexes: file_adventofcode_adventofcode_proto_depIdxs,
-		EnumInfos:         file_adventofcode_adventofcode_proto_enumTypes,
 		MessageInfos:      file_adventofcode_adventofcode_proto_msgTypes,
 	}.Build()
 	File_adventofcode_adventofcode_proto = out.File
