@@ -1,10 +1,7 @@
 package input
 
 import (
-	"context"
 	"fmt"
-	"os"
-	"os/signal"
 
 	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch/client"
 	"github.com/spf13/cobra"
@@ -50,8 +47,7 @@ func runE(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
+	ctx := cmd.Context()
 	input, err := c.GetInput(ctx, year, day)
 	if err != nil {
 		return err
