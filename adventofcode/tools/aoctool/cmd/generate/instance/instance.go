@@ -3,8 +3,14 @@ package instance
 import (
 	"errors"
 	"fmt"
+	"io/fs"
+	"os"
 
 	"github.com/spf13/cobra"
+	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
+
+	adventofcodepb "github.com/Saser/pdp/adventofcode/adventofcode_go_proto"
 )
 
 var (
@@ -20,6 +26,7 @@ var (
 	inputFile  string
 	answerFile string
 	format     string
+	outFile    string
 )
 
 func init() {
@@ -35,6 +42,8 @@ func init() {
 	cmd.MarkFlagRequired("answer_file")
 	cmd.Flags().StringVar(&format, "format", "", `The format to write the protobuf message in. Must be either "prototext" or "binary".`)
 	cmd.MarkFlagRequired("format")
+	cmd.Flags().StringVar(&outFile, "out_file", "", "Path to a file where the Instance message should be written.")
+	cmd.MarkFlagRequired("out_file")
 }
 
 func runE(cmd *cobra.Command, args []string) error {
@@ -50,10 +59,42 @@ func runE(cmd *cobra.Command, args []string) error {
 	if day == 25 && part == 2 {
 		return errors.New("there is no part 2 for day 25")
 	}
+	inputBytes, err := os.ReadFile(inputFile)
+	if err != nil {
+		return err
+	}
+	input := string(inputBytes)
+	answerBytes, err := os.ReadFile(answerFile)
+	if err != nil {
+		return err
+	}
+	answer := string(answerBytes)
 	if format != "prototext" && format != "binary" {
 		return fmt.Errorf(`--format=%q is not a valid format; must be either "prototext" or "binary"`, format)
 	}
-	fmt.Printf("year=%d day=%d part=%d input_file=%q answer_file=%q format=%q\n", year, day, part, inputFile, answerFile, format)
+
+	instance := &adventofcodepb.Instance{
+		Problem: &adventofcodepb.Problem{
+			Year: int32(year),
+			Day:  int32(day),
+			Part: int32(part),
+		},
+		Input:  input,
+		Answer: answer,
+	}
+	var out []byte
+	switch format {
+	case "prototext":
+		out, err = prototext.MarshalOptions{Multiline: true}.Marshal(instance)
+	case "binary":
+		out, err = proto.Marshal(instance)
+	}
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(outFile, out, fs.FileMode(0644)); err != nil {
+		return err
+	}
 	return nil
 }
 
