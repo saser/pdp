@@ -155,6 +155,113 @@ func (x *Instance) GetAnswer() string {
 	return ""
 }
 
+// Request message for the Solve RPC.
+type SolveRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Which problem to solve.
+	Problem *Problem `protobuf:"bytes,1,opt,name=problem,proto3" json:"problem,omitempty"`
+	// What the input of the problem is.
+	Input string `protobuf:"bytes,2,opt,name=input,proto3" json:"input,omitempty"`
+}
+
+func (x *SolveRequest) Reset() {
+	*x = SolveRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_adventofcode_adventofcode_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SolveRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SolveRequest) ProtoMessage() {}
+
+func (x *SolveRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_adventofcode_adventofcode_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SolveRequest.ProtoReflect.Descriptor instead.
+func (*SolveRequest) Descriptor() ([]byte, []int) {
+	return file_adventofcode_adventofcode_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SolveRequest) GetProblem() *Problem {
+	if x != nil {
+		return x.Problem
+	}
+	return nil
+}
+
+func (x *SolveRequest) GetInput() string {
+	if x != nil {
+		return x.Input
+	}
+	return ""
+}
+
+// Response message for the Solve RPC.
+type SolveResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The answer as it should be entered on the Advent of Code website.
+	Answer string `protobuf:"bytes,1,opt,name=answer,proto3" json:"answer,omitempty"`
+}
+
+func (x *SolveResponse) Reset() {
+	*x = SolveResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_adventofcode_adventofcode_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SolveResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SolveResponse) ProtoMessage() {}
+
+func (x *SolveResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_adventofcode_adventofcode_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SolveResponse.ProtoReflect.Descriptor instead.
+func (*SolveResponse) Descriptor() ([]byte, []int) {
+	return file_adventofcode_adventofcode_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SolveResponse) GetAnswer() string {
+	if x != nil {
+		return x.Answer
+	}
+	return ""
+}
+
 var File_adventofcode_adventofcode_proto protoreflect.FileDescriptor
 
 var file_adventofcode_adventofcode_proto_rawDesc = []byte{
@@ -171,12 +278,24 @@ var file_adventofcode_adventofcode_proto_rawDesc = []byte{
 	0x2e, 0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x52, 0x07, 0x70, 0x72, 0x6f, 0x62, 0x6c, 0x65,
 	0x6d, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65,
-	0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x42,
-	0x39, 0x5a, 0x37, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x53, 0x61,
-	0x73, 0x65, 0x72, 0x2f, 0x70, 0x64, 0x70, 0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66,
-	0x63, 0x6f, 0x64, 0x65, 0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64,
-	0x65, 0x5f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x22,
+	0x55, 0x0a, 0x0c, 0x53, 0x6f, 0x6c, 0x76, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x2f, 0x0a, 0x07, 0x70, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x15, 0x2e, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x2e,
+	0x50, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d, 0x52, 0x07, 0x70, 0x72, 0x6f, 0x62, 0x6c, 0x65, 0x6d,
+	0x12, 0x14, 0x0a, 0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x22, 0x27, 0x0a, 0x0d, 0x53, 0x6f, 0x6c, 0x76, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x32,
+	0x4a, 0x0a, 0x06, 0x53, 0x6f, 0x6c, 0x76, 0x65, 0x72, 0x12, 0x40, 0x0a, 0x05, 0x53, 0x6f, 0x6c,
+	0x76, 0x65, 0x12, 0x1a, 0x2e, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64,
+	0x65, 0x2e, 0x53, 0x6f, 0x6c, 0x76, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
+	0x2e, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x53, 0x6f,
+	0x6c, 0x76, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x39, 0x5a, 0x37, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x53, 0x61, 0x73, 0x65, 0x72, 0x2f,
+	0x70, 0x64, 0x70, 0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65,
+	0x2f, 0x61, 0x64, 0x76, 0x65, 0x6e, 0x74, 0x6f, 0x66, 0x63, 0x6f, 0x64, 0x65, 0x5f, 0x67, 0x6f,
+	0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -191,18 +310,23 @@ func file_adventofcode_adventofcode_proto_rawDescGZIP() []byte {
 	return file_adventofcode_adventofcode_proto_rawDescData
 }
 
-var file_adventofcode_adventofcode_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_adventofcode_adventofcode_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_adventofcode_adventofcode_proto_goTypes = []interface{}{
-	(*Problem)(nil),  // 0: adventofcode.Problem
-	(*Instance)(nil), // 1: adventofcode.Instance
+	(*Problem)(nil),       // 0: adventofcode.Problem
+	(*Instance)(nil),      // 1: adventofcode.Instance
+	(*SolveRequest)(nil),  // 2: adventofcode.SolveRequest
+	(*SolveResponse)(nil), // 3: adventofcode.SolveResponse
 }
 var file_adventofcode_adventofcode_proto_depIdxs = []int32{
 	0, // 0: adventofcode.Instance.problem:type_name -> adventofcode.Problem
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 1: adventofcode.SolveRequest.problem:type_name -> adventofcode.Problem
+	2, // 2: adventofcode.Solver.Solve:input_type -> adventofcode.SolveRequest
+	3, // 3: adventofcode.Solver.Solve:output_type -> adventofcode.SolveResponse
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_adventofcode_adventofcode_proto_init() }
@@ -235,6 +359,30 @@ func file_adventofcode_adventofcode_proto_init() {
 				return nil
 			}
 		}
+		file_adventofcode_adventofcode_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SolveRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_adventofcode_adventofcode_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SolveResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -242,9 +390,9 @@ func file_adventofcode_adventofcode_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_adventofcode_adventofcode_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_adventofcode_adventofcode_proto_goTypes,
 		DependencyIndexes: file_adventofcode_adventofcode_proto_depIdxs,

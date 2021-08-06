@@ -4,6 +4,12 @@ package adventofcode;
 
 option go_package = "github.com/Saser/pdp/adventofcode/adventofcode_go_proto";
 
+// A service for solving Advent of Code problems.
+service Solver {
+  // Solve a single problem for a specific input.
+  rpc Solve(SolveRequest) returns (SolveResponse);
+}
+
 // An identifier for a single problem.
 message Problem {
   // Which year the problem is in. Must be a value in the range [2015, 2020].
@@ -27,4 +33,19 @@ message Instance {
 
   // The answer as it is given on the Advent of Code website.
   string answer = 3;
+}
+
+// Request message for the Solve RPC.
+message SolveRequest {
+  // Which problem to solve.
+  Problem problem = 1;
+
+  // What the input of the problem is.
+  string input = 2;
+}
+
+// Response message for the Solve RPC.
+message SolveResponse {
+  // The answer as it should be entered on the Advent of Code website.
+  string answer = 1;
 }

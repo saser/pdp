@@ -2,10 +2,16 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "adventofcode_go_proto",
-    srcs = ["adventofcode.pb.go"],
+    srcs = [
+        "adventofcode.pb.go",
+        "adventofcode_grpc.pb.go",
+    ],
     importpath = "github.com/Saser/pdp/adventofcode/adventofcode_go_proto",
     visibility = ["//visibility:public"],
     deps = [
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
         "@org_golang_google_protobuf//reflect/protoreflect",
         "@org_golang_google_protobuf//runtime/protoimpl",
     ],
