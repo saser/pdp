@@ -9,9 +9,9 @@ def instance_data(
     The arguments correspond to those in generate_instance.
     """
     if (input == None and input_file == None) or (input != None and input_file != None):
-        fail("exactly one of input and input_file is required; got input = %q, input_file = %q" % (input, input_file))
+        fail("exactly one of input and input_file is required; got input = \"%s\", input_file = \"%s\"" % (input, input_file))
     if (answer == None and answer_file == None) or (answer != None and answer_file != None):
-        fail("exactly one of answer and answer_file is required; got answer = %q, answer_file = %q" % (answer, answer_file))
+        fail("exactly one of answer and answer_file is required; got answer = %s, answer_file = %s" % (answer, answer_file))
 
     return struct(
         input = input,
@@ -49,9 +49,9 @@ def generate_instance(
     """
 
     if (input == None and input_file == None) or (input != None and input_file != None):
-        fail("exactly one of input and input_file must be specified; got input = %s and input_file = %s" % (input, input_file))
+        fail("exactly one of input and input_file must be specified; got input = \"%s\" and input_file = \"%s\"" % (input, input_file))
     if (answer == None and answer_file == None) or (answer != None and answer_file != None):
-        fail("exactly one of answer and answer_file must be specified; got answer = %s and answer_file = %s" % (answer, answer_file))
+        fail("exactly one of answer and answer_file must be specified; got answer = \"%s\" and answer_file = \"%s\"" % (answer, answer_file))
 
     srcs = []
     out_file = "%s.textproto" % name
