@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package adventofcode;
 
-option go_package = "github.com/Saser/pdp/adventofcode/adventofcode_go_proto";
+option go_package = "github.com/Saser/pdp/adventofcode/adventofcode_go_proto;adventofcodepb";
 
 // A service for solving Advent of Code problems.
 service Solver {
