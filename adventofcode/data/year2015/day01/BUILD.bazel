@@ -1,60 +1,69 @@
-load("//adventofcode/data:generate_instances.bzl", "generate_instances")
+load("//adventofcode/data:generate_instances.bzl", "generate_instances", "instance_data")
 
 exports_files(["actual.in"])
 
-part_one_examples = {
-    "part1_example1": [
-        "(())",
-        "0",
-    ],
-    "part1_example2": [
-        "()()",
-        "0",
-    ],
-    "part1_example3": [
-        "(((",
-        "3",
-    ],
-    "part1_example4": [
-        "(()(()(",
-        "3",
-    ],
-    "part1_example5": [
-        "))(((((",
-        "3",
-    ],
-    "part1_example6": [
-        "())",
-        "-1",
-    ],
-    "part1_example7": [
-        "))(",
-        "-1",
-    ],
-    "part1_example8": [
-        ")))",
-        "-3",
-    ],
-    "part1_example9": [
-        "))))())())",
-        "-3",
-    ],
-}
-
-part_two_examples = {
-    "part2_example1": [
-        ")",
-        "1",
-    ],
-    "part2_example2": [
-        "()())",
-        "5",
-    ],
+instances = {
+    "part1": {
+        "actual": instance_data(
+            answer = "232",
+            input_file = "actual.in",
+        ),
+        "example1": instance_data(
+            answer = "0",
+            input = "(())",
+        ),
+        "example2": instance_data(
+            answer = "0",
+            input = "()()",
+        ),
+        "example3": instance_data(
+            answer = "3",
+            input = "(((",
+        ),
+        "example4": instance_data(
+            answer = "3",
+            input = "(()(()(",
+        ),
+        "example5": instance_data(
+            answer = "3",
+            input = "))(((((",
+        ),
+        "example6": instance_data(
+            answer = "-1",
+            input = "())",
+        ),
+        "example7": instance_data(
+            answer = "-1",
+            input = "))(",
+        ),
+        "example8": instance_data(
+            answer = "-3",
+            input = ")))",
+        ),
+        "example9": instance_data(
+            answer = "-3",
+            input = "))))())())",
+        ),
+    },
+    "part2": {
+        "actual": instance_data(
+            answer = "1783",
+            input_file = "actual.in",
+        ),
+        "example1": instance_data(
+            answer = "1",
+            input = ")",
+        ),
+        "example2": instance_data(
+            answer = "5",
+            input = "()())",
+        ),
+    },
 }
 
 generate_instances(
     day = 1,
-    part_one_instances = part_one_examples,
-    part_two_instances = part_two_examples,
+    part1_instances = instances["part1"],
+    part2_instances = instances["part2"],
     year = 2015,
 )
