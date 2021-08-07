@@ -1,1 +1,46 @@
+load("//adventofcode/data:generate_instances.bzl", "generate_instances", "instance_data")
+
 exports_files(["actual.in"])
+
+instances = {
+    "part1": {
+        "actual": instance_data(
+            answer = "518",
+            input_file = "actual.in",
+        ),
+        "example1": instance_data(
+            answer = "4",
+            input_file = "part1_example1.in",
+        ),
+        "example2": instance_data(
+            answer = "7",
+            input_file = "part1_example2.in",
+        ),
+    },
+    "part2": {
+        "actual": instance_data(
+            answer = "200",
+            input_file = "actual.in",
+        ),
+        # The example test cases are off by one. This is due to a
+        # discrepancy between the example input and the actual input:
+        # in the actual input, all productions from "e" are to two
+        # other tokens, while in the example input the productions
+        # from "e" are to one other token.
+        "example1": instance_data(
+            answer = "2",
+            input_file = "part2_example1.in",
+        ),
+        "example2": instance_data(
+            answer = "5",
+            input_file = "part2_example2.in",
+        ),
+    },
+}
+
+generate_instances(
+    day = 19,
+    part1_instances = instances["part1"],
+    part2_instances = instances["part2"],
+    year = 2015,
+)
