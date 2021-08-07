@@ -1,3 +1,5 @@
+load("@bazel_skylib//lib:shell.bzl", "shell")
+
 def instance_data(
         input = None,
         input_file = None,
@@ -67,12 +69,12 @@ def generate_instance(
         "--out_file=\"$(location %s)\"" % out_file,
     ]
     if input != None:
-        cmd.append("--input=\"%s\"" % input)
+        cmd.append("--input=%s" % shell.quote(input))
     if input_file != None:
         cmd.append("--input_file=\"$(location %s)\"" % input_file)
         srcs.append(input_file)
     if answer != None:
-        cmd.append("--answer=\"%s\"" % answer)
+        cmd.append("--answer=%s" % shell.quote(answer))
     if answer_file != None:
         cmd.append("--answer_file=\"$(location %s)\"" % answer_file)
         srcs.append(answer_file)
