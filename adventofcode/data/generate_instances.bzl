@@ -1,74 +1,115 @@
-def _aoctool_generate_instance(
+def instance_data(
+        input = None,
+        input_file = None,
+        answer = None,
+        answer_file = None):
+    """
+    instance_data generates a struct suitable for generate_instances.
+
+    The arguments correspond to those in generate_instance.
+    """
+    if (input == None and input_file == None) or (input != None and input_file != None):
+        fail("exactly one of input and input_file is required; got input = %q, input_file = %q" % (input, input_file))
+    if (answer == None and answer_file == None) or (answer != None and answer_file != None):
+        fail("exactly one of answer and answer_file is required; got answer = %q, answer_file = %q" % (answer, answer_file))
+
+    return struct(
+        input = input,
+        input_file = input_file,
+        answer = answer,
+        answer_file = answer_file,
+    )
+
+def generate_instance(
         name,
         year = None,
         day = None,
         part = None,
         input = None,
+        input_file = None,
         answer = None,
-        out_file = None):
+        answer_file = None):
     if year == None:
         fail("year is required")
     if day == None:
         fail("day is required")
     if part == None:
         fail("part is required")
-    if input == None:
-        fail("input is required")
-    if answer == None:
-        fail("answer is required")
-    if out_file == None:
-        fail("out_file is required")
+    """
+    generate_instance creates a textproto file containing an adventofcode.Instance message.
+
+    Args:
+        year: Int. Required.
+        day: Int. Required.
+        part: Int. Required.
+        input: String. The input to the problem. Exactly one of input and input_file is required.
+        input_file: Label. A file containing the input to the problem. Exactly one of input and input_file is required.
+        answer: String. The answer to the problem. Exactly one of answer and answer_file is required.
+        answer_file: Label. A file containing the answer to the problem. Exactly one of answer and answer_file is required.
+    """
+
+    if (input == None and input_file == None) or (input != None and input_file != None):
+        fail("exactly one of input and input_file must be specified; got input = %s and input_file = %s" % (input, input_file))
+    if (answer == None and answer_file == None) or (answer != None and answer_file != None):
+        fail("exactly one of answer and answer_file must be specified; got answer = %s and answer_file = %s" % (answer, answer_file))
+
+    srcs = []
+    out_file = "%s.textproto" % name
+    outs = [out_file]
+    cmd = [
+        "$(location //adventofcode/tools/aoctool)",
+        "generate",
+        "instance",
+        "--year=%d" % year,
+        "--day=%d" % day,
+        "--part=%d" % part,
+        "--format=prototext",
+        "--out_file=\"$(location %s)\"" % out_file,
+    ]
+    if input != None:
+        cmd.append("--input=\"%s\"" % input)
+    if input_file != None:
+        cmd.append("--input_file=\"$(location %s)\"" % input_file)
+        srcs.append(input_file)
+    if answer != None:
+        cmd.append("--answer=\"%s\"" % answer)
+    if answer_file != None:
+        cmd.append("--answer_file=\"$(location %s)\"" % answer_file)
+        srcs.append(answer_file)
 
     native.genrule(
         name = name,
-        srcs = [],
-        outs = [out_file],
-        cmd = " ".join([
-            "$(location //adventofcode/tools/aoctool)",
-            "generate",
-            "instance",
-            "--year=%d" % year,
-            "--day=%d" % day,
-            "--part=%d" % part,
-            "--input=\"%s\"" % input,
-            "--answer=\"%s\"" % answer,
-            "--format=prototext",
-            "--out_file=$(location %s)" % out_file,
-        ]),
+        srcs = srcs,
+        outs = outs,
+        cmd = " ".join(cmd),
         exec_tools = ["//adventofcode/tools/aoctool"],
     )
 
 def generate_instances(
         year = None,
         day = None,
-        part_one_instances = {},
-        part_two_instances = {}):
-    """
-    generate_instances creates textproto files of adventofcode.Instance messages.
+        part1_instances = {},
+        part2_instances = {}):
+    """generate_instances is a convenience wrapper around generate_instance.
 
     Args:
-        year [int]: which year the instance is for. Required.
-        day [int]: which day the instance is for. Required.
-        part_one_instances [dict[string, List[string]]]: a mapping from name (the key) to a 2-element list representing, in order, the input and the answer, for the part 1 version of the puzzle.
-        part_two_instances [dict[string, List[string]]]: see part_one_instances.
+        year: Int. Required.
+        day: Int. Required.
+        part1_instances: dict[string, struct]. A dict mapping from name to a struct. The struct should be created using instance_data. For each item in the dict, a target called part1_{name} will be generated.
+        part2_instances: dict[string, struct]. See part1_instances.
     """
-    for name, data in part_one_instances.items():
-        _aoctool_generate_instance(
-            name = name,
-            year = year,
-            day = day,
-            part = 1,
-            input = data[0],
-            answer = data[1],
-            out_file = "%s.textproto" % name,
-        )
-    for name, data in part_two_instances.items():
-        _aoctool_generate_instance(
-            name = name,
-            year = year,
-            day = day,
-            part = 2,
-            input = data[0],
-            answer = data[1],
-            out_file = "%s.textproto" % name,
-        )
+    for part, instances in {
+        1: part1_instances,
+        2: part2_instances,
+    }.items():
+        for name, data in instances.items():
+            generate_instance(
+                name = "part%d_%s" % (part, name),
+                year = year,
+                day = day,
+                part = part,
+                input = data.input,
+                input_file = data.input_file,
+                answer = data.answer,
+                answer_file = data.answer_file,
+            )
