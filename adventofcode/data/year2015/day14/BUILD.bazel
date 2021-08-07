@@ -1,1 +1,25 @@
+load("//adventofcode/data:generate_instances.bzl", "generate_instances", "instance_data")
+
 exports_files(["actual.in"])
+
+instances = {
+    "part1": {
+        "actual": instance_data(
+            answer = "2696",
+            input_file = "actual.in",
+        ),
+    },
+    "part2": {
+        "actual": instance_data(
+            answer = "1084",
+            input_file = "actual.in",
+        ),
+    },
+}
+
+generate_instances(
+    day = 14,
+    part1_instances = instances["part1"],
+    part2_instances = instances["part2"],
+    year = 2015,
+)
