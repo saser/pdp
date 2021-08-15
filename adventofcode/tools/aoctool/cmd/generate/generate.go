@@ -2,6 +2,7 @@ package generate
 
 import (
 	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate/instance"
+	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate/testfile"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +14,10 @@ var (
 )
 
 func init() {
-	cmd.AddCommand(instance.Cmd())
+	cmd.AddCommand(
+		instance.Cmd(),
+		testfile.Cmd(),
+	)
 }
 
 func Cmd() *cobra.Command {

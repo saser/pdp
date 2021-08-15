@@ -7,6 +7,7 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//adventofcode/tools/aoctool/cmd/generate/instance",
+        "//adventofcode/tools/aoctool/cmd/generate/testfile",
         "@com_github_spf13_cobra//:cobra",
     ],
 )
