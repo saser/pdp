@@ -28,11 +28,14 @@ message Instance {
   // Which problem this is an instance of.
   Problem problem = 1;
 
+  // A unique name within all instances of the given problem.
+  string name = 2;
+
   // The input as it is given on the Advent of Code website.
-  string input = 2;
+  string input = 3;
 
   // The answer as it is given on the Advent of Code website.
-  string answer = 3;
+  string answer = 4;
 }
 
 // Request message for the Solve RPC.
