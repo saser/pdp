@@ -23,6 +23,7 @@ var (
 	year       int
 	day        int
 	part       int
+	name       string
 	input      string
 	inputFile  string
 	answer     string
@@ -40,6 +41,9 @@ func init() {
 
 	cmd.Flags().IntVar(&part, "part", 0, "The part, which must be either 1 or 2.")
 	cmd.MarkFlagRequired("part")
+
+	cmd.Flags().StringVar(&name, "name", "", "The name.")
+	cmd.MarkFlagRequired("name")
 
 	cmd.Flags().StringVar(&input, "input", "", "The puzzle input. This flag is suitable for short inputs, such as examples. Exactly one of --input or --input_file must be specified.")
 	cmd.Flags().StringVar(&inputFile, "input_file", "", "Path to a file to read the puzzle input from. Exactly one of --input or --input_file must be specified.")
@@ -105,6 +109,7 @@ func runE(cmd *cobra.Command, args []string) error {
 			Day:  int32(day),
 			Part: int32(part),
 		},
+		Name:   name,
 		Input:  input2,
 		Answer: answer2,
 	}
