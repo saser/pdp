@@ -65,6 +65,7 @@ def generate_instance(
         "--year=%d" % year,
         "--day=%d" % day,
         "--part=%d" % part,
+        "--name=%s" % shell.quote(name),
         "--format=prototext",
         "--out_file=\"$(location %s)\"" % out_file,
     ]
