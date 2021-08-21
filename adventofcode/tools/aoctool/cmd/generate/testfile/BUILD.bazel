@@ -2,8 +2,17 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "testfile",
-    srcs = ["testfile.go"],
+    srcs = [
+        "go.go",
+        "testfile.go",
+    ],
+    embedsrcs = ["go.tmpl"],
     importpath = "github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate/testfile",
     visibility = ["//visibility:public"],
-    deps = ["@com_github_spf13_cobra//:cobra"],
+    deps = [
+        "//adventofcode/adventofcode_go_proto",
+        "@com_github_spf13_cobra//:cobra",
+        "@org_golang_google_protobuf//encoding/prototext",
+        "@org_golang_google_protobuf//proto",
+    ],
 )

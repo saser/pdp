@@ -1,0 +1,69 @@
+package {{.Package}}
+
+import (
+	"fmt"
+	"testing"
+
+	"google.golang.org/protobuf/proto"
+
+	adventofcodepb "github.com/Saser/pdp/adventofcode/adventofcode_go_proto"
+)
+
+func unmarshal(t *testing.T, b []byte) *adventofcodepb.Instance {
+	instance := &adventofcodepb.Instance{}
+	if err := proto.Unmarshal(b, instance); err != nil {
+		t.Fatal(err)
+	}
+	return instance
+}
+
+func name(instance *adventofcodepb.Instance) string {
+	p := instance.GetProblem()
+	return fmt.Sprintf(
+		"Year%d_Day%02d_Part%d_%s",
+		p.GetYear(),
+		p.GetDay(),
+		p.GetPart(),
+		instance.GetName(),
+	)
+}
+
+func Test{{.Part1}}(t *testing.T) {
+	instances := []*adventofcodepb.Instance{
+		{{- range .Part1Blobs }}
+		unmarshal(t, {{printf "%#v" .}}),
+		{{- end }}
+	}
+	for _, instance := range instances {
+		t.Run(name(instance), func(t *testing.T) {
+			got, err := {{.Part1}}(instance.GetInput())
+			if err != nil {
+				t.Fatalf("{{.Part1}}() err = %v; want nil", err)
+			}
+			want := instance.GetAnswer()
+			if got != want {
+				t.Errorf("{{.Part1}}() answer = %q; want %q", got, want)
+			}
+		})
+	}
+}
+
+func Test{{.Part2}}(t *testing.T) {
+	instances := []*adventofcodepb.Instance{
+		{{- range .Part2Blobs }}
+		unmarshal(t, {{printf "%#v" .}}),
+		{{- end }}
+	}
+	for _, instance := range instances {
+		t.Run(name(instance), func(t *testing.T) {
+			got, err := {{.Part2}}(instance.GetInput())
+			if err != nil {
+				t.Fatalf("{{.Part2}}() err = %v; want nil", err)
+			}
+			want := instance.GetAnswer()
+			if got != want {
+				t.Errorf("{{.Part2}}() answer = %q; want %q", got, want)
+			}
+		})
+	}
+}
