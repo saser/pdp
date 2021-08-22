@@ -30,7 +30,8 @@ def generate_instance(
         input = None,
         input_file = None,
         answer = None,
-        answer_file = None):
+        answer_file = None,
+        visibility = ["//adventofcode:__subpackages__"]):
     if year == None:
         fail("year is required")
     if day == None:
@@ -86,6 +87,7 @@ def generate_instance(
         outs = outs,
         cmd = " ".join(cmd),
         exec_tools = ["//adventofcode/tools/aoctool"],
+        visibility = visibility,
     )
 
 def generate_instances(
