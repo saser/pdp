@@ -42,7 +42,7 @@ instances = {
         ),
         "example9": instance_data(
             answer = "-3",
-            input = "))))())())",
+            input = ")())())",
         ),
     },
     "part2": {
