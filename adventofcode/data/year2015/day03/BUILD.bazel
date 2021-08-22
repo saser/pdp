@@ -28,7 +28,7 @@ instances = {
         ),
         "example1": instance_data(
             answer = "3",
-            input = ">",
+            input = "^v",
         ),
         "example2": instance_data(
             answer = "3",

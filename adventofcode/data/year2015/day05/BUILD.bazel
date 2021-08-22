@@ -9,7 +9,7 @@ instances = {
             input_file = "actual.in",
         ),
         "example": instance_data(
-            answer = "3",
+            answer = "2",
             input_file = "part1_example.in",
         ),
     },
