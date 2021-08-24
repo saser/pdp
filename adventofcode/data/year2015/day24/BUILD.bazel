@@ -10,7 +10,7 @@ instances = {
         ),
         "example": instance_data(
             answer = "99",
-            input_file = "actual.in",
+            input_file = "example.in",
         ),
     },
     "part2": {
@@ -20,7 +20,7 @@ instances = {
         ),
         "example": instance_data(
             answer = "44",
-            input_file = "actual.in",
+            input_file = "example.in",
         ),
     },
 }
