@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-for day in {1..13}; do
+for day in {1..25}; do
     padded_day="$(printf %02d ${day})"
 
     # Create the new `instance_test` target.
@@ -23,7 +23,13 @@ for day in {1..13}; do
     buildozer \
 	"set go_package \"day${padded_day}\"" \
 	"set library \":day${padded_day}\"" \
+	'set part1 "Part1"' \
 	"//adventofcode/go/year2015/day${padded_day}:instance_test"
+    if [[ "${day}" != "25" ]]; then
+	buildozer \
+	    'set part2 "Part2"' \
+	    "//adventofcode/go/year2015/day${padded_day}:instance_test"
+    fi
 
     # Find all textproto targets for the given day and add them to the
     # `instances` attribute of the `instance_test` target.
