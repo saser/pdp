@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("//adventofcode/data:generate_testfile.bzl", "go_instance_test")
 
 go_library(
     name = "day07",
@@ -13,4 +14,17 @@ go_test(
     data = ["//adventofcode/data/year2015/day07:actual.in"],
     embed = [":day07"],
     deps = ["//adventofcode/go/testcase"],
+)
+
+go_instance_test(
+    name = "instance_test",
+    go_package = "day07",
+    instances = [
+        "//adventofcode/data/year2015/day07:part1_actual.textproto",
+        "//adventofcode/data/year2015/day07:part1_example.textproto",
+        "//adventofcode/data/year2015/day07:part2_actual.textproto",
+    ],
+    library = ":day07",
+    part1 = "Part1",
+    part2 = "Part2",
 )
