@@ -20,8 +20,8 @@ var (
 func init() {
 	cmd.Flags().StringVar(&goOut, "go_out", "", "Path to file where Go code should be written.")
 	cmd.Flags().StringVar(&goData.Package, "go_package", "", "Name of Go package to generate code in. Required if --go_out is non-empty.")
-	cmd.Flags().StringVar(&goData.Part1, "go_part1", "", "Name of solution function for part 1. Required if --go_out is non-empty.")
-	cmd.Flags().StringVar(&goData.Part2, "go_part2", "", "Name of solution function for part 2. Required if --go_out is non-empty.")
+	cmd.Flags().StringVar(&goData.Part1, "go_part1", "", "Name of solution function for part 1. If empty then no code will be generated for testing part 1. At least one of --go_part1 and --go_part2 is required if --go_out is non-empty.")
+	cmd.Flags().StringVar(&goData.Part2, "go_part2", "", "Name of solution function for part 2. If empty then no code will be generated for testing part 2. At least one of --go_part1 and --go_part2 is required if --go_out is non-empty.")
 }
 
 // goTmplData holds the data for the Go template.

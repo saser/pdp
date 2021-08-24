@@ -50,11 +50,8 @@ func runE(cmd *cobra.Command, args []string) error {
 		if goData.Package == "" {
 			return errors.New("--go_package is required if --go_out is non-empty")
 		}
-		if goData.Part1 == "" {
-			return errors.New("--go_part1 is required if --go_out is non-empty")
-		}
-		if goData.Part2 == "" {
-			return errors.New("--go_part2 is required if --go_out is non-empty")
+		if goData.Part1 == "" && goData.Part2 == "" {
+			return fmt.Errorf("--go_part1=%q and --go_part2=%q; at least one is required if --go_out is non-empty", goData.Part1, goData.Part2)
 		}
 		for _, instance := range part1Instances {
 			b, err := proto.Marshal(instance)

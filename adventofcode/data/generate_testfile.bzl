@@ -4,8 +4,8 @@ def go_instance_test(
         name,
         library = None,
         go_package = None,
-        part1 = "Part1",
-        part2 = "Part2",
+        part1 = None,
+        part2 = None,
         instances = []):
     """
     go_instance_test generates a go_test target for the given instances.
@@ -29,6 +29,8 @@ def go_instance_test(
         fail("go_package is required")
     if len(instances) == 0:
         fail("instances is required to be non-empty")
+    if part1 == None and part2 == None:
+        fail("at least one of part1 and part2 is required")
 
     srcs = instances
     out_file = "%s.go" % name
@@ -39,11 +41,14 @@ def go_instance_test(
         "testfile",
         "--go_out='$(location %s)'" % out_file,
         "--go_package='%s'" % go_package,
-        "--go_part1='%s'" % part1,
-        "--go_part2='%s'" % part2,
     ]
+    if part1 != None:
+        cmd.append("--go_part1='%s'" % part1)
+    if part2 != None:
+        cmd.append("--go_part2='%s'" % part2)
     for instance in instances:
         cmd.append("'$(location %s)'" % instance)
+
     native.genrule(
         name = "%s_go" % name,
         srcs = srcs,

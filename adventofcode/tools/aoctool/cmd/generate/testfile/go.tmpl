@@ -28,6 +28,7 @@ func name(instance *adventofcodepb.Instance) string {
 	)
 }
 
+{{if ne .Part1 "" -}}
 func Test{{.Part1}}(t *testing.T) {
 	instances := []*adventofcodepb.Instance{
 		{{- range .Part1Blobs }}
@@ -47,7 +48,9 @@ func Test{{.Part1}}(t *testing.T) {
 		})
 	}
 }
+{{- end}}
 
+{{if ne .Part2 "" -}}
 func Test{{.Part2}}(t *testing.T) {
 	instances := []*adventofcodepb.Instance{
 		{{- range .Part2Blobs }}
@@ -67,3 +70,4 @@ func Test{{.Part2}}(t *testing.T) {
 		})
 	}
 }
+{{- end}}
