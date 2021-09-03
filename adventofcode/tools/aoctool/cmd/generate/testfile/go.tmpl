@@ -9,10 +9,11 @@ import (
 	adventofcodepb "github.com/Saser/pdp/adventofcode/adventofcode_go_proto"
 )
 
-func unmarshal(t *testing.T, b []byte) *adventofcodepb.Instance {
+func unmarshal(tb testing.TB, b []byte) *adventofcodepb.Instance {
+	tb.Helper()
 	instance := &adventofcodepb.Instance{}
 	if err := proto.Unmarshal(b, instance); err != nil {
-		t.Fatal(err)
+		tb.Fatal(err)
 	}
 	return instance
 }
@@ -28,14 +29,16 @@ func name(instance *adventofcodepb.Instance) string {
 	)
 }
 
+var part1Blobs = [][]byte{
+	{{- range .Part1Blobs }}
+	{{printf "%#v" .}},
+	{{- end }}
+}
+
 {{if ne .Part1 "" -}}
 func Test{{.Part1}}(t *testing.T) {
-	instances := []*adventofcodepb.Instance{
-		{{- range .Part1Blobs }}
-		unmarshal(t, {{printf "%#v" .}}),
-		{{- end }}
-	}
-	for _, instance := range instances {
+	for _, blob := range part1Blobs {
+		instance := unmarshal(t, blob)
 		t.Run(name(instance), func(t *testing.T) {
 			got, err := {{.Part1}}(instance.GetInput())
 			if err != nil {
@@ -48,16 +51,36 @@ func Test{{.Part1}}(t *testing.T) {
 		})
 	}
 }
+
+func Benchmark{{.Part1}}(b *testing.B) {
+	for _, blob := range part1Blobs {
+		instance := unmarshal(b, blob)
+		b.Run(name(instance), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				got, err := {{.Part1}}(instance.GetInput())
+				if err != nil {
+					b.Fatalf("{{.Part1}}() err = %v; want nil", err)
+				}
+				want := instance.GetAnswer()
+				if got != want {
+					b.Errorf("{{.Part1}}() answer = %q; want %q", got, want)
+				}
+			}
+		})
+	}
+}
 {{- end}}
+
+var part2Blobs = [][]byte{
+	{{- range .Part2Blobs }}
+	{{printf "%#v" .}},
+	{{- end }}
+}
 
 {{if ne .Part2 "" -}}
 func Test{{.Part2}}(t *testing.T) {
-	instances := []*adventofcodepb.Instance{
-		{{- range .Part2Blobs }}
-		unmarshal(t, {{printf "%#v" .}}),
-		{{- end }}
-	}
-	for _, instance := range instances {
+	for _, blob := range part2Blobs {
+		instance := unmarshal(t, blob)
 		t.Run(name(instance), func(t *testing.T) {
 			got, err := {{.Part2}}(instance.GetInput())
 			if err != nil {
@@ -66,6 +89,24 @@ func Test{{.Part2}}(t *testing.T) {
 			want := instance.GetAnswer()
 			if got != want {
 				t.Errorf("{{.Part2}}() answer = %q; want %q", got, want)
+			}
+		})
+	}
+}
+
+func Benchmark{{.Part2}}(b *testing.B) {
+	for _, blob := range part2Blobs {
+		instance := unmarshal(b, blob)
+		b.Run(name(instance), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				got, err := {{.Part2}}(instance.GetInput())
+				if err != nil {
+					b.Fatalf("{{.Part2}}() err = %v; want nil", err)
+				}
+				want := instance.GetAnswer()
+				if got != want {
+					b.Errorf("{{.Part2}}() answer = %q; want %q", got, want)
+				}
 			}
 		})
 	}
