@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option go_package = "github.com/Saser/pdp/tasks3/tasks3_go_proto;tasks3pb";
+
+service Tasks {
+  rpc GetTask(GetTaskRequest) returns (Task);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+  rpc CreateTask(CreateTaskRequest) returns (Task);
+}
+
+message Task {
+  string name = 1;
+
+  string title = 2;
+
+  bool completed = 3;
+}
+
+message GetTaskRequest {
+  string name = 1;
+}
+
+message ListTasksRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListTasksResponse {
+  repeated Task tasks = 1;
+
+  string next_page_token = 2;
+}
+
+message CreateTaskRequest {
+  Task task = 1;
+}
