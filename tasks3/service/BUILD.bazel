@@ -5,5 +5,10 @@ go_library(
     srcs = ["service.go"],
     importpath = "github.com/Saser/pdp/tasks3/service",
     visibility = ["//visibility:public"],
-    deps = ["//tasks3/tasks3_go_proto"],
+    deps = [
+        "//tasks3/tasks3_go_proto",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//proto",
+    ],
 )
