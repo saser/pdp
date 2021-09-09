@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package tasks3;
+
 option go_package = "github.com/Saser/pdp/tasks3/tasks3_go_proto;tasks3pb";
 
 service Tasks {

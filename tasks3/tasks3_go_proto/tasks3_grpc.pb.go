@@ -33,7 +33,7 @@ func NewTasksClient(cc grpc.ClientConnInterface) TasksClient {
 
 func (c *tasksClient) GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*Task, error) {
 	out := new(Task)
-	err := c.cc.Invoke(ctx, "/Tasks/GetTask", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tasks3.Tasks/GetTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (c *tasksClient) GetTask(ctx context.Context, in *GetTaskRequest, opts ...g
 
 func (c *tasksClient) ListTasks(ctx context.Context, in *ListTasksRequest, opts ...grpc.CallOption) (*ListTasksResponse, error) {
 	out := new(ListTasksResponse)
-	err := c.cc.Invoke(ctx, "/Tasks/ListTasks", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tasks3.Tasks/ListTasks", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *tasksClient) ListTasks(ctx context.Context, in *ListTasksRequest, opts 
 
 func (c *tasksClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error) {
 	out := new(Task)
-	err := c.cc.Invoke(ctx, "/Tasks/CreateTask", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tasks3.Tasks/CreateTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func _Tasks_GetTask_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Tasks/GetTask",
+		FullMethod: "/tasks3.Tasks/GetTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TasksServer).GetTask(ctx, req.(*GetTaskRequest))
@@ -122,7 +122,7 @@ func _Tasks_ListTasks_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Tasks/ListTasks",
+		FullMethod: "/tasks3.Tasks/ListTasks",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TasksServer).ListTasks(ctx, req.(*ListTasksRequest))
@@ -140,7 +140,7 @@ func _Tasks_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Tasks/CreateTask",
+		FullMethod: "/tasks3.Tasks/CreateTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TasksServer).CreateTask(ctx, req.(*CreateTaskRequest))
@@ -152,7 +152,7 @@ func _Tasks_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Tasks_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Tasks",
+	ServiceName: "tasks3.Tasks",
 	HandlerType: (*TasksServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
