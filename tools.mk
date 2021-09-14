@@ -7,7 +7,7 @@ $(tools):
 	mkdir -p '$@'
 
 # protoc: the protobuf compiler
-protoc_version := 3.15.6
+protoc_version := 3.17.3
 protoc_dir := $(tools)/protoc-$(protoc_version)
 protoc_archive := $(protoc_dir).zip
 protoc := $(protoc_dir)/bin/protoc
