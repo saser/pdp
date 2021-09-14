@@ -64,25 +64,31 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_cc/archive/daf6ace7cfeacd6a83e9ff2ed659f416537b6c74.zip"],
 )
 
+COM_GOOGLE_GOOGLETEST_COMMIT = "e2239ee6043f73722e7aa812a459f54a28552929"  # master as of 2021-09-14
+
 http_archive(
     name = "com_google_googletest",
-    sha256 = "2db427be8b258ad401177c411c2a7c2f6bc78548a04f1a23576cc62616d9cd38",
-    strip_prefix = "googletest-703bd9caab50b139428cea1aaff9974ebee5742e",
-    urls = ["https://github.com/google/googletest/archive/703bd9caab50b139428cea1aaff9974ebee5742e.zip"],
+    sha256 = "8daa1a71395892f7c1ec5f7cb5b099a02e606be720d62f1a6a98f8f8898ec826",
+    strip_prefix = "googletest-%s" % COM_GOOGLE_GOOGLETEST_COMMIT,
+    urls = ["https://github.com/google/googletest/archive/%s.zip" % COM_GOOGLE_GOOGLETEST_COMMIT],
 )
+
+COM_GITHUB_GOOGLE_BENCHMARK_COMMIT = "713b9177183375c8b1b25595e33daf2a1625df5b"  # master as of 2021-09-14
 
 http_archive(
     name = "com_github_google_benchmark",
-    sha256 = "e777f978593ea6db38356ce09ec3902e839b3037a9a19ff543e6f901e50cc773",
-    strip_prefix = "benchmark-090faecb454fbd6e6e17a75ef8146acb037118d4",
-    urls = ["https://github.com/google/benchmark/archive/090faecb454fbd6e6e17a75ef8146acb037118d4.zip"],
+    sha256 = "5cffc1043e6ba948e7fd16b0f97472ab17af07615726aa0cbf5361e4dca27597",
+    strip_prefix = "benchmark-%s" % COM_GITHUB_GOOGLE_BENCHMARK_COMMIT,
+    urls = ["https://github.com/google/benchmark/archive/%s.zip" % COM_GITHUB_GOOGLE_BENCHMARK_COMMIT],
 )
+
+COM_GOOGLE_ABSL_COMMIT = "b2dc72c17ac663885b62334d334da9f8970543b5"  # master as of 2021-09-14
 
 http_archive(
     name = "com_google_absl",
-    sha256 = "f1a959a2144f0482b9bd61e67a9897df02234fff6edf82294579a4276f2f4b97",
-    strip_prefix = "abseil-cpp-aa844899c937bde5d2b24f276b59997e5b668bde",
-    urls = ["https://github.com/abseil/abseil-cpp/archive/aa844899c937bde5d2b24f276b59997e5b668bde.zip"],
+    sha256 = "5247e92a222cf39ce1dfa12bf5aad452d27bab3f051f4e81f5d78d1d7ede9306",
+    strip_prefix = "abseil-cpp-%s" % COM_GOOGLE_ABSL_COMMIT,
+    urls = ["https://github.com/abseil/abseil-cpp/archive/%s.zip" % COM_GOOGLE_ABSL_COMMIT],
 )
 
 ################################################################################
