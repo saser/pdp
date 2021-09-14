@@ -13,7 +13,7 @@ cc_test(
     data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
     deps = [
         ":{{.FullDay}}",
-        "@googletest//:gtest_main",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -23,6 +23,6 @@ cc_binary(
     data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
     deps = [
         ":{{.FullDay}}",
-        "@googlebenchmark//:benchmark_main",
+        "@com_github_google_benchmark//:benchmark_main",
     ],
 )

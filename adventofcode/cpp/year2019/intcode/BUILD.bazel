@@ -5,7 +5,7 @@ cc_library(
     srcs = ["intcode.cc"],
     hdrs = ["intcode.h"],
     visibility = ["//visibility:public"],
-    deps = ["@abseil//absl/strings"],
+    deps = ["@com_google_absl//absl/strings"],
 )
 
 cc_test(
@@ -13,6 +13,6 @@ cc_test(
     srcs = ["intcode_test.cc"],
     deps = [
         ":intcode",
-        "@googletest//:gtest_main",
+        "@com_google_googletest//:gtest_main",
     ],
 )

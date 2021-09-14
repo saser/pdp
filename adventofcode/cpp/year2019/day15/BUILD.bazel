@@ -16,7 +16,7 @@ cc_test(
     data = ["//adventofcode/data/year2019/day15:actual.in"],
     deps = [
         ":day15",
-        "@googletest//:gtest_main",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -26,6 +26,6 @@ cc_binary(
     data = ["//adventofcode/data/year2019/day15:actual.in"],
     deps = [
         ":day15",
-        "@googlebenchmark//:benchmark_main",
+        "@com_github_google_benchmark//:benchmark_main",
     ],
 )

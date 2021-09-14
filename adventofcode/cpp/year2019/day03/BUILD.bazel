@@ -6,7 +6,7 @@ cc_library(
     hdrs = ["day03.h"],
     deps = [
         "//adventofcode/cpp:adventofcode",
-        "@abseil//absl/strings",
+        "@com_google_absl//absl/strings",
     ],
 )
 
@@ -16,7 +16,7 @@ cc_test(
     data = glob(["testdata/*"]) + ["//adventofcode/data/year2019/day03:actual.in"],
     deps = [
         ":day03",
-        "@googletest//:gtest_main",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -26,6 +26,6 @@ cc_binary(
     data = ["//adventofcode/data/year2019/day03:actual.in"],
     deps = [
         ":day03",
-        "@googlebenchmark//:benchmark_main",
+        "@com_github_google_benchmark//:benchmark_main",
     ],
 )
