@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package tasks3;
+package tasks;
 
-option go_package = "github.com/Saser/pdp/tasks3/tasks3_go_proto;tasks3pb";
+option go_package = "github.com/Saser/pdp/tasks/tasks_go_proto;taskspb";
 
 service Tasks {
   rpc GetTask(GetTaskRequest) returns (Task);

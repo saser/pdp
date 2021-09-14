@@ -3,10 +3,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "service",
     srcs = ["service.go"],
-    importpath = "github.com/Saser/pdp/tasks3/service",
+    importpath = "github.com/Saser/pdp/tasks/service",
     visibility = ["//visibility:public"],
     deps = [
-        "//tasks3/tasks3_go_proto",
+        "//tasks/tasks_go_proto",
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//status",
         "@org_golang_google_protobuf//proto",

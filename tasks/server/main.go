@@ -9,11 +9,11 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/Saser/pdp/tasks3/service"
+	"github.com/Saser/pdp/tasks/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	tasks3pb "github.com/Saser/pdp/tasks3/tasks3_go_proto"
+	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
 var (
@@ -29,7 +29,7 @@ func emain() error {
 	svc := service.NewServer()
 	srv := grpc.NewServer()
 	reflection.Register(srv)
-	tasks3pb.RegisterTasksServer(srv, svc)
+	taskspb.RegisterTasksServer(srv, svc)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
