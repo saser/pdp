@@ -1,4 +1,3 @@
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 ################################################################################
@@ -107,14 +106,13 @@ rules_java_dependencies()
 
 rules_java_toolchains()
 
-git_repository(
+RULES_JVM_EXTERNAL_COMMIT = "786947c47918c44b5d740df500bb3090607df04d"  # master as of 2021-09-14
+
+http_archive(
     name = "rules_jvm_external",
-    # `commit` and `shallow_since` was given by first specifying:
-    #     tag = "3.1"
-    # and then following the debug messages given by Bazel.
-    commit = "9aec21a7eff032dfbdcf728bb608fe1a02c54124",
-    remote = "https://github.com/bazelbuild/rules_jvm_external",
-    shallow_since = "1577467222 -0500",
+    sha256 = "3d00a53394e0e856f6a97fab75855a3fd6552190ca004f79bfac0cbfd3c1e5d1",
+    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_COMMIT,
+    urls = ["https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_COMMIT],
 )
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
