@@ -123,10 +123,15 @@ maven_install(
         "org.openjdk.jmh:jmh-core:1.22",
         "org.openjdk.jmh:jmh-generator-annprocess:1.22",
     ],
+    maven_install_json = "//:maven_install.json",
     repositories = [
         "https://repo1.maven.org/maven2",
     ],
 )
+
+load("@maven//:defs.bzl", "pinned_maven_install")
+
+pinned_maven_install()
 
 ################################################################################
 # Rust
