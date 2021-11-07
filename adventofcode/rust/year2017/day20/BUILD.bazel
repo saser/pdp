@@ -4,7 +4,11 @@ rust_library(
     name = "day20",
     srcs = ["day20.rs"],
     crate_name = "adventofcode_rust_year2017_day20",
-    deps = ["//adventofcode/rust/aoc"],
+    deps = [
+        "//adventofcode/rust/aoc",
+        "//cargo:lazy_static",
+        "//cargo:regex",
+    ],
 )
 
 rust_test(

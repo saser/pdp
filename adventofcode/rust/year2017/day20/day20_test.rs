@@ -5,7 +5,7 @@ mod part1 {
     aoc::testfn!(
         actual,
         aoc::Data::File("adventofcode/data/year2017/day20/actual.in"),
-        aoc::Data::String("TODO: fill in answer here"),
+        aoc::Data::String("258"),
         crate::part1
     );
 }
