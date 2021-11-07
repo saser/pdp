@@ -17,7 +17,7 @@ TEST(Year{{.Year}}Day{{.PaddedDay}}, Part1Example1) {
 }
 
 TEST(Year{{.Year}}Day{{.PaddedDay}}, Part1Actual) {
-  std::ifstream input("inputs/{{.Year}}/{{.PaddedDay}}");
+  std::ifstream input("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in");
   std::string output = "";
   adventofcode::answer_t a = {{.FullDay}}::part1(input);
   EXPECT_EQ("", a.error);
@@ -34,7 +34,7 @@ TEST(Year{{.Year}}Day{{.PaddedDay}}, Part1Actual) {
 // }
 
 // TEST(Year{{.Year}}Day{{.PaddedDay}}, Part2Actual) {
-//   std::ifstream input("inputs/{{.Year}}/{{.PaddedDay}}");
+//   std::ifstream input("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in");
 //   std::string output = "";
 //   adventofcode::answer_t a = {{.FullDay}}::part2(input);
 //   EXPECT_EQ("", a.error);

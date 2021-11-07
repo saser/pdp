@@ -19,7 +19,7 @@ public class Day{{.PaddedDay}}Test {
 
     @Test
     public void part1Actual() throws IOException {
-        try (var input = new FileReader("adventofcode/inputs/{{.Year}}/{{.PaddedDay}}")) {
+        try (var input = new FileReader("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in")) {
             var output = "";
             var result = Day{{.PaddedDay}}.part1(input);
             Assert.assertEquals("no error", "", result.error);
@@ -38,7 +38,7 @@ public class Day{{.PaddedDay}}Test {
 
     // @Test
     // public void part2Actual() throws IOException {
-    //     try (var input = new FileReader("inputs/{{.Year}}/{{.PaddedDay}}")) {
+    //     try (var input = new FileReader("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in")) {
     //         var output = "";
     //         var result = Day{{.PaddedDay}}.part2(input);
     //         Assert.assertEquals("no error", "", result.error);

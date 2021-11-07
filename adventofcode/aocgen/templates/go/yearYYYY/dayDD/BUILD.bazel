@@ -10,7 +10,7 @@ go_library(
 go_test(
     name = "{{.FullDay}}_test",
     srcs = ["{{.FullDay}}_test.go"],
-    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
     embed = [":{{.FullDay}}"],
     deps = ["//adventofcode/go/testcase"],
 )

@@ -10,7 +10,7 @@ cc_library(
 cc_test(
     name = "{{.FullDay}}_test",
     srcs = ["{{.FullDay}}_test.cc"],
-    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
     deps = [
         ":{{.FullDay}}",
         "@com_google_googletest//:gtest_main",
@@ -20,7 +20,7 @@ cc_test(
 cc_binary(
     name = "{{.FullDay}}_benchmark",
     srcs = ["{{.FullDay}}_benchmark.cc"],
-    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
     deps = [
         ":{{.FullDay}}",
         "@com_github_google_benchmark//:benchmark_main",

@@ -11,5 +11,5 @@ rust_test(
     name = "{{.FullDay}}_test",
     srcs = ["{{.FullDay}}_test.rs"],
     crate = ":{{.FullDay}}",
-    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
 )

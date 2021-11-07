@@ -9,7 +9,7 @@ java_library(
 java_test(
     name = "{{.FullDay}}_test",
     srcs = ["Day{{.PaddedDay}}Test.java"],
-    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
     test_class = "adventofcode.java.{{.FullYear}}.{{.FullDay}}.Day{{.PaddedDay}}Test",
     deps = [
         ":{{.FullDay}}",
@@ -21,7 +21,7 @@ java_test(
 java_library(
     name = "{{.FullDay}}_benchmark_library",
     srcs = ["Day{{.PaddedDay}}Benchmark.java"],
-    data = ["//adventofcode/inputs:{{.Year}}/{{.PaddedDay}}"],
+    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
     plugins = ["//adventofcode/java:benchmark_annotation_processor"],
     deps = [
         ":{{.FullDay}}",

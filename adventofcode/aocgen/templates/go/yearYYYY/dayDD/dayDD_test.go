@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	inputFile = testcase.Runfile("adventofcode/inputs/{{.Year}}/{{.PaddedDay}}")
+	inputFile = testcase.Runfile("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in")
 	tcPart1   = testcase.NewFile("input", inputFile, "")
 	tcPart2   = testcase.NewFile("input", inputFile, "")
 )

@@ -5,7 +5,7 @@
 #include "benchmark/benchmark.h"
 
 static void Year{{.Year}}Day{{.PaddedDay}}Part1(benchmark::State& state) {
-  std::ifstream input("{{.FullYear}}/testdata/{{.PaddedDay}}");
+  std::ifstream input("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in");
   for (auto _ : state) {
     {{.FullDay}}::part1(input);
     input.clear();
@@ -15,7 +15,7 @@ static void Year{{.Year}}Day{{.PaddedDay}}Part1(benchmark::State& state) {
 BENCHMARK(Year{{.Year}}Day{{.PaddedDay}}Part1);
 
 static void Year{{.Year}}Day{{.PaddedDay}}Part2(benchmark::State& state) {
-  std::ifstream input("{{.FullYear}}/testdata/{{.PaddedDay}}");
+  std::ifstream input("adventofcode/data/{{.FullYear}}/{{.FullDay}}/actual.in");
   for (auto _ : state) {
     {{.FullDay}}::part2(input);
     input.clear();
