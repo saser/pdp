@@ -2,27 +2,17 @@
 
 A personal monorepo, ish. I try to collect all my projects here and build them all using Bazel.
 
-## Setting up a local Kubernetes cluster
+## Setting up a local Kubernetes cluster with a local registry
 
-The `tools.go` file includes some tools used to maintain and build the code in
-this repository. It includes the
-[`sigs.k8s.io/kind`](https://pkg.go.dev/sigs.k8s.io/kind) package. This can be
-run either using the `go` command or using Bazel.
+[`kind`](https://kind.sigs.k8s.io) is used to set up a local Kubernetes cluster
+for development. To be used effectively we also need a local registry where
+Docker images can be pushed by the `rules_k8s` rules. The
+`kind_with_registry.sh` script, run using the `//:kind_with_registry` target,
+sets that up for us. So, simply doing this will get us started:
 
-*   With `go`, run the following (assuming you have `$GOPATH/bin` in `$PATH`):
+```
+bazel run //:kind_with_registry
+```
 
-    ```
-    go install sigs.k8s.io/kind
-    ```
-
-    To create a cluster, run:
-
-    ```
-    kind create cluster [--name=foobar]
-    ```
-
-*   With Bazel, run:
-
-    ```
-    bazel run @io_k8s_sigs_kind//:kind -- create cluster [--name=foobar]
-    ```
+After this, BUILD packages can use the `k8s_local_object` repository to push
+images to the created local repository.

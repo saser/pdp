@@ -15,3 +15,10 @@ gazelle(
     ],
     command = "update-repos",
 )
+
+sh_binary(
+    name = "kind_with_registry",
+    srcs = ["kind_with_registry.sh"],
+    data = ["@io_k8s_sigs_kind//:kind"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)

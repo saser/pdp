@@ -212,7 +212,13 @@ http_archive(
     ],
 )
 
-load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_repositories")
+load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_defaults", "k8s_repositories")
+
+k8s_defaults(
+    name = "k8s_local_object",
+    context = "kind-kind",  # must be "kind-kind" when used with //:kind_with_registry
+    image_chroot = "localhost:5000",  # see //:kind_with_registry to set this up
+)
 
 k8s_repositories()
 
