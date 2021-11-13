@@ -198,6 +198,15 @@ load(
 
 _go_image_repos()
 
+load("@io_bazel_rules_docker//container:pull.bzl", "container_pull")
+
+container_pull(
+    name = "postgres_image",
+    digest = "sha256:3ee027aeb3c8bc4a5870b21fc6590a926ad5c2629d3ce6e27685ac1eab6d4ada",  # tag "14" as of 2021-11-13
+    registry = "index.docker.io",
+    repository = "library/postgres",
+)
+
 ################################################################################
 # Kubernetes
 ################################################################################
