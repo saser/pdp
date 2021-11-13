@@ -3,4 +3,15 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 # gazelle:exclude _tools
 # gazelle:prefix github.com/Saser/pdp
 # gazelle:proto disable_global
+
 gazelle(name = "gazelle")
+
+gazelle(
+    name = "gazelle_update_repos",
+    args = [
+        "-from_file=go.mod",
+        "-to_macro=go_repositories.bzl%go_repositories",
+        "-prune",
+    ],
+    command = "update-repos",
+)
