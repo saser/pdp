@@ -197,3 +197,25 @@ load(
 )
 
 _go_image_repos()
+
+################################################################################
+# Kubernetes
+################################################################################
+
+http_archive(
+    name = "io_bazel_rules_k8s",
+    sha256 = "a08850199d6900328ef899906717fb1dfcc6cde62701c63725748b2e6ca1d5d9",
+    strip_prefix = "rules_k8s-d05cbea5c56738ef02c667c10951294928a1d64a",
+    urls = [
+        # master branch as of 2021-11-13
+        "https://github.com/bazelbuild/rules_k8s/archive/d05cbea5c56738ef02c667c10951294928a1d64a.tar.gz",
+    ],
+)
+
+load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_repositories")
+
+k8s_repositories()
+
+load("@io_bazel_rules_k8s//k8s:k8s_go_deps.bzl", k8s_go_deps = "deps")
+
+k8s_go_deps()
