@@ -1,0 +1,18 @@
+load("@io_bazel_rules_docker//container:image.bzl", "container_image")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+
+pkg_tar(
+    name = "schema_tar",
+    srcs = ["schema.sql"],
+    package_dir = "docker-entrypoint-initdb.d",
+)
+
+container_image(
+    name = "database_image",
+    base = "@postgres_image//image",
+    env = {
+        "POSTGRES_PASSWORD": "tasks/database:password",
+        "POSTGRES_USER": "tasks_database_user",
+    },
+    tars = [":schema_tar"],
+)
