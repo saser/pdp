@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-server
+  labels:
+    app: tasks
+spec:
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      containers:
+        - name: tasks
+          image: bazel/tasks/server:server_image
+          ports:
+            - containerPort: 8080
