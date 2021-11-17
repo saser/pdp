@@ -1,5 +1,4 @@
 _tools/
-adventofcode/aocgen/templates/
 adventofcode/bazel-adventofcode
 adventofcode/bazel-bin
 adventofcode/bazel-out
