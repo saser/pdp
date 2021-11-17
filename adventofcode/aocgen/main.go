@@ -1,11 +1,12 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
+	"io/fs"
 	"os"
 	"path"
-	"path/filepath"
 	"strings"
 	"text/template"
 )
@@ -15,8 +16,10 @@ var (
 	fDay         = flag.Uint("day", 0, "specifies day")
 	fLang        = flag.String("lang", "", "programming language of solutions")
 	fBasedir     = flag.String("basedir", "", `base directory of solutions (default "../<value of -lang>")`)
-	fTemplatedir = flag.String("templatedir", "", `directory of template files for solutions (default "templates/<value of -lang>")`)
 )
+
+//go:embed templates/**
+var tmplFS embed.FS
 
 type templateData struct {
 	Year      uint
@@ -60,11 +63,6 @@ func imain() int {
 		basedir = fmt.Sprintf("../%s", lang)
 	}
 
-	templatedir := *fTemplatedir
-	if templatedir == "" {
-		templatedir = fmt.Sprintf("templates/%s", lang)
-	}
-
 	fullYear := fmt.Sprintf("year%d", year)
 	paddedDay := fmt.Sprintf("%02d", day)
 	fullDay := fmt.Sprintf("day%s", paddedDay)
@@ -76,16 +74,16 @@ func imain() int {
 		FullDay:   fullDay,
 	}
 
-	walkFn := func(templatePath string, info os.FileInfo, err error) error {
+	walkFn := func(templatePath string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		outPath := strings.TrimPrefix(templatePath, templatedir)
+		outPath := templatePath
 		outPath = strings.Replace(outPath, "YYYY", fmt.Sprint(year), -1)
 		outPath = strings.Replace(outPath, "DD", paddedDay, -1)
 		outPath = strings.TrimSuffix(outPath, ".tmpl")
 		outPath = path.Join(basedir, outPath)
-		if info.IsDir() {
+		if d.IsDir() {
 			if err := os.MkdirAll(outPath, os.ModePerm); err != nil {
 				return fmt.Errorf("error creating directory %s: %w", outPath, err)
 			}
@@ -109,7 +107,7 @@ func imain() int {
 		}
 		return nil
 	}
-	if err := filepath.Walk(templatedir, walkFn); err != nil {
+	if err := fs.WalkDir(tmplFS, lang, walkFn); err != nil {
 		fmt.Printf("error when rendering templates: %+v\n", err)
 		return 2
 	}

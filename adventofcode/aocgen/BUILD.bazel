@@ -1,1 +1,31 @@
-# gazelle:exclude templates
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "aocgen_lib",
+    srcs = ["main.go"],
+    embedsrcs = [
+        "templates/cpp/yearYYYY/dayDD/BUILD.bazel.tmpl",
+        "templates/cpp/yearYYYY/dayDD/dayDD.cc.tmpl",
+        "templates/cpp/yearYYYY/dayDD/dayDD.h.tmpl",
+        "templates/cpp/yearYYYY/dayDD/dayDD_benchmark.cc.tmpl",
+        "templates/cpp/yearYYYY/dayDD/dayDD_test.cc.tmpl",
+        "templates/go/yearYYYY/dayDD/BUILD.bazel.tmpl",
+        "templates/go/yearYYYY/dayDD/dayDD.go.tmpl",
+        "templates/go/yearYYYY/dayDD/dayDD_test.go.tmpl",
+        "templates/java/yearYYYY/dayDD/BUILD.bazel.tmpl",
+        "templates/java/yearYYYY/dayDD/DayDD.java.tmpl",
+        "templates/java/yearYYYY/dayDD/DayDDBenchmark.java.tmpl",
+        "templates/java/yearYYYY/dayDD/DayDDTest.java.tmpl",
+        "templates/rust/yearYYYY/dayDD/BUILD.bazel.tmpl",
+        "templates/rust/yearYYYY/dayDD/dayDD.rs.tmpl",
+        "templates/rust/yearYYYY/dayDD/dayDD_test.rs.tmpl",
+    ],
+    importpath = "github.com/Saser/pdp/adventofcode/aocgen",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "aocgen",
+    embed = [":aocgen_lib"],
+    visibility = ["//visibility:public"],
+)
