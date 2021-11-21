@@ -83,6 +83,7 @@ func imain() int {
 		outPath := strings.TrimPrefix(templatePath, templatedir)
 		outPath = strings.Replace(outPath, "YYYY", fmt.Sprint(year), -1)
 		outPath = strings.Replace(outPath, "DD", paddedDay, -1)
+		outPath = strings.TrimSuffix(outPath, ".tmpl")
 		outPath = path.Join(basedir, outPath)
 		if info.IsDir() {
 			if err := os.MkdirAll(outPath, os.ModePerm); err != nil {
