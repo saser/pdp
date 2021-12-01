@@ -13,6 +13,11 @@ import (
 	adventofcodepb "github.com/Saser/pdp/adventofcode/adventofcode_go_proto"
 )
 
+const (
+	minYear = 2015
+	maxYear = 2021
+)
+
 var (
 	cmd = &cobra.Command{
 		Use:   "instance",
@@ -33,7 +38,7 @@ var (
 )
 
 func init() {
-	cmd.Flags().IntVar(&year, "year", 0, "The year in the range [2015, 2020].")
+	cmd.Flags().IntVar(&year, "year", 0, fmt.Sprintf("The year in the range [%d, %d].", minYear, maxYear))
 	cmd.MarkFlagRequired("year")
 
 	cmd.Flags().IntVar(&day, "day", 0, "The day in the range [1, 25].")
@@ -59,8 +64,8 @@ func init() {
 }
 
 func runE(cmd *cobra.Command, args []string) error {
-	if year < 2015 || year > 2020 {
-		return fmt.Errorf("--year=%d is outside range [2015, 2020]", year)
+	if year < minYear || year > maxYear {
+		return fmt.Errorf("--year=%d is outside range [%d, %d]", year, minYear, maxYear)
 	}
 	if day < 1 || day > 25 {
 		return fmt.Errorf("--day=%d is outside range [1, 25]", day)
