@@ -1,5 +1,1 @@
 _tools/
-adventofcode/bazel-adventofcode
-adventofcode/bazel-bin
-adventofcode/bazel-out
-adventofcode/bazel-testlogs
