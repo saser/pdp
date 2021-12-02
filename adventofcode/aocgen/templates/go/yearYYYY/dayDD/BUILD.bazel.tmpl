@@ -1,4 +1,5 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("//adventofcode/data:generate_testfile.bzl", "go_instance_test")
 
 go_library(
     name = "{{.FullDay}}",
@@ -7,10 +8,16 @@ go_library(
     visibility = ["//adventofcode/go:__subpackages__"],
 )
 
-go_test(
-    name = "{{.FullDay}}_test",
-    srcs = ["{{.FullDay}}_test.go"],
-    data = ["//adventofcode/data/{{.FullYear}}/{{.FullDay}}:actual.in"],
-    embed = [":{{.FullDay}}"],
-    deps = ["//adventofcode/go/testcase"],
+go_instance_test(
+    name = "instance_test",
+    go_package = "{{.FullDay}}",
+    instances = [
+        "//adventofcode/data/{{.FullYear}}/{{.FullDay}}:part1_actual.textproto",
+        "//adventofcode/data/{{.FullYear}}/{{.FullDay}}:part1_example1.textproto",
+        "//adventofcode/data/{{.FullYear}}/{{.FullDay}}:part2_actual.textproto",
+        "//adventofcode/data/{{.FullYear}}/{{.FullDay}}:part2_example1.textproto",
+    ],
+    library = ":{{.FullDay}}",
+    part1 = "Part1",
+    part2 = "Part2",
 )
