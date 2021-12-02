@@ -1,3 +1,6 @@
+"""Build macros to generate test files based on adventofcode.Instance proto
+messages."""
+
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 
 def go_instance_test(
@@ -14,6 +17,7 @@ def go_instance_test(
     target, by embedding the library.
 
     Args:
+        name: String. Name of the generated go_test target.
         library: Label. Must be a go_library target. It will embedded
             in the go_test target using the `embed` attribute.
         go_package: String. The name of the embedded package.
