@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("//adventofcode/data:generate_testfile.bzl", "go_instance_test")
+
+go_library(
+    name = "day03",
+    srcs = ["day03.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/go/year2021/day03",
+    visibility = ["//adventofcode/go:__subpackages__"],
+)
+
+go_instance_test(
+    name = "instance_test",
+    go_package = "day03",
+    instances = [
+        "//adventofcode/data/year2021/day03:part1_actual.textproto",
+        "//adventofcode/data/year2021/day03:part1_example1.textproto",
+        "//adventofcode/data/year2021/day03:part2_actual.textproto",
+        "//adventofcode/data/year2021/day03:part2_example1.textproto",
+    ],
+    library = ":day03",
+    part1 = "Part1",
+    part2 = "Part2",
+)
