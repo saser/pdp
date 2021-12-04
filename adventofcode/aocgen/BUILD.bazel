@@ -11,7 +11,6 @@ go_library(
         "templates/cpp/yearYYYY/dayDD/dayDD_test.cc.tmpl",
         "templates/go/yearYYYY/dayDD/BUILD.bazel.tmpl",
         "templates/go/yearYYYY/dayDD/dayDD.go.tmpl",
-        "templates/go/yearYYYY/dayDD/dayDD_test.go.tmpl",
         "templates/java/yearYYYY/dayDD/BUILD.bazel.tmpl",
         "templates/java/yearYYYY/dayDD/DayDD.java.tmpl",
         "templates/java/yearYYYY/dayDD/DayDDBenchmark.java.tmpl",
