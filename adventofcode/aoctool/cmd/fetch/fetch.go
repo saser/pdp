@@ -1,8 +1,8 @@
 package fetch
 
 import (
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch/answer"
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch/input"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/fetch/answer"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/fetch/input"
 	"github.com/spf13/cobra"
 )
 

@@ -60,7 +60,7 @@ def generate_instance(
     out_file = "%s.textproto" % name
     outs = [out_file]
     cmd = [
-        "$(location //adventofcode/tools/aoctool)",
+        "$(location //adventofcode/aoctool)",
         "generate",
         "instance",
         "--year=%d" % year,
@@ -86,7 +86,7 @@ def generate_instance(
         srcs = srcs,
         outs = outs,
         cmd = " ".join(cmd),
-        exec_tools = ["//adventofcode/tools/aoctool"],
+        exec_tools = ["//adventofcode/aoctool"],
         visibility = visibility,
     )
 

@@ -3,11 +3,11 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "fetch",
     srcs = ["fetch.go"],
-    importpath = "github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch",
+    importpath = "github.com/Saser/pdp/adventofcode/aoctool/cmd/fetch",
     visibility = ["//visibility:public"],
     deps = [
-        "//adventofcode/tools/aoctool/cmd/fetch/answer",
-        "//adventofcode/tools/aoctool/cmd/fetch/input",
+        "//adventofcode/aoctool/cmd/fetch/answer",
+        "//adventofcode/aoctool/cmd/fetch/input",
         "@com_github_spf13_cobra//:cobra",
     ],
 )

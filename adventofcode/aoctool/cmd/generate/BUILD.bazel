@@ -3,11 +3,11 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "generate",
     srcs = ["generate.go"],
-    importpath = "github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate",
+    importpath = "github.com/Saser/pdp/adventofcode/aoctool/cmd/generate",
     visibility = ["//visibility:public"],
     deps = [
-        "//adventofcode/tools/aoctool/cmd/generate/instance",
-        "//adventofcode/tools/aoctool/cmd/generate/testfile",
+        "//adventofcode/aoctool/cmd/generate/instance",
+        "//adventofcode/aoctool/cmd/generate/testfile",
         "@com_github_spf13_cobra//:cobra",
     ],
 )

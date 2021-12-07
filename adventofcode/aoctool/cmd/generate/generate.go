@@ -1,8 +1,8 @@
 package generate
 
 import (
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate/instance"
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate/testfile"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/generate/instance"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/generate/testfile"
 	"github.com/spf13/cobra"
 )
 

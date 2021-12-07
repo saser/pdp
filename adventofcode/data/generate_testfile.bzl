@@ -40,7 +40,7 @@ def go_instance_test(
     out_file = "%s.go" % name
     outs = [out_file]
     cmd = [
-        "$(location //adventofcode/tools/aoctool)",
+        "$(location //adventofcode/aoctool)",
         "generate",
         "testfile",
         "--go_out='$(location %s)'" % out_file,
@@ -58,7 +58,7 @@ def go_instance_test(
         srcs = srcs,
         outs = outs,
         cmd = " ".join(cmd),
-        exec_tools = ["//adventofcode/tools/aoctool"],
+        exec_tools = ["//adventofcode/aoctool"],
     )
 
     go_test(
