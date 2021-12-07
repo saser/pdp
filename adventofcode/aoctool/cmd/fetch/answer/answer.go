@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch/client"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/fetch/client"
 	"github.com/spf13/cobra"
 )
 

@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd"
 )
 
 func main() {

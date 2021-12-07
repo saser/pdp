@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/fetch"
-	"github.com/Saser/pdp/adventofcode/tools/aoctool/cmd/generate"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/fetch"
+	"github.com/Saser/pdp/adventofcode/aoctool/cmd/generate"
 	"github.com/spf13/cobra"
 )
 
