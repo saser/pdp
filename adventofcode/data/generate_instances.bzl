@@ -27,6 +27,7 @@ def generate_instance(
         year = None,
         day = None,
         part = None,
+        instance_name = None,
         input = None,
         input_file = None,
         answer = None,
@@ -38,13 +39,17 @@ def generate_instance(
         fail("day is required")
     if part == None:
         fail("part is required")
+    if instance_name == None:
+        fail("instance_name is required")
     """
     generate_instance creates a textproto file containing an adventofcode.Instance message.
 
     Args:
+        name: String. Required. The name of the build target that is generated.
         year: Int. Required.
         day: Int. Required.
         part: Int. Required.
+        instance_name: String. Required. The `name` field in the generated adventofcode.Instance message.
         input: String. The input to the problem. Exactly one of input and input_file is required.
         input_file: Label. A file containing the input to the problem. Exactly one of input and input_file is required.
         answer: String. The answer to the problem. Exactly one of answer and answer_file is required.
@@ -66,7 +71,7 @@ def generate_instance(
         "--year=%d" % year,
         "--day=%d" % day,
         "--part=%d" % part,
-        "--name=%s" % shell.quote(name),
+        "--name=%s" % shell.quote(instance_name),
         "--format=prototext",
         "--out_file=\"$(location %s)\"" % out_file,
     ]
@@ -113,6 +118,7 @@ def generate_instances(
                 year = year,
                 day = day,
                 part = part,
+                instance_name = name,
                 input = data.input,
                 input_file = data.input_file,
                 answer = data.answer,

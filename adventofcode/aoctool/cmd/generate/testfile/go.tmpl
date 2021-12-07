@@ -1,7 +1,6 @@
 package {{.Package}}
 
 import (
-	"fmt"
 	"testing"
 
 	"google.golang.org/protobuf/proto"
@@ -19,14 +18,7 @@ func unmarshal(tb testing.TB, b []byte) *adventofcodepb.Instance {
 }
 
 func name(instance *adventofcodepb.Instance) string {
-	p := instance.GetProblem()
-	return fmt.Sprintf(
-		"Year%d_Day%02d_Part%d_%s",
-		p.GetYear(),
-		p.GetDay(),
-		p.GetPart(),
-		instance.GetName(),
-	)
+	return instance.GetName()
 }
 
 var part1Blobs = [][]byte{
