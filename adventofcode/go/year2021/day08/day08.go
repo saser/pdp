@@ -44,6 +44,9 @@ func solve(input string, part int) (string, error) {
 		// First fill out numbers and patterns with the patterns of unique length,
 		// representing numbers 1, 4, 7, and 8.
 		for _, d := range e.Patterns {
+			if len(numbers) == 4 {
+				break
+			}
 			switch d.Count() {
 			case 2: // number 1
 				numbers[d] = 1
@@ -99,26 +102,13 @@ func solve(input string, part int) (string, error) {
 // unused and will always be 0.
 type digit int8
 
-var bitmap = map[rune]int{
-	'a': 0,
-	'b': 1,
-	'c': 2,
-	'd': 3,
-	'e': 4,
-	'f': 5,
-	'g': 6,
-}
-
 func parseDigit(s string) (digit, error) {
 	if len(s) > 7 {
 		return 0, fmt.Errorf("parse digit: too long: %q", s)
 	}
 	var d digit
 	for _, r := range s {
-		bit, ok := bitmap[r]
-		if !ok {
-			return 0, fmt.Errorf("parse digit: invalid character %q", r)
-		}
+		bit := r - 'a'
 		d |= (1 << bit)
 	}
 	return d, nil
