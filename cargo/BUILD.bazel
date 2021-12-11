@@ -40,15 +40,6 @@ alias(
 )
 
 alias(
-    name = "rayon",
-    actual = "@raze__rayon__1_2_0//:rayon",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "regex",
     actual = "@raze__regex__1_0_5//:regex",
     tags = [
