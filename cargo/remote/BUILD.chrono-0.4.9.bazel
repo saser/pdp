@@ -10,9 +10,10 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 # buildifier: disable=load
 load(
-    "@rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:defs.bzl",
     "rust_binary",
     "rust_library",
+    "rust_proc_macro",
     "rust_test",
 )
 
@@ -33,15 +34,12 @@ licenses([
 rust_library(
     name = "chrono",
     srcs = glob(["**/*.rs"]),
-    aliases = {
-    },
     crate_features = [
         "clock",
         "default",
         "time",
     ],
     crate_root = "src/lib.rs",
-    crate_type = "lib",
     data = [],
     edition = "2015",
     rustc_flags = [
@@ -50,6 +48,7 @@ rust_library(
     tags = [
         "cargo-raze",
         "manual",
+        "crate-name=chrono"
     ],
     version = "0.4.9",
     # buildifier: leave-alone
@@ -58,15 +57,7 @@ rust_library(
         "@raze__num_integer__0_1_41//:num_integer",
         "@raze__num_traits__0_2_9//:num_traits",
         "@raze__time__0_1_42//:time",
-    ] + selects.with_or({
-        # cfg(all(target_arch = "wasm32", not(target_os = "emscripten")))
-        (
-            "@rules_rust//rust/platform:wasm32-unknown-unknown",
-            "@rules_rust//rust/platform:wasm32-wasi",
-        ): [
-        ],
-        "//conditions:default": [],
-    }),
+    ],
 )
 
 # Unsupported target "wasm" with type "test" omitted
