@@ -1,6 +1,7 @@
 include tools.mk
 
 proto_files := $(shell git ls-files -- '*.proto')
+build_files := $(shell git ls-files -- '**/BUILD.bazel')
 go_module := $(shell go list -m)
 
 .PHONY: generate
@@ -26,6 +27,7 @@ generate:
 
 .PHONY: lint
 buildifier: \
+	$(build_files) \
 	$(buildifier)
 buildifier:
 	$(buildifier) \
@@ -33,4 +35,4 @@ buildifier:
 		-warnings=all \
 		-r \
 		-v \
-		.
+		$(build_files)
