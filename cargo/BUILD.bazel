@@ -22,15 +22,6 @@ alias(
 )
 
 alias(
-    name = "clap",
-    actual = "@raze__clap__2_29_0//:clap",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "lazy_static",
     actual = "@raze__lazy_static__1_2_0//:lazy_static",
     tags = [
