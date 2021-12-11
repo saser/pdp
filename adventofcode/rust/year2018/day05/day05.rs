@@ -1,6 +1,4 @@
 use adventofcode_rust_aoc as aoc;
-use rayon::iter::IntoParallelRefIterator;
-use rayon::iter::ParallelIterator;
 
 pub fn part1(input: &str) -> Result<String, String> {
     solve(input, aoc::Part::One)
@@ -20,7 +18,7 @@ fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
         aoc::Part::Two => {
             let chars = (b'a'..=b'z').map(char::from).collect::<Vec<char>>();
             let best = chars
-                .par_iter()
+                .iter()
                 .map(|&c| fully_react_without(&input, c))
                 .map(|s| s.len())
                 .min()
