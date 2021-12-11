@@ -7,7 +7,6 @@ rust_library(
     deps = [
         "//adventofcode/rust/aoc",
         "//adventofcode/rust/grid",
-        "//cargo:rayon",
     ],
 )
 

@@ -3,8 +3,6 @@ use std::str::FromStr;
 
 use adventofcode_rust_aoc as aoc;
 use adventofcode_rust_grid as grid;
-use rayon::iter::IntoParallelRefIterator;
-use rayon::iter::ParallelIterator;
 
 type Coordinates = collections::HashMap<char, grid::Point>;
 type Distances = collections::HashMap<char, u64>;
@@ -43,7 +41,7 @@ fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
                 }
             }
             let max_area = closest_points
-                .par_iter()
+                .iter()
                 .filter(|(c, _points)| !infinite_coordinates.contains(c))
                 .map(|(_c, points)| points.len())
                 .max()
@@ -53,7 +51,7 @@ fn solve(input: &str, part: aoc::Part) -> Result<String, String> {
         aoc::Part::Two => {
             let limit = 10_000;
             let count = distances
-                .par_iter()
+                .iter()
                 .map(|(_point, distance_map)| distance_map.values().cloned().collect::<Vec<u64>>())
                 .map(|ds| ds.iter().sum::<u64>())
                 .filter(|&sum| sum < limit)
@@ -135,7 +133,7 @@ impl BoundingBox {
 
 fn distances(point: &grid::Point, coordinates: &Coordinates) -> Distances {
     coordinates
-        .par_iter()
+        .iter()
         .map(|(&c, &coord_point)| (c, point.manhattan_distance_to(coord_point)))
         .collect()
 }
@@ -145,7 +143,7 @@ fn bounding_box_distances(
     coordinates: &Coordinates,
 ) -> collections::HashMap<grid::Point, Distances> {
     bb.points()
-        .par_iter()
+        .iter()
         .map(|&point| (point, distances(&point, coordinates)))
         .collect()
 }
@@ -162,7 +160,7 @@ fn minimal_distances(distances: &Distances) -> Vec<char> {
 fn all_minimal_distances(
     map: &collections::HashMap<grid::Point, Distances>,
 ) -> collections::HashMap<grid::Point, Vec<char>> {
-    map.par_iter()
+    map.iter()
         .map(|(&point, distances)| (point, minimal_distances(distances)))
         .collect()
 }
