@@ -6,7 +6,6 @@ rust_library(
     crate_name = "adventofcode_rust_year2018_day04",
     deps = [
         "//adventofcode/rust/aoc",
-        "//cargo:chrono",
         "//cargo:lazy_static",
         "//cargo:regex",
     ],

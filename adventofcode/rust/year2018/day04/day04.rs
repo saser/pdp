@@ -2,8 +2,6 @@ use std::collections;
 use std::str::FromStr;
 
 use adventofcode_rust_aoc as aoc;
-use chrono;
-use chrono::Timelike;
 use lazy_static;
 use regex;
 
@@ -56,7 +54,7 @@ fn strategy_2(sorted_events: &[Event]) -> u64 {
 
 fn gather_guard_events(events: &[Event]) -> collections::HashMap<u64, Vec<Vec<(u32, EventType)>>> {
     let first_event = events[0];
-    let first_event_minute = first_event.datetime.minute();
+    let first_event_minute = first_event.time.minute;
     let first_event_type = first_event.event_type;
     let mut current_guard = if let EventType::BeginsShift(id) = first_event_type {
         id
@@ -66,7 +64,7 @@ fn gather_guard_events(events: &[Event]) -> collections::HashMap<u64, Vec<Vec<(u
     let mut current_events = vec![(first_event_minute, first_event_type)];
     let mut map = collections::HashMap::new();
     for &event in &events[1..] {
-        let event_minute = event.datetime.minute();
+        let event_minute = event.time.minute;
         let event_type = event.event_type;
         if let EventType::BeginsShift(id) = event_type {
             map.entry(current_guard)
@@ -120,8 +118,17 @@ fn calculate_sleeping(events: &[Vec<(u32, EventType)>]) -> (u32, u32, u32) {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+struct Time {
+    year: u32,
+    month: u32,
+    day: u32,
+    hour: u32,
+    minute: u32,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 struct Event {
-    datetime: chrono::NaiveDateTime,
+    time: Time,
     event_type: EventType,
 }
 
@@ -131,15 +138,20 @@ impl FromStr for Event {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         lazy_static::lazy_static! {
             static ref EVENT_RE: regex::Regex =
-                regex::Regex::new(r"\[(?P<datetime>\d{4}\-\d{2}\-\d{2} \d{2}:\d{2})\] (?P<event_type>.+)")
+                regex::Regex::new(r"\[(?P<Y>\d{4})\-(?P<m>\d{2})\-(?P<d>\d{2}) (?P<H>\d{2}):(?P<M>\d{2})\] (?P<event_type>.+)")
                     .unwrap();
         }
         let captures = EVENT_RE.captures(s).unwrap();
-        let datetime =
-            chrono::NaiveDateTime::parse_from_str(&captures["datetime"], "%Y-%m-%d %H:%M").unwrap();
+        let time = Time {
+            year: u32::from_str(&captures["Y"]).unwrap(),
+            month: u32::from_str(&captures["m"]).unwrap(),
+            day: u32::from_str(&captures["d"]).unwrap(),
+            hour: u32::from_str(&captures["H"]).unwrap(),
+            minute: u32::from_str(&captures["M"]).unwrap(),
+        };
         let event_type = EventType::from_str(&captures["event_type"]).unwrap();
         Ok(Event {
-            datetime,
+            time,
             event_type,
         })
     }
