@@ -7,11 +7,11 @@ $(tools):
 	mkdir -p '$@'
 
 # protoc: the protobuf compiler
-protoc_version := 3.17.3
+protoc_version := 3.19.1
 protoc_dir := $(tools)/protoc-$(protoc_version)
 protoc_archive := $(protoc_dir).zip
 protoc := $(protoc_dir)/bin/protoc
-# TODO: make this more platform-independent (`osx` is specified in the archive URL.)
+# TODO: make this more platform-independent (`linux` is specified in the archive URL.)
 $(protoc_archive): | $(tools)
 	curl \
 		--fail \
@@ -19,7 +19,7 @@ $(protoc_archive): | $(tools)
 		--show-error \
 		--silent \
 		--output '$@' \
-		'https://github.com/protocolbuffers/protobuf/releases/download/v$(protoc_version)/protoc-$(protoc_version)-osx-x86_64.zip'
+		'https://github.com/protocolbuffers/protobuf/releases/download/v$(protoc_version)/protoc-$(protoc_version)-linux-x86_64.zip'
 
 $(protoc_dir): $(protoc_archive)
 	unzip \
