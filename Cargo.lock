@@ -25,7 +25,6 @@ dependencies = [
 name = "aoc"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "lazy_static",
  "nalgebra",
  "regex",
@@ -57,18 +56,6 @@ name = "cfg-if"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "082bb9b28e00d3c9d39cc03e64ce4cea0f1bb9b3fde493f0cbc008472d22bdf4"
-
-[[package]]
-name = "chrono"
-version = "0.4.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8493056968583b0193c1bb04d6f7684586f3726992d6c573261941a895dbd68"
-dependencies = [
- "libc",
- "num-integer",
- "num-traits",
- "time",
-]
 
 [[package]]
 name = "cloudabi"
@@ -159,16 +146,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "num-integer"
-version = "0.1.41"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b85e541ef8255f6cf42bbfe4ef361305c6c135d10919ecc26126c4e5ae94bc09"
-dependencies = [
- "autocfg",
- "num-traits",
-]
-
-[[package]]
 name = "num-traits"
 version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -212,12 +189,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebac11a9d2e11f2af219b8b8d833b76b1ea0e054aa0e8d8e9e4cbde353bdf019"
 
 [[package]]
-name = "redox_syscall"
-version = "0.1.32"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab105df655884ede59d45b7070c8a65002d921461ee813a024558ca16030eea0"
-
-[[package]]
 name = "regex"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -246,17 +217,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6b53e329000edc2b34dbe8545fd20e55a333362d0a321909685a19bd28c3f1b"
 dependencies = [
  "lazy_static",
-]
-
-[[package]]
-name = "time"
-version = "0.1.42"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db8dcfca086c1143c9270ac42a2bbd8a7ee477b78ac8e45b19abfb0cbede4b6f"
-dependencies = [
- "libc",
- "redox_syscall",
- "winapi",
 ]
 
 [[package]]

@@ -13,15 +13,6 @@ licenses([
 
 # Aliased targets
 alias(
-    name = "chrono",
-    actual = "@raze__chrono__0_4_9//:chrono",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "lazy_static",
     actual = "@raze__lazy_static__1_2_0//:lazy_static",
     tags = [

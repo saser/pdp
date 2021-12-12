@@ -13,7 +13,6 @@ name = "placeholder"
 path = "placeholder_bin.rs"
 
 [dependencies]
-chrono = "0.4"
 lazy_static = "1.2.0"
 nalgebra = "0.16"
 regex = "1"
