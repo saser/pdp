@@ -1,0 +1,8 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "intmath",
+    srcs = ["intmath.go"],
+    importpath = "github.com/Saser/pdp/adventofcode/go/intmath",
+    visibility = ["//visibility:public"],
+)
