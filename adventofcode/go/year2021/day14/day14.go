@@ -17,12 +17,11 @@ func Part2(input string) (string, error) {
 
 func solve(input string, part int) (string, error) {
 	template, mapping := parse(input)
-	e := newExpander(mapping)
 	steps := 10
 	if part == 2 {
 		steps = 40
 	}
-	freq := e.Expand(template, steps)
+	freq := expand(template, mapping, steps)
 	var counts []int
 	for _, n := range freq {
 		counts = append(counts, n)
@@ -43,81 +42,64 @@ func parse(input string) (string, map[string]string) {
 	return template, mapping
 }
 
-type frequency map[rune]int // element -> how many times it occurs
+// This solution was not my own. I learned it from glancing on this solution:
+// https://github.com/mlonn/adventofcode-2021/blob/16284827a11ac16147d85e8bc405542cfa3848b6/14/extended_polymerization.go
 
-func (f frequency) Merge(ff frequency) {
-	for r, n := range ff {
-		f[r] += n
-	}
-}
+func expand(template string, mapping map[string]string, steps int) map[rune]int {
+	// The basic overview of this solution is:
+	//     1. Keep track of how many times a certain pair occurs in the current expansion.
+	//     2. In each step, every instance of a pair is replaced by the same
+	//        number of each of its two expansion pairs (if the pair has an
+	//        expansion).
+	//     3. After all steps, count the number of occurrences of each element
+	//        in each pair (accounting for double-counting as necessary).
 
-type expander struct {
-	mapping map[string]string // pair -> element
+	// We will proactively keep track of some double-counting, so we create freq
+	// here.
+	freq := make(map[rune]int) // element -> how many times it occurs
 
-	memo map[args]frequency // expandPair arguments -> return value
-}
-
-func newExpander(mapping map[string]string) *expander {
-	return &expander{
-		mapping: mapping,
-		memo:    make(map[args]frequency),
-	}
-}
-
-type args struct {
-	Pair  string // e.g., "CH"
-	Steps int    // how many steps the pair should be expanded
-}
-
-func (e *expander) expandPair(a args) (f frequency) {
-	f = make(frequency)
-	// Early return: if there is no mapping for this pair, then no matter the
-	// number of steps, the result will be the same. Similarly, if we are to
-	// take 0 steps, the result is just the input pair.
-	elem, ok := e.mapping[a.Pair]
-	if !ok || a.Steps == 0 {
-		for _, r := range a.Pair {
-			f[r]++
-		}
-		return f
-	}
-	// Retrieve the result from the memo, if it is stored, otherwise make sure
-	// it is stored when we return.
-	if m, ok := e.memo[a]; ok {
-		return m
-	}
-	defer func() {
-		e.memo[a] = f
-	}()
-	// Recurse into the left pair and the right pair, and merge the results.
-	a1 := args{
-		Pair:  a.Pair[0:1] + elem,
-		Steps: a.Steps - 1,
-	}
-	f.Merge(e.expandPair(a1))
-	a2 := args{
-		Pair:  elem + a.Pair[1:2],
-		Steps: a.Steps - 1,
-	}
-	f.Merge(e.expandPair(a2))
-	// elem has been double counted, so decrease it by one.
-	f[rune(elem[0])]--
-	return f
-}
-
-func (e *expander) Expand(template string, steps int) frequency {
-	f := make(frequency)
+	// Count the initial set of pairs.
+	pairs := make(map[string]int) // pair -> how many times it occurs
 	for i := 0; i < len(template)-1; i++ {
-		a := args{
-			Pair:  template[i : i+2],
-			Steps: steps,
-		}
-		f.Merge(e.expandPair(a))
+		pairs[template[i:i+2]]++
 	}
-	// All elements except the first and the last have been double counted, so
-	// decrease them by one.
+	// All elements except the first and the last in the template are now
+	// double-counted, so proactively decrease their frequency here.
 	for _, r := range template[1 : len(template)-1] {
-		f[r]--
+		freq[r]--
 	}
-	return f
+
+	// Iterate through the steps. The unexpanded map is used as a slight
+	// optimization(?).
+	unexpanded := make(map[string]int) // pair without expansion -> how many times it occurs
+	for i := 0; i < steps; i++ {
+		next := make(map[string]int)
+		for pair, n := range pairs {
+			elem, ok := mapping[pair]
+			if !ok {
+				unexpanded[pair] += n
+				continue
+			}
+			next[pair[0:1]+elem] += n
+			next[elem+pair[1:2]] += n
+			// elem gets double counted above, so proactively decrease its
+			// eventual frequency.
+			freq[rune(elem[0])] -= n
+		}
+		pairs = next
+	}
+
+	// Accumulate the counts among all pairs, both unexpanded and the results of
+	// the last iteration.
+	for pair, n := range unexpanded {
+		for _, r := range pair {
+			freq[r] += n
+		}
+	}
+	for pair, n := range pairs {
+		for _, r := range pair {
+			freq[r] += n
+		}
+	}
+	return freq
 }
