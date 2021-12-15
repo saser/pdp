@@ -43,63 +43,42 @@ func parse(input string) (string, map[string]string) {
 }
 
 // This solution was not my own. I learned it from glancing on this solution:
-// https://github.com/mlonn/adventofcode-2021/blob/16284827a11ac16147d85e8bc405542cfa3848b6/14/extended_polymerization.go
+// https://github.com/lindskogen/advent-of-code-2021/blob/06a8a20d3805e4d52bad3c94084161ba56d0c83c/src/main/kotlin/day14/main.kt
 
 func expand(template string, mapping map[string]string, steps int) map[rune]int {
 	// The basic overview of this solution is:
-	//     1. Keep track of how many times a certain pair occurs in the current expansion.
-	//     2. In each step, every instance of a pair is replaced by the same
-	//        number of each of its two expansion pairs (if the pair has an
-	//        expansion).
-	//     3. After all steps, count the number of occurrences of each element
-	//        in each pair (accounting for double-counting as necessary).
-
-	// We will proactively keep track of some double-counting, so we create freq
-	// here.
-	freq := make(map[rune]int) // element -> how many times it occurs
+	//     1. Keep track of how many times each pair occurs.
+	//     2. Count the initial frequencies of the elements in the template.
+	//     3. In each step, every pair is replaced by the same number of each of
+	//        its expansion pairs. The expansion also creates the same number of
+	//        the new element, so its frequency is increased.
 
 	// Count the initial set of pairs.
 	pairs := make(map[string]int) // pair -> how many times it occurs
 	for i := 0; i < len(template)-1; i++ {
 		pairs[template[i:i+2]]++
 	}
-	// All elements except the first and the last in the template are now
-	// double-counted, so proactively decrease their frequency here.
-	for _, r := range template[1 : len(template)-1] {
-		freq[r]--
+
+	// Count the initial element frequencies.
+	freq := make(map[rune]int) // element -> how many times it occurs
+	for _, r := range template {
+		freq[r]++
 	}
 
-	// Iterate through the steps. The unexpanded map is used as a slight
-	// optimization(?).
-	unexpanded := make(map[string]int) // pair without expansion -> how many times it occurs
 	for i := 0; i < steps; i++ {
 		next := make(map[string]int)
 		for pair, n := range pairs {
-			elem, ok := mapping[pair]
-			if !ok {
-				unexpanded[pair] += n
-				continue
-			}
+			// Assume that a mapping exists for every pair. That was the case
+			// for my input at least.
+			elem := mapping[pair]
 			next[pair[0:1]+elem] += n
 			next[elem+pair[1:2]] += n
-			// elem gets double counted above, so proactively decrease its
-			// eventual frequency.
-			freq[rune(elem[0])] -= n
+			// The expansion created new occurrences of elem, so count them
+			// here.
+			freq[rune(elem[0])] += n
 		}
 		pairs = next
 	}
 
-	// Accumulate the counts among all pairs, both unexpanded and the results of
-	// the last iteration.
-	for pair, n := range unexpanded {
-		for _, r := range pair {
-			freq[r] += n
-		}
-	}
-	for pair, n := range pairs {
-		for _, r := range pair {
-			freq[r] += n
-		}
-	}
 	return freq
 }
