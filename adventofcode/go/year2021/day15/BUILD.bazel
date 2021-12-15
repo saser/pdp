@@ -6,7 +6,6 @@ go_library(
     srcs = ["day15.go"],
     importpath = "github.com/Saser/pdp/adventofcode/go/year2021/day15",
     visibility = ["//adventofcode/go:__subpackages__"],
-    deps = ["//adventofcode/go/geo"],
 )
 
 go_instance_test(
