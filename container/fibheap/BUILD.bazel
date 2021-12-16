@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "fibheap",
+    srcs = ["fibheap.go"],
+    importpath = "github.com/Saser/pdp/container/fibheap",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "fibheap_test",
+    srcs = ["fibheap_test.go"],
+    embed = [":fibheap"],
+    deps = ["@com_github_google_go_cmp//cmp"],
+)
