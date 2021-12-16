@@ -1,0 +1,85 @@
+load("//adventofcode/data:generate_instances.bzl", "generate_instances", "instance_data")
+
+exports_files(["actual.in"])
+
+instances = {
+    "part1": {
+        "actual": instance_data(
+            answer = "860",
+            input_file = "actual.in",
+        ),
+        "example1": instance_data(
+            answer = "6",
+            input = "D2FE28",
+        ),
+        "example2": instance_data(
+            answer = "9",
+            input = "38006F45291200",
+        ),
+        "example3": instance_data(
+            answer = "14",
+            input = "EE00D40C823060",
+        ),
+        "example4": instance_data(
+            answer = "16",
+            input = "8A004A801A8002F478",
+        ),
+        "example5": instance_data(
+            answer = "12",
+            input = "620080001611562C8802118E34",
+        ),
+        "example6": instance_data(
+            answer = "23",
+            input = "C0015000016115A2E0802F182340",
+        ),
+        "example7": instance_data(
+            answer = "31",
+            input = "A0016C880162017C3686B18A3D4780",
+        ),
+    },
+    "part2": {
+        "actual": instance_data(
+            answer = "470949537659",
+            input_file = "actual.in",
+        ),
+        "example1": instance_data(
+            answer = "3",
+            input = "C200B40A82",
+        ),
+        "example2": instance_data(
+            answer = "54",
+            input = "04005AC33890",
+        ),
+        "example3": instance_data(
+            answer = "7",
+            input = "880086C3E88112",
+        ),
+        "example4": instance_data(
+            answer = "9",
+            input = "CE00C43D881120",
+        ),
+        "example5": instance_data(
+            answer = "1",
+            input = "D8005AC2A8F0",
+        ),
+        "example6": instance_data(
+            answer = "0",
+            input = "F600BC2D8F",
+        ),
+        "example7": instance_data(
+            answer = "0",
+            input = "9C005AC2F8F0",
+        ),
+        "example8": instance_data(
+            answer = "1",
+            input = "9C0141080250320F1802104A08",
+        ),
+    },
+}
+
+generate_instances(
+    day = 16,
+    part1_instances = instances["part1"],
+    part2_instances = instances["part2"],
+    year = 2021,
+)
