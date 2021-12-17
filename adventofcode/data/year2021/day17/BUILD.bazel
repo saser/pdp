@@ -5,7 +5,7 @@ exports_files(["actual.in"])
 instances = {
     "part1": {
         "actual": instance_data(
-            answer = "TODO answer here",
+            answer = "11781",
             input_file = "actual.in",
         ),
         "example1": instance_data(
