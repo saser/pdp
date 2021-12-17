@@ -5,6 +5,7 @@ go_library(
     srcs = ["fibheap.go"],
     importpath = "github.com/Saser/pdp/container/fibheap",
     visibility = ["//visibility:public"],
+    deps = ["//adventofcode/go/intmath"],
 )
 
 go_test(
