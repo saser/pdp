@@ -1,6 +1,6 @@
 module github.com/Saser/pdp
 
-go 1.17
+go 1.18
 
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20210227132407-f2aed9ee205d
