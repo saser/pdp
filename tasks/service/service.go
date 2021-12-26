@@ -12,18 +12,18 @@ import (
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
 
-type Server struct {
+type Service struct {
 	taskspb.UnimplementedTasksServer
 
 	mu    sync.Mutex
 	tasks []*taskspb.Task
 }
 
-func NewServer() *Server {
-	return &Server{}
+func New() *Service {
+	return &Service{}
 }
 
-func (s *Server) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*taskspb.Task, error) {
+func (s *Service) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*taskspb.Task, error) {
 	name := req.GetName()
 	if name == "" {
 		return nil, status.Error(codes.InvalidArgument, "empty name")
@@ -39,7 +39,7 @@ func (s *Server) GetTask(ctx context.Context, req *taskspb.GetTaskRequest) (*tas
 	return nil, status.Errorf(codes.NotFound, "task %q not found", name)
 }
 
-func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (*taskspb.ListTasksResponse, error) {
+func (s *Service) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (*taskspb.ListTasksResponse, error) {
 	if ps := req.GetPageSize(); ps != 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid page size: %d", ps)
 	}
@@ -55,7 +55,7 @@ func (s *Server) ListTasks(ctx context.Context, req *taskspb.ListTasksRequest) (
 	return res, nil
 }
 
-func (s *Server) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest) (*taskspb.Task, error) {
+func (s *Service) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest) (*taskspb.Task, error) {
 	newTask := proto.Clone(req.GetTask()).(*taskspb.Task)
 	if newTask.GetTitle() == "" {
 		return nil, status.Error(codes.InvalidArgument, "empty title")

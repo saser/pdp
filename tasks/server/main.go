@@ -9,9 +9,10 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/Saser/pdp/tasks/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"github.com/Saser/pdp/tasks/service"
 
 	taskspb "github.com/Saser/pdp/tasks/tasks_go_proto"
 )
@@ -26,7 +27,7 @@ func emain() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	svc := service.NewServer()
+	svc := service.New()
 	srv := grpc.NewServer()
 	reflection.Register(srv)
 	taskspb.RegisterTasksServer(srv, svc)
