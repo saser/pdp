@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "service",
@@ -10,5 +10,18 @@ go_library(
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//status",
         "@org_golang_google_protobuf//proto",
+    ],
+)
+
+go_test(
+    name = "service_test",
+    srcs = ["integration_test.go"],
+    embed = [":service"],
+    deps = [
+        "//tasks/tasks_go_proto",
+        "//testing/grpctest",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
+        "@org_golang_google_protobuf//testing/protocmp",
     ],
 )
