@@ -1,0 +1,9 @@
+BEGIN;
+
+CREATE TABLE Test (
+    id UUID NOT NULL,
+
+    PRIMARY KEY (id)
+);
+
+COMMIT;
