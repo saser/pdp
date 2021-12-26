@@ -21,12 +21,14 @@ bazel_skylib_workspace()
 # Go
 ################################################################################
 
+RULES_GO_COMMIT = "34a808cc1b95ab85d65bd201576ddb62cd635b60"
+
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "2b1641428dff9018f9e85c0384f03ec6c10660d935b750e3fa1492a281a53b0f",
+    sha256 = "99980d1f313ffbae740059d2606cd3d9c5dbb912508f3ba54d792f351e0f9fd0",
+    strip_prefix = "rules_go-{commit}".format(commit = RULES_GO_COMMIT),
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.29.0/rules_go-v0.29.0.zip",
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.29.0/rules_go-v0.29.0.zip",
+        "https://github.com/bazelbuild/rules_go/archive/{commit}.zip".format(commit = RULES_GO_COMMIT),
     ],
 )
 
