@@ -8,6 +8,9 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//postgres",
+        "@com_github_docker_docker//api/types",
+        "@com_github_docker_docker//api/types/container",
+        "@com_github_docker_docker//client",
         "@io_bazel_rules_go//go/tools/bazel:go_default_library",
     ],
 )
