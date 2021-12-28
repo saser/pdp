@@ -27,8 +27,5 @@ go_test(
     name = "day18_test",
     srcs = ["day18_test.go"],
     embed = [":day18"],
-    deps = [
-        "@com_github_google_go_cmp//cmp",
-        "@com_github_google_go_cmp//cmp/cmpopts",
-    ],
+    deps = ["@com_github_google_go_cmp//cmp"],
 )
